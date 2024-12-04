@@ -210,11 +210,11 @@ class ScraperPtt extends Command {
                 if(empty($sendNotifyText)) $sendNotifyText .= "\n" . "PTT任務列表" . "\n". "\n";
 
                 JobPtt::create([
-                    'title'   => $job['title'],
+                    'title'   => isset($job['title']) ? $job['title'] : '',
                     'link'    => $job['link'],
-                    'company' => $job['company'],
-                    'salary'  => $job['salary'],
-                    'place'   => $job['place'],
+                    'company' => isset($job['company']) ? $job['company'] : '',
+                    'salary'  => isset($job['salary']) ? $job['salary'] : 0,
+                    'place'   => isset($job['place']) ? $job['place'] : '',
                     'date'    => $date,
                 ]);
 
