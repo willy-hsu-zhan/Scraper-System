@@ -82,6 +82,7 @@ class ScraperPtt extends Command {
                 Log::error('CSS style or div struct seem has been changed!.');
             }
 
+            /* css排版已改 無法使用
             $jobList->each(function ($jobNode) use (&$jobs, $baseUrl) { // 傳值不能傳參考
                 $title   = $jobNode->filter('a')->text();
                 $link    = $baseUrl . $jobNode->filter('a')->attr('href');
@@ -96,6 +97,26 @@ class ScraperPtt extends Command {
                     'company' => trim($company),
                     'salary'  => trim($salary),
                     'place'   => trim($place),
+                    'date'    => trim($date),
+                ];
+            });
+            */
+
+            $jobList->each(function ($jobNode) use (&$jobs, $baseUrl) {
+                $linkNode = $jobNode->filter('.title a');
+                $dateNode = $jobNode->filter('.date');
+                $authorNode = $jobNode->filter('.author');
+
+                $link = $linkNode->count() > 0 ? $baseUrl . $linkNode->attr('href') : null;
+                $title = $linkNode->count() > 0 ? $linkNode->text() : 'Unknown';
+                $author = $authorNode->count() > 0 ? $authorNode->text() : 'Unknown';
+                $date = $dateNode->count() > 0 ? $dateNode->text() : 'Unknown';
+
+                // result
+                $jobs[] = [
+                    'title'   => trim($title),
+                    'link'    => trim($link),
+                    'company' => trim($author),
                     'date'    => trim($date),
                 ];
             });
@@ -166,7 +187,7 @@ class ScraperPtt extends Command {
 
         foreach( $jobs as $key => $job )
         {
-            if( $job['place'] == '公告' )
+            if(isset($job['place']) && $job['place'] == '公告')
             {
                 unset($jobs[$key]);
             }
@@ -177,7 +198,7 @@ class ScraperPtt extends Command {
         }
 
         $jobs = array_values($jobs);
-        dd($jobs);
+
         $sendNotifyText = "";
 
         foreach ($jobs as $job)
