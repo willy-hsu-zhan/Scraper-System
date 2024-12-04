@@ -218,11 +218,11 @@ class ScraperPtt extends Command {
                     'date'    => $date,
                 ]);
 
-                $sendNotifyText .= '標題：'. $job['title'] . "\n";
+                $sendNotifyText .= '標題：'. (isset($job['title']) ? $job['title'] : '') . "\n";
                 $sendNotifyText .= '任務連結：'. $job['link'] . "\n";
-                $sendNotifyText .= '雇主：'. $job['company'] . "\n";
-                $sendNotifyText .= '工作地方：'. $job['place'] . "\n";
-               // $sendNotifyText .= '薪水：'. $job['salary'] . "\n";
+                $sendNotifyText .= '雇主：'. (isset($job['company']) ? $job['company'] : '') . "\n";
+                $sendNotifyText .= '工作地方：'. (isset($job['place']) ? $job['place'] : '') . "\n";
+                $sendNotifyText .= '薪水：'. (isset($job['salary']) ? $job['salary'] : 0) . "\n";
             }
 
             if(!empty($sendNotifyText)) $sendNotifyText .= "\n" . "\n";
