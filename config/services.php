@@ -31,4 +31,7 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'line_notify' => [
+        'token' => env('LINE_NOTIFY_TOKEN'),
+    ],
 ];
