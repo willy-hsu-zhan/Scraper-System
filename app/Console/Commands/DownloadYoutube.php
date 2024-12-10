@@ -21,7 +21,8 @@ class DownloadYoutube extends Command
 
         // 解析 YouTube URL
         $videoId = $this->getVideoId($url);
-        if (!$videoId) {
+        if (!$videoId)
+        {
             $this->error('Invalid YouTube URL.');
             return 1;
         }
@@ -42,7 +43,8 @@ class DownloadYoutube extends Command
             '/\/(v|embed|shorts|live)\/([0-9A-Za-z-_]{10,})/',
         ];
 
-        foreach ($patterns as $pattern) {
+        foreach ($patterns as $pattern)
+        {
             if (preg_match($pattern, $url, $matches)) {
                 return $matches[count($matches) - 1];
             }
@@ -53,24 +55,34 @@ class DownloadYoutube extends Command
 
     private function downloadVideo($videoId, $format, $resolution, $audioOnly)
     {
+        //dd($videoId);
         // 使用 yt-dlp 工具執行下載
         //$ytDlpPath = '/usr/local/bin/yt-dlp'; // yt-dlp 工具路徑
-        // 使用 yt-dlp 工具執行下載
-        $ytDlpPath = '/home/vagrant/.local/bin/yt-dlp'; // 更新 yt-dlp 工具路徑
-        $outputDir = storage_path('app/youtube');
-        $fileName = $audioOnly ? '%(title)s.%(ext)s' : "%(title)s-${resolution}p.%(ext)s";
+        $ytDlpPath = '/home/vagrant/.local/bin/yt-dlp';
+        //$url = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
+        $url = 'https://www.youtube.com/watch?v=' . $videoId;
+        $outputPath = storage_path('app/youtube/%(title)s-720p.%(ext)s');
+        $format = 'bestvideo[height<=720]+bestaudio';
 
-        $command = "$ytDlpPath -f ";
-        $command .= $audioOnly ? "bestaudio" : "bestvideo[height<=$resolution]+bestaudio";
-        $command .= " -o \"$outputDir/$fileName\" https://www.youtube.com/watch?v=$videoId";
+        // 使用 escapeshellarg 處理特殊符號
+        $command = sprintf(
+            '%s -f %s -o %s %s',
+            escapeshellarg($ytDlpPath),
+            escapeshellarg($format),
+            escapeshellarg($outputPath),
+            escapeshellarg($url)
+        );
 
-        $this->info("Running command: $command");
-        exec($command, $output, $status);
+        exec($command, $output, $returnVar);
 
-        if ($status === 0) {
-            $this->info("Download completed. Files saved in: $outputDir");
-        } else {
-            $this->error("Download failed. Error: " . implode("\n", $output));
+        if ($returnVar === 0)
+        {
+            echo "Download successful!";
+        }
+        else
+        {
+            echo "Download failed. Error:\n";
+            echo implode("\n", $output);
         }
     }
 }
