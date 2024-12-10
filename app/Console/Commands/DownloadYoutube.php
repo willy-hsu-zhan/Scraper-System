@@ -61,7 +61,7 @@ class DownloadYoutube extends Command
         $ytDlpPath = '/home/vagrant/.local/bin/yt-dlp';
         //$url = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
         $url = 'https://www.youtube.com/watch?v=' . $videoId;
-        $outputPath = storage_path('app/youtube/%(title)s-720p.%(ext)s');
+        $outputPath = storage_path('app/youtube/%(title)s-720p.mp4');
         $format = 'bestvideo[height<=720]+bestaudio';
 
         // 使用 escapeshellarg 處理特殊符號
