@@ -148,8 +148,8 @@ class DownloadYoutube extends Command
                     // 可選擇刪除原始的 webm 檔案
                     unlink($downloadedFile); // 刪除原始的 webm 檔案
                     echo "Original webm file deleted.\n";
-
-                    $this->uploadToTelegram();
+                    $fileName = basename($convertedFile);
+                    $this->uploadToTelegram($fileName);
                 } else {
                     echo "Conversion failed. Error:\n";
                     echo implode("\n", $output);
@@ -163,7 +163,7 @@ class DownloadYoutube extends Command
         }
     }
 
-    public function uploadToTelegram()
+    public function uploadToTelegram($fileName)
     {
         $bot_api_key = '8030468571:AAFhSaw8zoiwxBZhf14BsL2QI9iQ8N_HKUE';  // 您的 Telegram Bot Token
         $chat_id = '-4664862172'; // 您的聊天 ID
@@ -188,8 +188,8 @@ class DownloadYoutube extends Command
         $response = Http::timeout(6000)  // 設定超時時間為 60 秒
             ->attach(
                 'document',
-                file_get_contents('/var/www/Scraper-System/storage/app/youtube/Rick Astley - Never Gonna Give You Up (Official Music Video)-720p.mp4'),
-                'Rick Astley - Never Gonna Give You Up (Official Music Video)-720p.mp4'
+                file_get_contents('/var/www/Scraper-System/storage/app/youtube/' . $fileName),
+                $fileName
             )
             ->post('https://api.telegram.org/bot' . $bot_api_key . '/sendDocument', [
                 'chat_id' => $chat_id,
