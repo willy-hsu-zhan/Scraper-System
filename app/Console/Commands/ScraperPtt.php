@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use App\Models\JobPtt;
 use App\Services\LineNotify;
+use App\Services\TelegramService;
 
-class ScraperPtt extends Command
-{
+class ScraperPtt extends Command {
     /**
      * The name and signature of the console command.
      *
@@ -32,13 +32,36 @@ class ScraperPtt extends Command
     public $locations = ['遠端', '多區', '台北', '新北', '桃園', '台中', '台南', '高雄', '基隆', '新竹', '新竹', '苗栗', '彰化', '南投', '雲林', '嘉義', '嘉義', '屏東', '宜蘭', '花蓮', '台東', '澎湖', '金門', '連江'];
 
     protected $lineNotify;
+    protected $chatId = '-4664862172'; // 暫時先用全域變數 // 日後聊天室擴充再更改
+    protected $telegramService;
+    protected $jobTexts;
 
-    public function __construct(LineNotify $lineNotify)
+    public function __construct(LineNotify $lineNotify, TelegramService $telegramService)
     {
         parent::__construct();
-        $this->lineNotify = $lineNotify;
+        $this->lineNotify      = $lineNotify;
+        $this->telegramService = $telegramService;
     }
 
+    private function fliterPlace(string $notFilterPlace): string
+    {
+        $filterPlace = '';
+
+        foreach( $this->locations as $location )
+        {
+            if( mb_strpos($notFilterPlace, $location) !== false )
+            {
+                $filterPlace = $location;
+                break;
+            }
+        }
+        if( empty($filterPlace) )
+        {
+            $filterPlace = mb_substr($notFilterPlace, 1, 2);
+        }
+
+        return $filterPlace;
+    }
     public function handle()
     {
         // 偶爾更新 所以排程可以每小時跑就好
@@ -56,8 +79,7 @@ class ScraperPtt extends Command
 
         $crawler = $client->request('GET', $url);
 
-
-        while ($currentPage <= $maxPage)
+        while( $currentPage <= $maxPage )
         {
             try
             {
@@ -103,23 +125,22 @@ class ScraperPtt extends Command
             });
             */
 
-            $jobList->each(function ($jobNode) use (&$jobs, $baseUrl)
-            {
-                $linkNode = $jobNode->filter('.title a');
-                $dateNode = $jobNode->filter('.date');
+            $jobList->each(function ($jobNode) use (&$jobs, $baseUrl) {
+                $linkNode   = $jobNode->filter('.title a');
+                $dateNode   = $jobNode->filter('.date');
                 $authorNode = $jobNode->filter('.author');
 
-                $link = $linkNode->count() > 0 ? $baseUrl . $linkNode->attr('href') : null;
-                $title = $linkNode->count() > 0 ? $linkNode->text() : 'Unknown';
+                $link   = $linkNode->count() > 0 ? $baseUrl . $linkNode->attr('href') : null;
+                $title  = $linkNode->count() > 0 ? $linkNode->text() : 'Unknown';
                 $author = $authorNode->count() > 0 ? $authorNode->text() : 'Unknown';
-                $date = $dateNode->count() > 0 ? $dateNode->text() : 'Unknown';
+                $date   = $dateNode->count() > 0 ? $dateNode->text() : 'Unknown';
 
                 // result
                 $jobs[] = [
-                    'title' => trim($title),
-                    'link' => trim($link),
+                    'title'   => trim($title),
+                    'link'    => trim($link),
                     'company' => trim($author),
-                    'date' => trim($date),
+                    'date'    => trim($date),
                 ];
             });
 
@@ -135,7 +156,7 @@ class ScraperPtt extends Command
 
         $crawler = $client->request('GET', $url);
 
-        while ($currentPage <= $maxPage)
+        while( $currentPage <= $maxPage )
         {
             try
             {
@@ -160,28 +181,27 @@ class ScraperPtt extends Command
                 Log::error('CSS style or div struct seem has been changed!.');
             }
 
-            $jobList->each(function ($jobNode) use (&$jobs, $baseUrl)
-            { // 傳值不能傳參考
+            $jobList->each(function ($jobNode) use (&$jobs, $baseUrl) { // 傳值不能傳參考
                 $titleNode = $jobNode->filter('a');
-                $title = $titleNode->count() > 0 ? $titleNode->text() : '';
+                $title     = $titleNode->count() > 0 ? $titleNode->text() : '';
 
                 $linkNode = $jobNode->filter('a');
-                $link = $linkNode->count() > 0 ? $baseUrl . $linkNode->attr('href') : '';
+                $link     = $linkNode->count() > 0 ? $baseUrl . $linkNode->attr('href') : '';
 
                 $company = $jobNode->filter('.author')->text();
-                $salary = 0; // 進去網頁內的參數也是不定參數 所以直接給他設為0
-                $place = $this->fliterPlace($title); // 使用 $jobNode->filter('a')->text() 來過濾地點
-                $date = $jobNode->filter('.date')->text();
+                $salary  = 0; // 進去網頁內的參數也是不定參數 所以直接給他設為0
+                $place   = $this->fliterPlace($title); // 使用 $jobNode->filter('a')->text() 來過濾地點
+                $date    = $jobNode->filter('.date')->text();
 
-                if (mb_strpos($title, '徵才') !== false)
+                if( mb_strpos($title, '徵才') !== false ) // 因為會有其他討論串，只抓title是徵才的才是工作
                 {
                     $jobs[] = [
-                        'title' => trim($title),
-                        'link' => trim($link),
+                        'title'   => trim($title),
+                        'link'    => trim($link),
                         'company' => trim($company),
-                        'salary' => trim($salary),
-                        'place' => trim($place),
-                        'date' => trim($date),
+                        'salary'  => trim($salary),
+                        'place'   => trim($place),
+                        'date'    => trim($date),
                     ];
                 }
             });
@@ -189,13 +209,13 @@ class ScraperPtt extends Command
             ++$currentPage;
         }
 
-        foreach ($jobs as $key => $job)
+        foreach( $jobs as $key => $job )
         {
-            if (isset($job['place']) && $job['place'] == '公告')
+            if( isset($job['place']) && $job['place'] == '公告' )
             {
                 unset($jobs[$key]);
             }
-            if (mb_strpos($job['title'], '已徵到') !== false)
+            if( mb_strpos($job['title'], '已徵到') !== false )
             {
                 unset($jobs[$key]);
             }
@@ -205,22 +225,22 @@ class ScraperPtt extends Command
 
         $sendNotifyText = "";
 
-        foreach ($jobs as $job)
+        foreach( $jobs as $job )
         {
             $date = Carbon::now()->toDateString();
 
-            if (!JobPtt::where('link', $job['link'])->first())
+            if( !JobPtt::where('link', $job['link'])->first() )
             {
-                if (empty($sendNotifyText))
+                if( empty($sendNotifyText) )
                     $sendNotifyText .= "\n" . "PTT任務列表" . "\n" . "\n";
 
                 JobPtt::create([
-                    'title' => isset($job['title']) ? $job['title'] : '',
-                    'link' => $job['link'],
+                    'title'   => isset($job['title']) ? $job['title'] : '',
+                    'link'    => $job['link'],
                     'company' => isset($job['company']) ? $job['company'] : '',
-                    'salary' => isset($job['salary']) ? $job['salary'] : 0,
-                    'place' => isset($job['place']) ? $job['place'] : '',
-                    'date' => $date,
+                    'salary'  => isset($job['salary']) ? $job['salary'] : 0,
+                    'place'   => isset($job['place']) ? $job['place'] : '',
+                    'date'    => $date,
                 ]);
 
                 $sendNotifyText .= '標題：' . (isset($job['title']) ? $job['title'] : '') . "\n";
@@ -228,13 +248,22 @@ class ScraperPtt extends Command
                 $sendNotifyText .= '雇主：' . (isset($job['company']) ? $job['company'] : '') . "\n";
                 $sendNotifyText .= '工作地方：' . (isset($job['place']) ? $job['place'] : '') . "\n";
                 $sendNotifyText .= '薪水：' . (isset($job['salary']) ? $job['salary'] : 0) . "\n";
+
+                $this->jobTexts[] = [
+                    'PTT ----' . "\n\n" .
+                    '標題：' . $job['title'] . "\n" .
+                    '任務連結：' . $job['link'] . "\n" .
+                    '雇主：' . $job['company'] . "\n" .
+                    '工作地方：' . $job['place'] . "\n" .
+                    '薪水：' . $job['salary'] . "\n"
+                ];
             }
 
-            if (!empty($sendNotifyText))
+            if( !empty($sendNotifyText) )
                 $sendNotifyText .= "\n" . "\n";
         }
 
-        if (!empty($sendNotifyText))
+        if( !empty($sendNotifyText) ) // send line notify
         {
             $this->info('save data success');
 
@@ -242,7 +271,7 @@ class ScraperPtt extends Command
 
             $data = json_decode($response);
 
-            if ($data->status != '200' && $data->message != 'ok')
+            if( $data->status != '200' && $data->message != 'ok' )
             {
                 Log::error('send notify error! ' . $data->message);
             }
@@ -255,25 +284,15 @@ class ScraperPtt extends Command
         {
             $this->info('no recent job period!');
         }
-    }
 
-    private function fliterPlace(string $notFilterPlace): string
-    {
-        $filterPlace = '';
-
-        foreach ($this->locations as $location)
+        if( !empty($this->jobTexts) ) // send telegram notify
         {
-            if (mb_strpos($notFilterPlace, $location) !== false)
+            foreach( $this->jobTexts as $index => $jobText )
             {
-                $filterPlace = $location;
-                break;
+                $message = implode("\n", $jobText);
+                $this->telegramService->sendMessage($this->chatId, $message);
+                sleep(1);
             }
         }
-        if (empty($filterPlace))
-        {
-            $filterPlace = mb_substr($notFilterPlace, 1, 2);
-        }
-
-        return $filterPlace;
     }
 }
