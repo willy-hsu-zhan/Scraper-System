@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Http;
 class TelegramService
 {
     protected $telegram;
+    protected $apiKey;
 
     public function __construct()
     {
@@ -45,13 +46,13 @@ class TelegramService
     {
         try
         {
-            $response = Http::timeout(60)
+            $response = Http::timeout(600)
                 ->attach(
                     'document',
                     file_get_contents($filePath),
                     $fileName
                 )
-                ->post('https://api.telegram.org/bot' . $this->apiKey . '/sendDocument', [
+                ->post('https://api.telegram.org/bot' . config('telegram.apikey') . '/sendDocument', [
                     'chat_id' => $chatId,
                 ]);
 
@@ -69,4 +70,5 @@ class TelegramService
             return "檔案上傳失敗：" . $e->getMessage();
         }
     }
+
 }

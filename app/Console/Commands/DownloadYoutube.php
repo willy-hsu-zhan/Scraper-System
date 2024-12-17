@@ -4,8 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
-use Longman\TelegramBot\Request;
-use Longman\TelegramBot\Telegram;
+use Illuminate\Support\Facades\File;
 use App\Services\TelegramService;
 
 class DownloadYoutube extends Command
@@ -21,7 +20,7 @@ class DownloadYoutube extends Command
     {
         parent::__construct();
         $this->telegramService = $telegramService;
-        $this->baseFilePath = (string)storage_path('app/youtube/');
+        $this->baseFilePath = storage_path('app/youtube/');
     }
 
     public function handle()
@@ -123,6 +122,20 @@ class DownloadYoutube extends Command
         return glob(storage_path('app/youtube/*-720p.*'))[0]; // 假設只會有一個文件
     }
 
+    private function getCovertedFile()
+    {
+        return !empty($this->fileName) ?? $this->baseFilePath . $this->fileName;
+    }
+
+    private function deleteTempFiles()
+    {
+        $directory = $this->baseFilePath;
+        if (File::exists($directory)) {
+            File::deleteDirectory($directory); // 刪除整個資料夾
+            File::makeDirectory($directory); // 重新建立空資料夾
+        }
+    }
+
     private function downloadVideo($videoId, $format, $resolution, $audioOnly)
     {
         $ytDlpPath = $this->getYtDlpPath();
@@ -155,8 +168,12 @@ class DownloadYoutube extends Command
             return 1;
         }
 
+        // send msg file name
+        $this->telegramService->sendMessage($this->chatId,$this->fileName);
         // upload to telegram bot
         $filePath = $this->baseFilePath . $this->fileName;
         $this->telegramService->sendDocument($this->chatId, $filePath, $this->fileName);
+        // delete all temp files
+        $this->deleteTempFiles();
     }
 }
