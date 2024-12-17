@@ -129,7 +129,7 @@ class ScraperChickpt extends Command
                 $sendNotifyText .= '薪水：' . $job['salary'] . "\n";
 
                 $this->jobTexts[] = [
-                    '小雞上工 ----' . "\n\n" .
+                    '**** 小雞上工 ****' . "\n\n" .
                     '標題：' . $job['title'] . "\n" .
                     '任務連結：' . $job['link'] . "\n" .
                     '雇主：' . $job['company'] . "\n" .
@@ -167,7 +167,7 @@ class ScraperChickpt extends Command
                 $sendNotifyText .= '薪水：' . $job['salary'] . "\n";
 
                 $this->jobTexts[] = [
-                    '小雞上工 ----' . "\n\n" .
+                    '**** 小雞上工 ****' . "\n\n" .
                     '標題：' . $job['title'] . "\n" .
                     '任務連結：' . $job['link'] . "\n" .
                     '雇主：' . $job['company'] . "\n" .
@@ -182,27 +182,28 @@ class ScraperChickpt extends Command
             }
         }
 
-        if (!empty($sendNotifyText))
-        {
-            $this->info('send line notify start');
+        // 暫時先隱藏line notify
+        // if (!empty($sendNotifyText))
+        // {
+        //     $this->info('send line notify start');
 
-            $response = $this->lineNotify->sendMessage($sendNotifyText);
+        //     $response = $this->lineNotify->sendMessage($sendNotifyText);
 
-            $data = json_decode($response);
+        //     $data = json_decode($response);
 
-            if ($data->status != '200' && $data->message != 'ok')
-            {
-                Log::error('send notify error! ' . $data->message);
-            }
-            else
-            {
-                $this->info('send notify success');
-            }
-        }
-        else
-        {
-            $this->info('no recent job period!');
-        }
+        //     if ($data->status != '200' && $data->message != 'ok')
+        //     {
+        //         Log::error('send notify error! ' . $data->message);
+        //     }
+        //     else
+        //     {
+        //         $this->info('send notify success');
+        //     }
+        // }
+        // else
+        // {
+        //     $this->info('no recent job period!');
+        // }
 
         if (!empty($this->jobTexts))
         {

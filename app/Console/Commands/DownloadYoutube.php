@@ -122,10 +122,10 @@ class DownloadYoutube extends Command
         return glob(storage_path('app/youtube/*-720p.*'))[0]; // 假設只會有一個文件
     }
 
-    private function getCovertedFile()
-    {
-        return !empty($this->fileName) ?? $this->baseFilePath . $this->fileName;
-    }
+    // private function getCovertedFile()
+    // {
+    //     return !empty($this->fileName) ?? $this->baseFilePath . $this->fileName;
+    // }
 
     private function deleteTempFiles()
     {

@@ -250,7 +250,7 @@ class ScraperPtt extends Command {
                 $sendNotifyText .= '薪水：' . (isset($job['salary']) ? $job['salary'] : 0) . "\n";
 
                 $this->jobTexts[] = [
-                    'PTT ----' . "\n\n" .
+                    '**** PTT ****' . "\n\n" .
                     '標題：' . $job['title'] . "\n" .
                     '任務連結：' . $job['link'] . "\n" .
                     '雇主：' . $job['company'] . "\n" .
@@ -263,27 +263,28 @@ class ScraperPtt extends Command {
                 $sendNotifyText .= "\n" . "\n";
         }
 
-        if( !empty($sendNotifyText) ) // send line notify
-        {
-            $this->info('save data success');
+        // 暫時先隱藏line notify
+        // if( !empty($sendNotifyText) ) // send line notify
+        // {
+        //     $this->info('save data success');
 
-            $response = $this->lineNotify->sendMessage($sendNotifyText);
+        //     $response = $this->lineNotify->sendMessage($sendNotifyText);
 
-            $data = json_decode($response);
+        //     $data = json_decode($response);
 
-            if( $data->status != '200' && $data->message != 'ok' )
-            {
-                Log::error('send notify error! ' . $data->message);
-            }
-            else
-            {
-                $this->info('send notify success');
-            }
-        }
-        else
-        {
-            $this->info('no recent job period!');
-        }
+        //     if( $data->status != '200' && $data->message != 'ok' )
+        //     {
+        //         Log::error('send notify error! ' . $data->message);
+        //     }
+        //     else
+        //     {
+        //         $this->info('send notify success');
+        //     }
+        // }
+        // else
+        // {
+        //     $this->info('no recent job period!');
+        // }
 
         if( !empty($this->jobTexts) ) // send telegram notify
         {

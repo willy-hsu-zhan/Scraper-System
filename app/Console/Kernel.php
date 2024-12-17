@@ -14,7 +14,6 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('app:scraper-chickpt')->everyThirtyMinutes();
         $schedule->command('app:scraper-ptt')->everyThirtyMinutes();
-        $schedule->command('app:scraper-facebook')->everyThirtyMinutes();
     }
 
     /**
