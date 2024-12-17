@@ -10,7 +10,8 @@ use Carbon\Carbon;
 use App\Models\JobPtt;
 use App\Services\LineNotify;
 
-class ScraperPtt extends Command {
+class ScraperPtt extends Command
+{
     /**
      * The name and signature of the console command.
      *
@@ -56,7 +57,7 @@ class ScraperPtt extends Command {
         $crawler = $client->request('GET', $url);
 
 
-        while( $currentPage <= $maxPage )
+        while ($currentPage <= $maxPage)
         {
             try
             {
@@ -102,7 +103,8 @@ class ScraperPtt extends Command {
             });
             */
 
-            $jobList->each(function ($jobNode) use (&$jobs, $baseUrl) {
+            $jobList->each(function ($jobNode) use (&$jobs, $baseUrl)
+            {
                 $linkNode = $jobNode->filter('.title a');
                 $dateNode = $jobNode->filter('.date');
                 $authorNode = $jobNode->filter('.author');
@@ -114,10 +116,10 @@ class ScraperPtt extends Command {
 
                 // result
                 $jobs[] = [
-                    'title'   => trim($title),
-                    'link'    => trim($link),
+                    'title' => trim($title),
+                    'link' => trim($link),
                     'company' => trim($author),
-                    'date'    => trim($date),
+                    'date' => trim($date),
                 ];
             });
 
@@ -133,7 +135,7 @@ class ScraperPtt extends Command {
 
         $crawler = $client->request('GET', $url);
 
-        while( $currentPage <= $maxPage )
+        while ($currentPage <= $maxPage)
         {
             try
             {
@@ -158,7 +160,8 @@ class ScraperPtt extends Command {
                 Log::error('CSS style or div struct seem has been changed!.');
             }
 
-            $jobList->each(function ($jobNode) use (&$jobs, $baseUrl) { // 傳值不能傳參考
+            $jobList->each(function ($jobNode) use (&$jobs, $baseUrl)
+            { // 傳值不能傳參考
                 $titleNode = $jobNode->filter('a');
                 $title = $titleNode->count() > 0 ? $titleNode->text() : '';
 
@@ -166,11 +169,12 @@ class ScraperPtt extends Command {
                 $link = $linkNode->count() > 0 ? $baseUrl . $linkNode->attr('href') : '';
 
                 $company = $jobNode->filter('.author')->text();
-                $salary  = 0; // 進去網頁內的參數也是不定參數 所以直接給他設為0
-                $place   = $this->fliterPlace($title); // 使用 $jobNode->filter('a')->text() 來過濾地點
-                $date    = $jobNode->filter('.date')->text();
+                $salary = 0; // 進去網頁內的參數也是不定參數 所以直接給他設為0
+                $place = $this->fliterPlace($title); // 使用 $jobNode->filter('a')->text() 來過濾地點
+                $date = $jobNode->filter('.date')->text();
 
-                if (mb_strpos($title, '徵才') !== false) {
+                if (mb_strpos($title, '徵才') !== false)
+                {
                     $jobs[] = [
                         'title' => trim($title),
                         'link' => trim($link),
@@ -185,9 +189,9 @@ class ScraperPtt extends Command {
             ++$currentPage;
         }
 
-        foreach( $jobs as $key => $job )
+        foreach ($jobs as $key => $job)
         {
-            if(isset($job['place']) && $job['place'] == '公告')
+            if (isset($job['place']) && $job['place'] == '公告')
             {
                 unset($jobs[$key]);
             }
@@ -207,28 +211,30 @@ class ScraperPtt extends Command {
 
             if (!JobPtt::where('link', $job['link'])->first())
             {
-                if(empty($sendNotifyText)) $sendNotifyText .= "\n" . "PTT任務列表" . "\n". "\n";
+                if (empty($sendNotifyText))
+                    $sendNotifyText .= "\n" . "PTT任務列表" . "\n" . "\n";
 
                 JobPtt::create([
-                    'title'   => isset($job['title']) ? $job['title'] : '',
-                    'link'    => $job['link'],
+                    'title' => isset($job['title']) ? $job['title'] : '',
+                    'link' => $job['link'],
                     'company' => isset($job['company']) ? $job['company'] : '',
-                    'salary'  => isset($job['salary']) ? $job['salary'] : 0,
-                    'place'   => isset($job['place']) ? $job['place'] : '',
-                    'date'    => $date,
+                    'salary' => isset($job['salary']) ? $job['salary'] : 0,
+                    'place' => isset($job['place']) ? $job['place'] : '',
+                    'date' => $date,
                 ]);
 
-                $sendNotifyText .= '標題：'. (isset($job['title']) ? $job['title'] : '') . "\n";
-                $sendNotifyText .= '任務連結：'. $job['link'] . "\n";
-                $sendNotifyText .= '雇主：'. (isset($job['company']) ? $job['company'] : '') . "\n";
-                $sendNotifyText .= '工作地方：'. (isset($job['place']) ? $job['place'] : '') . "\n";
-                $sendNotifyText .= '薪水：'. (isset($job['salary']) ? $job['salary'] : 0) . "\n";
+                $sendNotifyText .= '標題：' . (isset($job['title']) ? $job['title'] : '') . "\n";
+                $sendNotifyText .= '任務連結：' . $job['link'] . "\n";
+                $sendNotifyText .= '雇主：' . (isset($job['company']) ? $job['company'] : '') . "\n";
+                $sendNotifyText .= '工作地方：' . (isset($job['place']) ? $job['place'] : '') . "\n";
+                $sendNotifyText .= '薪水：' . (isset($job['salary']) ? $job['salary'] : 0) . "\n";
             }
 
-            if(!empty($sendNotifyText)) $sendNotifyText .= "\n" . "\n";
+            if (!empty($sendNotifyText))
+                $sendNotifyText .= "\n" . "\n";
         }
 
-        if(!empty($sendNotifyText))
+        if (!empty($sendNotifyText))
         {
             $this->info('save data success');
 
@@ -236,9 +242,9 @@ class ScraperPtt extends Command {
 
             $data = json_decode($response);
 
-            if($data->status != '200' && $data->message != 'ok')
+            if ($data->status != '200' && $data->message != 'ok')
             {
-                Log::error('send notify error! '. $data->message);
+                Log::error('send notify error! ' . $data->message);
             }
             else
             {
@@ -255,15 +261,15 @@ class ScraperPtt extends Command {
     {
         $filterPlace = '';
 
-        foreach( $this->locations as $location )
+        foreach ($this->locations as $location)
         {
-            if( mb_strpos($notFilterPlace, $location) !== false )
+            if (mb_strpos($notFilterPlace, $location) !== false)
             {
                 $filterPlace = $location;
                 break;
             }
         }
-        if( empty($filterPlace) )
+        if (empty($filterPlace))
         {
             $filterPlace = mb_substr($notFilterPlace, 1, 2);
         }
