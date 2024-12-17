@@ -10,8 +10,6 @@ use App\Services\LineNotify;
 use App\Services\TelegramService;
 use App\Models\JobChickpt;
 use Illuminate\Support\Carbon;
-use Longman\TelegramBot\Request;
-use Longman\TelegramBot\Telegram;
 
 class ScraperChickpt extends Command
 {
@@ -30,9 +28,10 @@ class ScraperChickpt extends Command
     protected $description = 'Command description';
 
     public $jobs = [];
-
     protected $lineNotify;
-    protected $TelegramService;
+    protected $telegramService;
+    protected $jobTexts;
+    protected $chatId = '-4664862172'; // 暫時先用全域變數 // 日後聊天室擴充再更改
 
     public function __construct(LineNotify $lineNotify, TelegramService $telegramService)
     {
@@ -56,7 +55,7 @@ class ScraperChickpt extends Command
         $crawler = $client->request('GET', $url); // 默認第一頁
 
         while (true)
-         {
+        {
             try
             {
                 $link = $crawler->selectLink($currentPage)->link(); // 網頁剛好有頁碼可以這樣子抓取
@@ -70,7 +69,8 @@ class ScraperChickpt extends Command
 
             $crawler = $client->click($link);
 
-            try {
+            try
+            {
                 $jobList = $crawler->filter('.jobs-wrap ul#job-list.job-list.show li'); // 抓取job-list獨有的css設定
             }
             catch (Exception $e)
@@ -80,20 +80,21 @@ class ScraperChickpt extends Command
             }
 
             // Loop through each job
-            $jobList->each(function ($jobNode) use (&$jobs) { // 傳值不能傳參考
-                $title   = $jobNode->filter('h2')->text();
-                $link    = $jobNode->filter('a')->attr('href');
+            $jobList->each(function ($jobNode) use (&$jobs)
+            { // 傳值不能傳參考
+                $title = $jobNode->filter('h2')->text();
+                $link = $jobNode->filter('a')->attr('href');
                 $company = $jobNode->filter('.ellipsis-job-company')->text();
-                $salary  = $jobNode->filter('.salary')->text();
-                $place   = $jobNode->filter('.place')->text();
-                $update_time    = $jobNode->filter('.date-time')->text();
+                $salary = $jobNode->filter('.salary')->text();
+                $place = $jobNode->filter('.place')->text();
+                $update_time = $jobNode->filter('.date-time')->text();
 
                 $jobs[] = [
-                    'title'   => trim($title),
-                    'link'    => trim($link),
+                    'title' => trim($title),
+                    'link' => trim($link),
                     'company' => trim($company),
-                    'salary'  => trim($salary),
-                    'place'   => trim($place),
+                    'salary' => trim($salary),
+                    'place' => trim($place),
                     'update_time' => trim($update_time),
                 ];
             });
@@ -109,25 +110,35 @@ class ScraperChickpt extends Command
 
             if (!JobChickpt::where('link', $job['link'])->first())
             {
-                if(empty($sendNotifyText)) $sendNotifyText .= "\n" . "小雞上工任務列表" . "\n". "\n";
+                if (empty($sendNotifyText))
+                    $sendNotifyText .= "\n" . "小雞上工任務列表" . "\n" . "\n";
 
                 JobChickpt::create([
-                    'title'   => $job['title'],
-                    'link'    => $job['link'],
+                    'title' => $job['title'],
+                    'link' => $job['link'],
                     'company' => $job['company'],
-                    'salary'  => $job['salary'],
-                    'place'   => $job['place'],
-                    'date'    => $date,
+                    'salary' => $job['salary'],
+                    'place' => $job['place'],
+                    'date' => $date,
                 ]);
 
-                $sendNotifyText .= '標題：'. $job['title'] . "\n";
-                $sendNotifyText .= '任務連結：'. $job['link'] . "\n";
-                $sendNotifyText .= '雇主：'. $job['company'] . "\n";
-                $sendNotifyText .= '工作地方：'. $job['place'] . "\n";
-                $sendNotifyText .= '薪水：'. $job['salary'] . "\n";
+                $sendNotifyText .= '標題：' . $job['title'] . "\n";
+                $sendNotifyText .= '任務連結：' . $job['link'] . "\n";
+                $sendNotifyText .= '雇主：' . $job['company'] . "\n";
+                $sendNotifyText .= '工作地方：' . $job['place'] . "\n";
+                $sendNotifyText .= '薪水：' . $job['salary'] . "\n";
+
+                $this->jobTexts[] = [
+                    '小雞上工 ----' . "\n\n" .
+                    '標題：' . $job['title'] . "\n" .
+                    '任務連結：' . $job['link'] . "\n" .
+                    '雇主：' . $job['company'] . "\n" .
+                    '工作地方：' . $job['place'] . "\n" .
+                    '薪水：' . $job['salary'] . "\n"
+                ];
             }
-            //$this->sendTelegramBotProcess($sendNotifyText);
-            if(!empty($sendNotifyText)) $sendNotifyText .= "\n" . "\n";
+            if (!empty($sendNotifyText))
+                $sendNotifyText .= "\n" . "\n";
         }
 
         foreach ($jobs as $job)
@@ -137,39 +148,51 @@ class ScraperChickpt extends Command
 
             if (!JobChickpt::where('link', $job['link'])->first())
             {
-                $this->sendTelegramBotProcess($telegramDivText);
-                if(empty($sendNotifyText)) $sendNotifyText .= "\n" . "小雞上工任務列表" . "\n". "\n";
+                if (empty($sendNotifyText))
+                    $sendNotifyText .= "\n" . "小雞上工任務列表" . "\n" . "\n";
 
                 JobChickpt::create([
-                    'title'   => $job['title'],
-                    'link'    => $job['link'],
+                    'title' => $job['title'],
+                    'link' => $job['link'],
                     'company' => $job['company'],
-                    'salary'  => $job['salary'],
-                    'place'   => $job['place'],
-                    'date'    => $date,
+                    'salary' => $job['salary'],
+                    'place' => $job['place'],
+                    'date' => $date,
                 ]);
 
-                $sendNotifyText .= '標題：'. $job['title'] . "\n";
-                $sendNotifyText .= '任務連結：'. $job['link'] . "\n";
-                $sendNotifyText .= '雇主：'. $job['company'] . "\n";
-                $sendNotifyText .= '工作地方：'. $job['place'] . "\n";
-                $sendNotifyText .= '薪水：'. $job['salary'] . "\n";
+                $sendNotifyText .= '標題：' . $job['title'] . "\n";
+                $sendNotifyText .= '任務連結：' . $job['link'] . "\n";
+                $sendNotifyText .= '雇主：' . $job['company'] . "\n";
+                $sendNotifyText .= '工作地方：' . $job['place'] . "\n";
+                $sendNotifyText .= '薪水：' . $job['salary'] . "\n";
+
+                $this->jobTexts[] = [
+                    '小雞上工 ----' . "\n\n" .
+                    '標題：' . $job['title'] . "\n" .
+                    '任務連結：' . $job['link'] . "\n" .
+                    '雇主：' . $job['company'] . "\n" .
+                    '工作地方：' . $job['place'] . "\n" .
+                    '薪水：' . $job['salary'] . "\n"
+                ];
             }
 
-            if(!empty($sendNotifyText)) $sendNotifyText .= "\n" . "\n";
+            if (!empty($sendNotifyText))
+            {
+                $sendNotifyText .= "\n" . "\n";
+            }
         }
 
-        if(!empty($sendNotifyText))
+        if (!empty($sendNotifyText))
         {
-            $this->info('save data success');
+            $this->info('send line notify start');
 
             $response = $this->lineNotify->sendMessage($sendNotifyText);
 
             $data = json_decode($response);
 
-            if($data->status != '200' && $data->message != 'ok')
+            if ($data->status != '200' && $data->message != 'ok')
             {
-                Log::error('send notify error! '. $data->message);
+                Log::error('send notify error! ' . $data->message);
             }
             else
             {
@@ -181,42 +204,19 @@ class ScraperChickpt extends Command
             $this->info('no recent job period!');
         }
 
-        // 定時清理舊資料 將昨天or7天前的資料刪除
+        if (!empty($this->jobTexts))
+        {
+            foreach ($this->jobTexts as $index => $jobText)
+            {
+                $message = implode("\n", $jobText);
+                $this->telegramService->sendMessage($this->chatId, $message);
+                sleep(3);
+            }
+        }
     }
 
     public function sendTelegramBotProcess($sendText)
     {
-        $botApiKey = '8030468571:AAFhSaw8zoiwxBZhf14BsL2QI9iQ8N_HKUE';
-        $botUsername = 'Hsu_Notify_Bot'; // 不包含 @
 
-        $chatId = '-4664862172';
-
-        //$this->telegramService->sendMessage($chatId,$sendText);
-        //dd(23123);
-        try {
-            // 初始化 Telegram 並設置到 Request
-            $telegram = new Telegram($botApiKey, $botUsername);
-            Request::initialize($telegram);
-
-            // 問使用者輸入
-            // $chatId = $this->ask('Enter the chat ID (e.g., -123456789 for groups):');
-            // $message = $this->ask('Enter the message:');
-
-            // 準備數據
-            $data = [
-                'chat_id' => '-4664862172',
-                'text'    => $sendText,
-            ];
-
-            // 發送訊息
-            $result = Request::sendMessage($data);
-            if ($result->isOk()) {
-                $this->info('Message sent: ' . $result->getDescription());
-            } else {
-                $this->error('Failed to send message: ' . $result->printError());
-            }
-        } catch (\Exception $e) {
-            $this->error('Error: ' . $e->getMessage());
-        }
     }
 }
