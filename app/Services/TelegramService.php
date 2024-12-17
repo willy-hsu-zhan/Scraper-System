@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Longman\TelegramBot\Telegram;
 use Longman\TelegramBot\Request;
+use Illuminate\Support\Facades\Http;
 
 class TelegramService
 {
@@ -14,7 +15,8 @@ class TelegramService
         $apiKey = config('telegram.apikey');
         $botUsername = config('telegram.username');
 
-        if (!$apiKey || !$botUsername) {
+        if (!$apiKey || !$botUsername)
+        {
             throw new \Exception('Telegram bot configuration is missing.');
         }
 
@@ -28,26 +30,43 @@ class TelegramService
             'text' => $message,
         ];
 
-        try {
+        try
+        {
             $result = Request::sendMessage($data);
             return $result->isOk() ? $result->getDescription() : $result->printError();
-        } catch (\Exception $e) {
+        }
+        catch (\Exception $e)
+        {
             return $e->getMessage();
         }
     }
 
-    public function sendDocument(string $chatId, string $documentPath)
+    public function sendDocument(string $chatId, string $filePath, string $fileName)
     {
-        $data = [
-            'chat_id' => $chatId,
-            'document' => new \CURLFile(realpath($documentPath)),
-        ];
+        try
+        {
+            $response = Http::timeout(60)
+                ->attach(
+                    'document',
+                    file_get_contents($filePath),
+                    $fileName
+                )
+                ->post('https://api.telegram.org/bot' . $this->apiKey . '/sendDocument', [
+                    'chat_id' => $chatId,
+                ]);
 
-        try {
-            $result = Request::sendDocument($data);
-            return $result->isOk() ? $result->getDescription() : $result->printError();
-        } catch (\Exception $e) {
-            return $e->getMessage();
+            if ($response->successful())
+            {
+                return "檔案上傳成功";
+            }
+            else
+            {
+                return "檔案上傳失敗：" . $response->body();
+            }
+        }
+        catch (\Exception $e)
+        {
+            return "檔案上傳失敗：" . $e->getMessage();
         }
     }
 }

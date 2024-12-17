@@ -6,13 +6,23 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 use Longman\TelegramBot\Request;
 use Longman\TelegramBot\Telegram;
-use Longman\TelegramBot\Entities\CURLFile;
-
+use App\Services\TelegramService;
 
 class DownloadYoutube extends Command
 {
     protected $signature = 'youtube:download {url} {--format=mp4} {--resolution=720} {--audio-only}';
     protected $description = 'Download YouTube videos or get video info';
+
+    protected $fileName;
+    protected $telegramService;
+    protected $chatId = '-4664862172'; // 暫時先用全域變數 // 日後聊天室擴充再更改
+    protected $baseFilePath;
+    public function __construct(TelegramService $telegramService)
+    {
+        parent::__construct();
+        $this->telegramService = $telegramService;
+        $this->baseFilePath = (string)storage_path('app/youtube/');
+    }
 
     public function handle()
     {
@@ -47,8 +57,10 @@ class DownloadYoutube extends Command
             '/\/(v|embed|shorts|live)\/([0-9A-Za-z-_]{10,})/',
         ];
 
-        foreach ($patterns as $pattern) {
-            if (preg_match($pattern, $url, $matches)) {
+        foreach ($patterns as $pattern)
+        {
+            if (preg_match($pattern, $url, $matches))
+            {
                 return $matches[count($matches) - 1];
             }
         }
@@ -56,59 +68,66 @@ class DownloadYoutube extends Command
         return null;
     }
 
+    private function getYtDlpPath() // 本地預設抓homestead路徑 正式環境另抓位置
+    {
+        return app('env') == 'local' ? '/home/vagrant/.local/bin/yt-dlp' : '/usr/local/bin/yt-dlp';
+    }
+
+    private function getOutputPath()
+    {
+        return $this->baseFilePath . '%(title)s-720p.%(ext)s';
+    }
+
+    private function doFormatWebmToMp4Process()
+    {
+        $downloadedFile = $this->getDownloadFile();
+        $convertedFile = preg_replace('/\.[^.]+$/', '.mp4', $downloadedFile); // 轉換檔案名稱為 .mp4
+        // 檢查檔案是否為 webm 格式，並使用 ffmpeg 進行轉換
+        if (pathinfo($downloadedFile, PATHINFO_EXTENSION) === 'webm')
+        {
+            $ffmpegCommand = sprintf(
+                'ffmpeg -i %s -c:v libx264 -c:a aac -strict experimental %s',
+                escapeshellarg($downloadedFile),
+                escapeshellarg($convertedFile)
+            );
+
+            exec($ffmpegCommand, $output, $returnVar);
+
+            if ($returnVar === 0)
+            {
+                echo "Video converted to MP4 successfully! Saved to:\n";
+                echo $convertedFile . "\n";
+
+                // 可選擇刪除原始的 webm 檔案
+                unlink($downloadedFile); // 刪除原始的 webm 檔案
+                echo "Original webm file deleted.\n";
+                $this->fileName = basename($convertedFile);
+            }
+            else
+            {
+                echo "Conversion failed. Error:\n";
+                echo implode("\n", $output);
+                return 1;
+            }
+        }
+        else
+        {
+            echo "Downloaded file is not in webm format.\n";
+            return 1;
+        }
+    }
+
+    private function getDownloadFile()
+    {
+        // 獲取下載的檔案名稱並轉換為 .mp4
+        return glob(storage_path('app/youtube/*-720p.*'))[0]; // 假設只會有一個文件
+    }
+
     private function downloadVideo($videoId, $format, $resolution, $audioOnly)
     {
-        /*
-        $bot_api_key = '8030468571:AAFhSaw8zoiwxBZhf14BsL2QI9iQ8N_HKUE';  // 您的 Telegram Bot Token
-        $chat_id = '-4664862172'; // 您的聊天 ID
-
-        // 設定 Telegram Bot
-        $telegram = new Telegram($bot_api_key);
-
-        // // 轉換檔案為 CURLFile 物件
-        // $document = new \CURLFile(realpath('/var/www/Scraper-System/storage/app/youtube/754568409.827326.mp4'), 'video/mp4');
-        // dd($document);
-        // // 發送檔案
-        // $response = Request::sendDocument([
-        //     'chat_id' => $chat_id,
-        //     'parse_mode' => 'mp4',
-        //     'document' => $document,
-        // ]);
-        //dd($response);
-        $bot_api_key = '8030468571:AAFhSaw8zoiwxBZhf14BsL2QI9iQ8N_HKUE';  // 您的 Telegram Bot Token
-        $chat_id = '-4664862172'; // 您的聊天 ID
-
-        // 使用 Laravel HTTP 客戶端發送檔案
-        $response = Http::timeout(6000)  // 設定超時時間為 60 秒
-            ->attach(
-                'document',
-                file_get_contents('/var/www/Scraper-System/storage/app/youtube/Rick Astley - Never Gonna Give You Up (Official Music Video)-720p.mp4'),
-                'Rick Astley - Never Gonna Give You Up (Official Music Video)-720p.mp4'
-            )
-            ->post('https://api.telegram.org/bot' . $bot_api_key . '/sendDocument', [
-                'chat_id' => $chat_id,
-            ]);
-
-        if ($response->successful()) {
-            echo "檔案上傳成功";
-        } else {
-            echo "檔案上傳失敗：" . $response->body();
-        }
-
-
-        // if ($response->isOk()) {
-        //     echo "File uploaded successfully!";
-        // } else {
-        //     echo "Error uploading file: " . $response->getDescription();
-        // }
-
-        */
-        //dd(213123);
-        // 使用 yt-dlp 工具執行下載
-        //$ytDlpPath = '/usr/local/bin/yt-dlp'; // yt-dlp 工具路徑
-        $ytDlpPath = '/home/vagrant/.local/bin/yt-dlp';
+        $ytDlpPath = $this->getYtDlpPath();
         $url = 'https://www.youtube.com/watch?v=' . $videoId;
-        $outputPath = storage_path('app/youtube/%(title)s-720p.%(ext)s');
+        $outputPath = $this->getOutputPath();
         $format = 'bestvideo[height<=720]+bestaudio'; // 下載最高畫質影片
 
         // 使用 escapeshellarg 處理特殊符號
@@ -123,82 +142,21 @@ class DownloadYoutube extends Command
         // 執行下載命令
         exec($command, $output, $returnVar);
 
-        if ($returnVar === 0) {
+        if ($returnVar === 0)
+        {
             echo "Download successful! Video saved to:\n";
             echo $outputPath . "\n";
-
-            // 獲取下載的檔案名稱並轉換為 .mp4
-            $downloadedFile = glob(storage_path('app/youtube/*-720p.*'))[0]; // 假設只會有一個文件
-            $convertedFile = preg_replace('/\.[^.]+$/', '.mp4', $downloadedFile); // 轉換檔案名稱為 .mp4
-
-            // 檢查檔案是否為 webm 格式，並使用 ffmpeg 進行轉換
-            if (pathinfo($downloadedFile, PATHINFO_EXTENSION) === 'webm') {
-                $ffmpegCommand = sprintf(
-                    'ffmpeg -i %s -c:v libx264 -c:a aac -strict experimental %s',
-                    escapeshellarg($downloadedFile),
-                    escapeshellarg($convertedFile)
-                );
-
-                exec($ffmpegCommand, $output, $returnVar);
-
-                if ($returnVar === 0) {
-                    echo "Video converted to MP4 successfully! Saved to:\n";
-                    echo $convertedFile . "\n";
-
-                    // 可選擇刪除原始的 webm 檔案
-                    unlink($downloadedFile); // 刪除原始的 webm 檔案
-                    echo "Original webm file deleted.\n";
-                    $fileName = basename($convertedFile);
-                    $this->uploadToTelegram($fileName);
-                } else {
-                    echo "Conversion failed. Error:\n";
-                    echo implode("\n", $output);
-                }
-            } else {
-                echo "Downloaded file is not in webm format.\n";
-            }
-        } else {
+            $this->doFormatWebmToMp4Process();
+        }
+        else
+        {
             echo "Download failed. Error:\n";
             echo implode("\n", $output);
+            return 1;
         }
-    }
 
-    public function uploadToTelegram($fileName)
-    {
-        $bot_api_key = '8030468571:AAFhSaw8zoiwxBZhf14BsL2QI9iQ8N_HKUE';  // 您的 Telegram Bot Token
-        $chat_id = '-4664862172'; // 您的聊天 ID
-
-        // 設定 Telegram Bot
-        $telegram = new Telegram($bot_api_key);
-
-        // // 轉換檔案為 CURLFile 物件
-        // $document = new \CURLFile(realpath('/var/www/Scraper-System/storage/app/youtube/754568409.827326.mp4'), 'video/mp4');
-        // dd($document);
-        // // 發送檔案
-        // $response = Request::sendDocument([
-        //     'chat_id' => $chat_id,
-        //     'parse_mode' => 'mp4',
-        //     'document' => $document,
-        // ]);
-        //dd($response);
-        $bot_api_key = '8030468571:AAFhSaw8zoiwxBZhf14BsL2QI9iQ8N_HKUE';  // 您的 Telegram Bot Token
-        $chat_id = '-4664862172'; // 您的聊天 ID
-
-        // 使用 Laravel HTTP 客戶端發送檔案
-        $response = Http::timeout(6000)  // 設定超時時間為 60 秒
-            ->attach(
-                'document',
-                file_get_contents('/var/www/Scraper-System/storage/app/youtube/' . $fileName),
-                $fileName
-            )
-            ->post('https://api.telegram.org/bot' . $bot_api_key . '/sendDocument', [
-                'chat_id' => $chat_id,
-            ]);
-
-        if ($response->successful()) {
-            echo "檔案上傳成功";
-        } else {
-            echo "檔案上傳失敗：" . $response->body();
-        }
+        // upload to telegram bot
+        $filePath = $this->baseFilePath . $this->fileName;
+        $this->telegramService->sendDocument($this->chatId, $filePath, $this->fileName);
     }
 }
