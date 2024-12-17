@@ -210,13 +210,8 @@ class ScraperChickpt extends Command
             {
                 $message = implode("\n", $jobText);
                 $this->telegramService->sendMessage($this->chatId, $message);
-                sleep(3);
+                sleep(1);
             }
         }
-    }
-
-    public function sendTelegramBotProcess($sendText)
-    {
-
     }
 }
