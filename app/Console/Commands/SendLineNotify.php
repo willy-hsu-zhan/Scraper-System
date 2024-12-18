@@ -36,7 +36,6 @@ class SendLineNotify extends Command
     {
         $message = "\n" . 'Hello, this is a Line Notify message from Laravel!';
         $response = $this->lineNotify->sendMessage($message);
-        dd($response);
         //return response()->json(['response' => $response]);
     }
 }

@@ -213,6 +213,10 @@ class ScraperChickpt extends Command
                 $this->telegramService->sendMessage($this->chatId, $message);
                 sleep(1);
             }
+
+            // 辨別已看過的訊息分隔用
+            $infoText = '最後更新時間：' . Carbon::now()->setTimezone('Asia/Taipei')->format('Y-m-d H:m:s');
+            $this->telegramService->sendMessage($this->chatId, $infoText);
         }
     }
 }
