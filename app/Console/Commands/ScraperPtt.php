@@ -75,8 +75,8 @@ class ScraperPtt extends Command
 
         $baseUrl = 'https://www.ptt.cc';
 
-        // $url = 'https://www.ptt.cc/bbs/part-time'; // part-time版
-        $url = 'https://www.ptt.cc/bbs/part-time/index3950.html';
+        $url = 'https://www.ptt.cc/bbs/part-time'; // part-time版
+        // $url = 'https://www.ptt.cc/bbs/part-time/index3950.html';
 
         $crawler = $client->request('GET', $url);
 
@@ -148,7 +148,6 @@ class ScraperPtt extends Command
 
             ++$currentPage;
         }
-
 
         $client = new Client();
 
@@ -254,11 +253,11 @@ class ScraperPtt extends Command
 
                 $this->jobTexts[] = [
                     '**** PTT ****' . "\n\n" .
-                    '標題：' . $job['title'] . "\n" .
+                    '標題：' . (isset($job['title']) ? $job['title'] : '') . "\n".
                     '任務連結：' . $job['link'] . "\n" .
-                    '雇主：' . $job['company'] . "\n" .
-                    '工作地方：' . $job['place'] . "\n" .
-                    '薪水：' . $job['salary'] . "\n"
+                    '雇主：' . '雇主：' . (isset($job['company']) ? $job['company'] : '') . "\n".
+                    '工作地方：' . (isset($job['place']) ? $job['place'] : '') . "\n".
+                    '薪水：' . (isset($job['salary']) ? $job['salary'] : 0) . "\n"
                 ];
             }
 
