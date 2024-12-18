@@ -255,9 +255,9 @@ class ScraperPtt extends Command
                     '**** PTT ****' . "\n\n" .
                     '標題：' . (isset($job['title']) ? $job['title'] : '') . "\n".
                     '任務連結：' . $job['link'] . "\n" .
-                    '雇主：' . '雇主：' . (isset($job['company']) ? $job['company'] : '') . "\n".
-                    '工作地方：' . (isset($job['place']) ? $job['place'] : '') . "\n".
-                    '薪水：' . (isset($job['salary']) ? $job['salary'] : 0) . "\n"
+                    '雇主：' . (isset($job['company']) ? $job['company'] : '') . "\n"
+                    //'工作地方：' . (isset($job['place']) ? $job['place'] : '') . "\n".
+                    //'薪水：' . (isset($job['salary']) ? $job['salary'] : 0) . "\n"
                 ];
             }
 
@@ -294,7 +294,7 @@ class ScraperPtt extends Command
             {
                 $message = implode("\n", $jobText);
                 $this->telegramService->sendMessage($this->chatId, $message);
-                sleep(1);
+                sleep(3);
             }
 
             // 辨別已看過的訊息分隔用

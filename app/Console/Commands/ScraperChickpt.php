@@ -211,7 +211,7 @@ class ScraperChickpt extends Command
             {
                 $message = implode("\n", $jobText);
                 $this->telegramService->sendMessage($this->chatId, $message);
-                sleep(1);
+                sleep(3);
             }
 
             // 辨別已看過的訊息分隔用
