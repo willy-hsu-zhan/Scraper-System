@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('job_ptt', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('link');
-            $table->string('company');
-            $table->unsignedInteger('salary');
-            $table->string('place');
-            $table->date('date');
+            $table->string('title')->nullable();
+            $table->string('link')->nullable();
+            $table->string('company')->nullable();
+            $table->unsignedInteger('salary')->nullable();
+            $table->string('place')->nullable();
+            $table->date('date')->nullable();
             $table->timestamps();
         });
     }
