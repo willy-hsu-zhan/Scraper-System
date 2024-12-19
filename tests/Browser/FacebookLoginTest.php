@@ -51,7 +51,7 @@ class FacebookLoginTest extends DuskTestCase
             }
             catch (Exception $e)
             {
-                dd($e->getMessage());  // 顯示錯誤訊息
+                //dd($e->getMessage());  // 顯示錯誤訊息
             }
             $url = $baseUrl . $groupUrl . $searchConditionUrl;
 
@@ -63,7 +63,7 @@ class FacebookLoginTest extends DuskTestCase
             }
             catch (Exception $e)
             {
-                dd('Error: ' . $e->getMessage());  // 顯示錯誤訊息
+                //dd('Error: ' . $e->getMessage());  // 顯示錯誤訊息
             }
 
 
@@ -102,7 +102,6 @@ class FacebookLoginTest extends DuskTestCase
                     'deadline' => trim($deadline),
                 ];
             });
-            dd($jobs);
             $sendNotifyText = "";
 
             foreach ($jobs as $job)

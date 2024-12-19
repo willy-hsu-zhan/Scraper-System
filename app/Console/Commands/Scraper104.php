@@ -39,7 +39,6 @@ class Scraper104 extends Command
      */
     public function handle()
     {
-        return 0;
         Artisan::call('dusk', [
             '--filter' => 'SearchJob104Test',
         ]);

@@ -43,7 +43,7 @@ class TelegramBotTest extends Command
             // 準備數據
             $data = [
                 'chat_id' => '-4664862172',
-                'text'    => 'YAAAAAAAAA 我又成功了',
+                'text'    => 'YAAAAA',
             ];
 
             // 發送訊息

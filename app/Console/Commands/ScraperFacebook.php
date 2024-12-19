@@ -26,7 +26,6 @@ class ScraperFacebook extends Command
      */
     public function handle()
     {
-        return 0;
         Artisan::call('dusk', [
             '--filter' => 'FacebookLoginTest',
         ]);
