@@ -99,39 +99,18 @@
 
                     <div class="col-lg-6 position-relative" data-aos="fade-up" data-aos-delay="100">
                         <img src="assets/img/about.jpg" class="img-fluid" alt="">
-                        <a href="https://youtu.be/GXDgr11eNO4" class="glightbox pulsating-play-btn"></a>
+                        <a href="https://www.youtube.com/playlist?list=PLKJj4i0VcDDvcDBbQssQJRLvDw1oyF8DM" target="_blank" rel="noopener noreferrer" class="pulsating-play-btn"></a>
                     </div>
 
                     <div class="col-lg-6 ps-lg-4 content d-flex flex-column justify-content-center" data-aos="fade-up"
                         data-aos-delay="200">
-                        <h3>關於蓋地藏廟的源起</h3>
-                        <!-- <p>
-                我一開始還沒開始念《地藏經》的時候，經歷了一段讓我對人生感觸深刻的時期。那時，我的岳父岳母突然離世，加上身邊一些同學和朋友年紀輕輕就過世了，讓我深刻感受到世事無常。這些經歷讓我萌生了修行的念頭，於是開始接觸佛法，並選擇念誦《地藏經》。
-              </p>
-              <p>
-                最初念經的時候，坦白說，我並沒有特別的感應。唯一讓我感受到力量的，是念誦「南無地藏王菩薩」聖號。那時候，一開始念，就發現自己所有的倒楣事彷彿瞬間停了下來，心裡覺得很安定，生活也慢慢好轉。於是，我更加精進地修行，並持續念誦《地藏經》。
-              </p>
-              <p>
-                後來有一天，我做了一個清晰的夢，夢見地藏王菩薩化現成一位美麗的女子，站在三座山的中央，腳踩在最高的一座山峰上。那山峰極高，看起來至少有一百層樓高。菩薩手持金錫禪杖，另一隻手拿著一疊像是古代毛筆字寫成的白紙，不斷將它們拋向天空。那些紙張飄向有人居住的城鎮，彷彿傳遞著什麼訊息。
-              </p>
-              <p>夢中，有一個聲音對我說：「如果你想救度眾生，那麼就去蓋一座地藏小廟吧。藉由弘揚地藏法門，你將能幫助更多人。」
-              </p>
-              <p>
-                這個夢深深影響了我，也成為我決心蓋地藏廟的起點。之後，我更加專注於修行，持續念誦《地藏經》。有一次，我在夢中再次見到南無地藏王菩薩，祂告訴我，要學習「占察輪」。占察輪是一種能看透過去、現在和未來的法門，但必須具備一定的靈通能力才能修習。如果沒有相應的基礎，很可能會不準確，甚至受到外魔干擾。因此，占察輪最好在白天進行。
-              </p>
-              <p>
-                至於為什麼要蓋地藏廟呢？原因很簡單。我們在人世間，總會遇到一些不可避免的業力影響。誠心念佛固然重要，但有些事情因為業力牽引，無法輕易化解。這就像人們常說的「是福不是禍，是禍躲不過」。然而，透過地藏法門的弘揚，我們可以幫助更多人減輕痛苦，化解業障。
-              </p>
-              <p>我深信地藏菩薩的力量，也堅信這並不是迷信，而是發自內心的信仰和實修的體驗。透過蓋地藏廟，能讓更多人接觸到地藏法門，進而救度更多的眾生。這就是蓋地藏廟的緣起。</p> -->
-                        <p>當我還沒開始念《地藏經》時，經歷了一段人生低谷，岳父岳母突然離世，身邊的朋友也有年輕過世的，這些讓我深刻體會到生命的無常。這段經歷讓我萌生了修行的念頭，於是開始接觸佛法，並念誦《地藏經》。
-                        </p>
-                        <p>最初，雖然沒有特別的感應，但我發現念「南無地藏王菩薩」聖號後，倒楣的事情彷彿停止了，內心逐漸安定，生活也慢慢好轉。我便更加精進地修行。</p>
-                        <p>
-                            有一天，我做了一個清晰的夢，夢中地藏王菩薩化身為一位美麗的女子，站在三座山中最高的一座山峰上，手持金錫禪杖並將寫滿古字的紙張拋向天空，這些紙飄向城鎮，彷彿傳遞著訊息。夢中的聲音告訴我：「如果你想救度眾生，就去蓋一座地藏廟。」
-                        </p>
-                        <p>這個夢深深影響了我，也成為我決心蓋地藏廟的起點。隨後，我更加專注於修行，並多次夢見地藏菩薩教導我修習「占察輪」，這是一種能看透過去、現在和未來的法門。</p>
-                        <p>蓋地藏廟的原因是因為每個人都會遇到業力的影響，誠心念佛固然重要，但有些業障無法輕易化解。透過地藏法門的弘揚，我們可以幫助更多人減輕痛苦，化解業障。我深信這是發自內心的信仰，而不是迷信。
-                        </p>
+                        <h3>發心蓋地藏廟的緣起與願景</h3>
+                        <p>阿彌陀佛，大家好！我是老周師兄，法名陳彥儒，是地藏菩薩廟的發起人。今天想與大家分享我發心蓋地藏廟的經過和願景。</p>
+                        <p>大約兩年前，我的岳父岳母先後離世，這讓我深刻體會到人生的無常。當時，我內心感到迷茫，便到廟裡拜拜，遇到了一位師姐，她鼓勵我念地藏王菩薩的聖號。剛開始，我半信半疑，但很快感受到地藏菩薩的加持——一些倒楣的事情突然停止了，內心也變得平靜。</p>
+                        <p>隨著不斷的誦經和念聖號，我感受到越來越多的感應與夢境，最終皈依地藏王菩薩門下。有一次，夢中地藏菩薩指示我可以發心蓋一間小小的地藏廟來弘揚佛法。我用占察輪請示，菩薩多次指示：「不用蓋太大，一塊六坪的土地就足夠了。」</p>
+                        <p>地藏廟的存在，不僅是一個修行與祈福的場所，更是實踐慈悲的平臺。我們希望藉由地藏廟的建立，除了為更多人提供一個清靜的修行場所外，也能幫助更多需要幫助的人。如果廟中有香客燒香拜拜，功德箱的善款達到一定數額，我們會將一部分用於幫助中低收入戶和清寒家庭。這不僅是地藏菩薩的心願，也是我們作為修行人應該盡力去做的事情。</p>
+                        <p>當然，我們明白每個人的能力有限，無法做到所有事，但我們相信，只要真心付出，點滴善念便能匯聚成大愛。</p>
+                        <p>如果您對占察或其他修行問題有興趣，也歡迎隨時與我聯繫，或觀看我的 YouTube 頻道 <strong>「周末地藏菩薩」</strong>，了解更多相關內容。感恩各位的支持與護持，阿彌陀佛！</p>
                     </div>
                 </div>
             </div>
@@ -541,7 +520,7 @@
                             <i class="bi bi-telephone flex-shrink-0"></i>
                             <div>
                                 <h3>Call Us</h3>
-                                <p>許先生 +886 0975346773</p>
+                                <p>信眾許先生 +886 0975346773</p>
                             </div>
                         </div>
 
@@ -576,31 +555,31 @@
               <form action="forms/contact.php" method="post" class="php-email-form" data-aos="fade-up"
                 data-aos-delay="200">
                 <div class="row gy-4">
-  
+
                   <div class="col-md-6">
                     <input type="text" name="name" class="form-control" placeholder="Your Name" required="">
                   </div>
-  
+
                   <div class="col-md-6 ">
                     <input type="email" class="form-control" name="email" placeholder="Your Email" required="">
                   </div>
-  
+
                   <div class="col-md-12">
                     <input type="text" class="form-control" name="subject" placeholder="Subject" required="">
                   </div>
-  
+
                   <div class="col-md-12">
                     <textarea class="form-control" name="message" rows="6" placeholder="Message" required=""></textarea>
                   </div>
-  
+
                   <div class="col-md-12 text-center">
                     <div class="loading">Loading</div>
                     <div class="error-message"></div>
                     <div class="sent-message">Your message has been sent. Thank you!</div>
-  
+
                     <button type="submit">Send Message</button>
                   </div>
-  
+
                 </div>
               </form>
             </div>End Contact Form -->
