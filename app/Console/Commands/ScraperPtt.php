@@ -298,7 +298,7 @@ class ScraperPtt extends Command {
             // 送發財圖
             $this->sendFachaiGIF();
             // 辨別已看過的訊息分隔用
-            $infoText = '最後更新時間：' . Carbon::now()->setTimezone('Asia/Taipei')->format('Y-m-d H:m:s');
+            $infoText = '最後更新時間：' . Carbon::now()->setTimezone('Asia/Taipei')->format('Y-m-d H:i:s');
             $this->telegramService->sendMessage($this->chatId, $infoText);
         }
     }
