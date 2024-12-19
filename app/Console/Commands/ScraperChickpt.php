@@ -10,9 +10,9 @@ use App\Services\LineNotify;
 use App\Services\TelegramService;
 use App\Models\JobChickpt;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\File;
 
-class ScraperChickpt extends Command
-{
+class ScraperChickpt extends Command {
     /**
      * The name and signature of the console command.
      *
@@ -36,7 +36,7 @@ class ScraperChickpt extends Command
     public function __construct(LineNotify $lineNotify, TelegramService $telegramService)
     {
         parent::__construct();
-        $this->lineNotify = $lineNotify;
+        $this->lineNotify      = $lineNotify;
         $this->telegramService = $telegramService;
     }
 
@@ -46,6 +46,7 @@ class ScraperChickpt extends Command
 
     public function handle()
     {
+        //$this->telegramService->sendDocument($this->chatId, $filePath, $this->fileName);
         $currentPage = 1; // 小雞上工任務頁預設為第一頁
 
         $client = new Client();
@@ -54,7 +55,7 @@ class ScraperChickpt extends Command
 
         $crawler = $client->request('GET', $url); // 默認第一頁
 
-        while (true)
+        while( true )
         {
             try
             {
@@ -80,21 +81,20 @@ class ScraperChickpt extends Command
             }
 
             // Loop through each job
-            $jobList->each(function ($jobNode) use (&$jobs)
-            { // 傳值不能傳參考
-                $title = $jobNode->filter('h2')->text();
-                $link = $jobNode->filter('a')->attr('href');
-                $company = $jobNode->filter('.ellipsis-job-company')->text();
-                $salary = $jobNode->filter('.salary')->text();
-                $place = $jobNode->filter('.place')->text();
+            $jobList->each(function ($jobNode) use (&$jobs) { // 傳值不能傳參考
+                $title       = $jobNode->filter('h2')->text();
+                $link        = $jobNode->filter('a')->attr('href');
+                $company     = $jobNode->filter('.ellipsis-job-company')->text();
+                $salary      = $jobNode->filter('.salary')->text();
+                $place       = $jobNode->filter('.place')->text();
                 $update_time = $jobNode->filter('.date-time')->text();
 
                 $jobs[] = [
-                    'title' => trim($title),
-                    'link' => trim($link),
-                    'company' => trim($company),
-                    'salary' => trim($salary),
-                    'place' => trim($place),
+                    'title'       => trim($title),
+                    'link'        => trim($link),
+                    'company'     => trim($company),
+                    'salary'      => trim($salary),
+                    'place'       => trim($place),
                     'update_time' => trim($update_time),
                 ];
             });
@@ -104,22 +104,22 @@ class ScraperChickpt extends Command
 
         $sendNotifyText = "";
 
-        foreach ($jobs as $job)
+        foreach( $jobs as $job )
         {
             $date = Carbon::now()->toDateString();
 
-            if (!JobChickpt::where('link', $job['link'])->first())
+            if( !JobChickpt::where('link', $job['link'])->first() )
             {
-                if (empty($sendNotifyText))
+                if( empty($sendNotifyText) )
                     $sendNotifyText .= "\n" . "小雞上工任務列表" . "\n" . "\n";
 
                 JobChickpt::create([
-                    'title' => $job['title'],
-                    'link' => $job['link'],
+                    'title'   => $job['title'],
+                    'link'    => $job['link'],
                     'company' => $job['company'],
-                    'salary' => $job['salary'],
-                    'place' => $job['place'],
-                    'date' => $date,
+                    'salary'  => $job['salary'],
+                    'place'   => $job['place'],
+                    'date'    => $date,
                 ]);
 
                 $sendNotifyText .= '標題：' . $job['title'] . "\n";
@@ -137,27 +137,27 @@ class ScraperChickpt extends Command
                     '薪水：' . $job['salary'] . "\n"
                 ];
             }
-            if (!empty($sendNotifyText))
+            if( !empty($sendNotifyText) )
                 $sendNotifyText .= "\n" . "\n";
         }
 
-        foreach ($jobs as $job)
+        foreach( $jobs as $job )
         {
             $telegramDivText = '';
-            $date = Carbon::now()->toDateString();
+            $date            = Carbon::now()->toDateString();
 
-            if (!JobChickpt::where('link', $job['link'])->first())
+            if( !JobChickpt::where('link', $job['link'])->first() )
             {
-                if (empty($sendNotifyText))
+                if( empty($sendNotifyText) )
                     $sendNotifyText .= "\n" . "小雞上工任務列表" . "\n" . "\n";
 
                 JobChickpt::create([
-                    'title' => $job['title'],
-                    'link' => $job['link'],
+                    'title'   => $job['title'],
+                    'link'    => $job['link'],
                     'company' => $job['company'],
-                    'salary' => $job['salary'],
-                    'place' => $job['place'],
-                    'date' => $date,
+                    'salary'  => $job['salary'],
+                    'place'   => $job['place'],
+                    'date'    => $date,
                 ]);
 
                 $sendNotifyText .= '標題：' . $job['title'] . "\n";
@@ -176,7 +176,7 @@ class ScraperChickpt extends Command
                 ];
             }
 
-            if (!empty($sendNotifyText))
+            if( !empty($sendNotifyText) )
             {
                 $sendNotifyText .= "\n" . "\n";
             }
@@ -205,18 +205,38 @@ class ScraperChickpt extends Command
         //     $this->info('no recent job period!');
         // }
 
-        if (!empty($this->jobTexts))
+        if( !empty($this->jobTexts) )
         {
-            foreach ($this->jobTexts as $index => $jobText)
+            foreach( $this->jobTexts as $index => $jobText )
             {
                 $message = implode("\n", $jobText);
                 $this->telegramService->sendMessage($this->chatId, $message);
                 sleep(3);
             }
 
+            // 送發財圖
+            $this->sendFachaiGIF();
             // 辨別已看過的訊息分隔用
             $infoText = '最後更新時間：' . Carbon::now()->setTimezone('Asia/Taipei')->format('Y-m-d H:m:s');
             $this->telegramService->sendMessage($this->chatId, $infoText);
+        }
+    }
+
+    public function sendFachaiGIF()
+    {
+        $path     = public_path('assets/video/fachai/');
+        $files    = File::files($path);
+        $fileName = [];
+
+        foreach( $files as $file )
+        {
+            $fileName[] = $file->getFilename();
+        }
+        if( !empty($fileName) )
+        {
+            $randomFile     = $fileName[array_rand($fileName)];
+            $randomFilePath = $path . $randomFile;
+            $this->telegramService->sendDocument($this->chatId, $randomFilePath, $randomFile);
         }
     }
 }
