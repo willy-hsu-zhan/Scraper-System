@@ -2,15 +2,24 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-J9XLPJGM5Y"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'G-J9XLPJGM5Y');
+    </script>
+
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>建造地藏廟募款 - 弘揚慈悲，護佑眾生</title>
     <meta name="description" content="">
     <meta name="keywords" content="">
-
-    <!-- Favicons
-  <link href="assets/img/favicon.png" rel="icon">
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon"> -->
     <link rel="icon" href="{{ asset('assets/favicon.ico') }}" type="image/x-icon">
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com" rel="preconnect">
@@ -38,46 +47,34 @@
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
 
+    <!-- Meta Pixel Code -->
+    <script>
+        ! function(f, b, e, v, n, t, s) {
+            if (f.fbq) return;
+            n = f.fbq = function() {
+                n.callMethod ?
+                    n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            };
+            if (!f._fbq) f._fbq = n;
+            n.push = n;
+            n.loaded = !0;
+            n.version = '2.0';
+            n.queue = [];
+            t = b.createElement(e);
+            t.async = !0;
+            t.src = v;
+            s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s)
+        }(window, document, 'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '1255628909077535');
+        fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+            src="https://www.facebook.com/tr?id=1255628909077535&ev=PageView&noscript=1" /></noscript>
+    <!-- End Meta Pixel Code -->
 </head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-J9XLPJGM5Y"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
 
-    function gtag() {
-        dataLayer.push(arguments);
-    }
-    gtag('js', new Date());
-
-    gtag('config', 'G-J9XLPJGM5Y');
-</script>
-
-<!-- Meta Pixel Code -->
-<script>
-    ! function(f, b, e, v, n, t, s) {
-        if (f.fbq) return;
-        n = f.fbq = function() {
-            n.callMethod ?
-                n.callMethod.apply(n, arguments) : n.queue.push(arguments)
-        };
-        if (!f._fbq) f._fbq = n;
-        n.push = n;
-        n.loaded = !0;
-        n.version = '2.0';
-        n.queue = [];
-        t = b.createElement(e);
-        t.async = !0;
-        t.src = v;
-        s = b.getElementsByTagName(e)[0];
-        s.parentNode.insertBefore(t, s)
-    }(window, document, 'script',
-        'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1255628909077535');
-    fbq('track', 'PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none"
-        src="https://www.facebook.com/tr?id=1255628909077535&ev=PageView&noscript=1" /></noscript>
-<!-- End Meta Pixel Code -->
 
 <body class="index-page">
 
@@ -155,7 +152,8 @@
                         </p>
                         <p>當然，我們明白每個人的能力有限，無法做到所有事，但我們相信，只要真心付出，點滴善念便能匯聚成大愛。</p>
                         <p>如果您對占察或其他修行問題有興趣，也歡迎隨時與我聯繫，或觀看我的 YouTube 頻道
-                            <strong>「周末地藏菩薩」</strong>，了解更多相關內容。感恩各位的支持與護持，阿彌陀佛！</p>
+                            <strong>「周末地藏菩薩」</strong>，了解更多相關內容。感恩各位的支持與護持，阿彌陀佛！
+                        </p>
                     </div>
                 </div>
             </div>
@@ -672,6 +670,14 @@
             });
         });
     </script>
+
+      <!-- Google Tag Manager (noscript) -->
+  <noscript>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=G-J9XLPJGM5Y"
+      height="0" width="0" style="display:none;visibility:hidden">
+    </iframe>
+  </noscript>
+  <!-- End Google Tag Manager (noscript) -->
 </body>
 
 </html>
