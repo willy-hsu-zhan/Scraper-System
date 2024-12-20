@@ -179,8 +179,8 @@
                         <div class="content" data-aos="fade-up" data-aos-delay="100">
                             <h4 style="font-weight: bold;">匯款帳號資訊</h4><br>
                             <h5><strong>銀行代碼：</strong> 808</h5>
-                            <h5><strong>銀行匯款帳號：</strong> 1230976051400</h5><br>
-                            <h6><strong>最後更新時間：</strong> 2024-12-18</h6>
+                            <h5><strong>銀行匯款帳號：</strong> 1230979154915</h5><br>
+                            <h6><strong>最後更新時間：</strong> 2024-12-20</h6>
                         </div>
                     </div>
                 </div>
