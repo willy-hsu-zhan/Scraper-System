@@ -2,15 +2,24 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>建造地藏廟募款 - 弘揚慈悲，護佑眾生</title>
-  <meta name="description" content="">
-  <meta name="keywords" content="">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-J9XLPJGM5Y"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
 
-  <!-- Favicons
-  <link href="assets/img/favicon.png" rel="icon">
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon"> -->
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'G-J9XLPJGM5Y');
+    </script>
+
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>建造地藏廟募款 - 弘揚慈悲，護佑眾生</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
     <link rel="icon" href="{{ asset('assets/favicon.ico') }}" type="image/x-icon">
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com" rel="preconnect">
@@ -38,46 +47,34 @@
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
 
+    <!-- Meta Pixel Code -->
+    <script>
+        ! function(f, b, e, v, n, t, s) {
+            if (f.fbq) return;
+            n = f.fbq = function() {
+                n.callMethod ?
+                    n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            };
+            if (!f._fbq) f._fbq = n;
+            n.push = n;
+            n.loaded = !0;
+            n.version = '2.0';
+            n.queue = [];
+            t = b.createElement(e);
+            t.async = !0;
+            t.src = v;
+            s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s)
+        }(window, document, 'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '1255628909077535');
+        fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+            src="https://www.facebook.com/tr?id=1255628909077535&ev=PageView&noscript=1" /></noscript>
+    <!-- End Meta Pixel Code -->
 </head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-J9XLPJGM5Y"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
 
-    function gtag() {
-        dataLayer.push(arguments);
-    }
-    gtag('js', new Date());
-
-    gtag('config', 'G-J9XLPJGM5Y');
-</script>
-
-<!-- Meta Pixel Code -->
-<script>
-    ! function(f, b, e, v, n, t, s) {
-        if (f.fbq) return;
-        n = f.fbq = function() {
-            n.callMethod ?
-                n.callMethod.apply(n, arguments) : n.queue.push(arguments)
-        };
-        if (!f._fbq) f._fbq = n;
-        n.push = n;
-        n.loaded = !0;
-        n.version = '2.0';
-        n.queue = [];
-        t = b.createElement(e);
-        t.async = !0;
-        t.src = v;
-        s = b.getElementsByTagName(e)[0];
-        s.parentNode.insertBefore(t, s)
-    }(window, document, 'script',
-        'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1255628909077535');
-    fbq('track', 'PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none"
-        src="https://www.facebook.com/tr?id=1255628909077535&ev=PageView&noscript=1" /></noscript>
-<!-- End Meta Pixel Code -->
 
 <body class="index-page">
 
@@ -164,30 +161,28 @@
 
         <div class="row gy-4">
 
-          <div class="col-lg-6 position-relative" data-aos="fade-up" data-aos-delay="100">
-            <img src="assets/img/about.jpg" class="img-fluid" alt="">
-            <a href="https://www.youtube.com/playlist?list=PLKJj4i0VcDDvcDBbQssQJRLvDw1oyF8DM" target="_blank"
-              rel="noopener noreferrer" class="pulsating-play-btn"></a>
-          </div>
-          <div class="col-lg-6 ps-lg-4 content d-flex flex-column justify-content-center" data-aos="fade-up"
-            data-aos-delay="200">
-            <h3>發心蓋地藏廟的緣起與願景</h3>
-            <br>
-            <p>阿彌陀佛，大家好！我是老周師兄，法名陳彥儒，是地藏菩薩廟的發起人。今天想與大家分享我發心蓋地藏廟的經過和願景。</p>
-            <p>
-              大約兩年前，我的岳父岳母先後離世，這讓我深刻體會到人生的無常。當時，我內心感到迷茫，便到廟裡拜拜，遇到了一位師姐，她鼓勵我念地藏王菩薩的聖號。剛開始，我半信半疑，但很快感受到地藏菩薩的加持——一些倒楣的事情突然停止了，內心也變得平靜。
-            </p>
-            <p>
-              隨著不斷的誦經和念聖號，我感受到越來越多的感應與夢境，最終皈依地藏王菩薩門下。有一次，夢中地藏菩薩指示我可以發心蓋一間小小的地藏廟來弘揚佛法。我用占察輪請示，菩薩多次指示：「不用蓋太大，一塊六坪的土地就足夠了。」
-            </p>
-            <p>
-              地藏廟的存在，不僅是一個修行與祈福的場所，更是實踐慈悲的平臺。我們希望藉由地藏廟的建立，除了為更多人提供一個清靜的修行場所外，也能幫助更多需要幫助的人。如果廟中有香客燒香拜拜，功德箱的善款達到一定數額，我們會將一部分用於幫助中低收入戶和清寒家庭。這不僅是地藏菩薩的心願，也是我們作為修行人應該盡力去做的事情。
-            </p>
-            <p>當然，我們明白每個人的能力有限，無法做到所有事，但我們相信，只要真心付出，點滴善念便能匯聚成大愛。</p>
-            <p>如果您對占察或其他修行問題有興趣，也歡迎隨時與我聯繫，或觀看我的 YouTube 頻道 <strong>「周末地藏菩薩」</strong>，了解更多相關內容。感恩各位的支持與護持，阿彌陀佛！</p>
-          </div>
-        </div>
-      </div>
+                    <div class="col-lg-6 position-relative" data-aos="fade-up" data-aos-delay="100">
+                        <img src="assets/img/about.jpg" class="img-fluid" alt="">
+                        <a href="https://www.youtube.com/playlist?list=PLKJj4i0VcDDvcDBbQssQJRLvDw1oyF8DM"
+                            target="_blank" rel="noopener noreferrer" class="pulsating-play-btn"></a>
+                    </div>
+
+                    <div class="col-lg-6 ps-lg-4 content d-flex flex-column justify-content-center" data-aos="fade-up"
+                        data-aos-delay="200">
+                        <h3>發心蓋地藏廟的緣起與願景</h3>
+                        <p>阿彌陀佛，大家好！我是老周師兄，法名陳彥儒，是地藏菩薩廟的發起人。今天想與大家分享我發心蓋地藏廟的經過和願景。</p>
+                        <p>大約兩年前，我的岳父岳母先後離世，這讓我深刻體會到人生的無常。當時，我內心感到迷茫，便到廟裡拜拜，遇到了一位師姐，她鼓勵我念地藏王菩薩的聖號。剛開始，我半信半疑，但很快感受到地藏菩薩的加持——一些倒楣的事情突然停止了，內心也變得平靜。
+                        </p>
+                        <p>隨著不斷的誦經和念聖號，我感受到越來越多的感應與夢境，最終皈依地藏王菩薩門下。有一次，夢中地藏菩薩指示我可以發心蓋一間小小的地藏廟來弘揚佛法。我用占察輪請示，菩薩多次指示：「不用蓋太大，一塊六坪的土地就足夠了。」
+                        </p>
+                        <p>地藏廟的存在，不僅是一個修行與祈福的場所，更是實踐慈悲的平臺。我們希望藉由地藏廟的建立，除了為更多人提供一個清靜的修行場所外，也能幫助更多需要幫助的人。如果廟中有香客燒香拜拜，功德箱的善款達到一定數額，我們會將一部分用於幫助中低收入戶和清寒家庭。這不僅是地藏菩薩的心願，也是我們作為修行人應該盡力去做的事情。
+                        </p>
+                        <p>當然，我們明白每個人的能力有限，無法做到所有事，但我們相信，只要真心付出，點滴善念便能匯聚成大愛。</p>
+                        <p>如果您對占察或其他修行問題有興趣，也歡迎隨時與我聯繫，或觀看我的 YouTube 頻道
+                            <strong>「周末地藏菩薩」</strong>，了解更多相關內容。感恩各位的支持與護持，阿彌陀佛！</p>
+                    </div>
+                </div>
+            </div>
 
     </section><!-- /About Section -->
 
@@ -666,12 +661,13 @@
       layoutMode: 'fitRows'
     });
 
-    $('.portfolio-filters').on('click', 'li', function () {
-      var filterValue = $(this).attr('data-filter');
-      $grid.isotope({ filter: filterValue });
-    });
-
-  </script>
+        $('.portfolio-filters').on('click', 'li', function() {
+            var filterValue = $(this).attr('data-filter');
+            $grid.isotope({
+                filter: filterValue
+            });
+        });
+    </script>
 </body>
 
 </html>
