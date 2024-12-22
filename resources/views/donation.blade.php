@@ -196,6 +196,8 @@
             <h3>我們的目標是 <span style="color: #ff6600;">3,500,000</span></h3><br>
             <h3>現已募集 <span style="color: #28a745;">28,603</span>！</h3><br>
             <h3>您的每一分貢獻，都將幫助更多人受益，感謝您的支持！</h3>
+            <br>
+            <h6 style="font-size: 1.1rem; color: #777;"><strong>最後更新時間：</strong> 2024-12-22</h6>
           </div>
         </div>
       </div>
@@ -229,8 +231,6 @@
                 <p style="font-size: 1.2rem; color: #555;">如果您沒有 PayPal 帳戶，也可以聯繫我們，我們將提供其他匯款方式。</p>
                 <br>
               </div>
-
-              <h6 style="font-size: 1.1rem; color: #777;"><strong>最後更新時間：</strong> 2024-12-22</h6>
             </div>
 
             <!-- 聯絡我們按鈕 -->
