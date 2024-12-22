@@ -229,7 +229,6 @@
                 </a>
                 <br>
                 <p style="font-size: 1.2rem; color: #555;">如果您沒有 PayPal 帳戶，也可以聯繫我們，我們將提供其他匯款方式。</p>
-                <br>
               </div>
             </div>
 
