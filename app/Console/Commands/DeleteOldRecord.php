@@ -1,0 +1,38 @@
+<?php
+
+namespace App\Console\Commands;
+
+use Illuminate\Console\Command;
+use Illuminate\Support\Carbon;
+use App\Models\JobChickpt;
+use App\Models\JobPtt;
+
+class DeleteOldRecord extends Command
+{
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'app:delete-old-record';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Command description';
+
+    /**
+     * Execute the console command.
+     */
+    public function handle()
+    {
+        $threeDaysAgo = Carbon::now()->subDays(3);
+
+        JobChickpt::where('created_at', '<', $threeDaysAgo)->delete();
+        JobPtt::where('created_at', '<', $threeDaysAgo)->delete();
+
+        $this->info('delete task finished');
+    }
+}

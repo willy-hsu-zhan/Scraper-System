@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('app:scraper-chickpt')->everyThirtyMinutes();
         $schedule->command('app:scraper-ptt')->hourly(); // 更新速度較慢 改每小時
+        $schedule->command('app:delete-old-record')->dailyAt('00:15')->timezone('Asia/Taipei');
     }
 
     /**
