@@ -65,11 +65,9 @@ class ScraperPtt extends Command {
     }
     public function handle()
     {
-        // 偶爾更新 所以排程可以每小時跑就好
-
         $currentPage = 1; // 默認第一頁為當天工作
 
-        $maxPage = 5;
+        $maxPage = 2; // 因為每天都會跑排程 抓到頂多兩頁就夠了
 
         $client = new Client();
 
