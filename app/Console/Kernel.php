@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->command('app:scraper-chickpt')->everyThirtyMinutes();
-        $schedule->command('app:scraper-ptt')->everyThirtyMinutes();
+        $schedule->command('app:scraper-ptt')->hourly(); // 更新速度較慢 改每小時
     }
 
     /**
