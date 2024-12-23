@@ -148,6 +148,7 @@ class ScraperPtt extends Command {
             ++$currentPage;
         }
 
+        /*
         $client = new Client();
 
         $url = 'https://www.ptt.cc/bbs/Soft_Job'; //軟工版
@@ -208,6 +209,7 @@ class ScraperPtt extends Command {
 
             ++$currentPage;
         }
+        */
 
         foreach( $jobs as $key => $job )
         {
