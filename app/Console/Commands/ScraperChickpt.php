@@ -63,6 +63,8 @@ class ScraperChickpt extends Command {
             }
             catch (Exception $e)
             {
+                if( $currentPage >= 3 ) break; // 降低loading 不全掃 因為每半小時都會跑
+
                 Log::error($e->getMessage());
                 Log::error('No more pages to load.');
                 break;
