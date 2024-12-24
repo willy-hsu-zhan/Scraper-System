@@ -28,10 +28,27 @@ class DeleteOldRecord extends Command
      */
     public function handle()
     {
-        $threeDaysAgo = Carbon::now()->subDays(3);
+        $jobChickpt = JobChickpt::all();
+        $subCount = JobChickpt::all()->count() - 100; // 維持總數=100
+        
+        if($subCount > 0) // 防呆
+        {
+            for($i = 0; $i < $subCount; $i++)
+            {
+                $jobChickpt[$i]->delete();
+            }
+        }
 
-        JobChickpt::where('created_at', '<', $threeDaysAgo)->delete();
-        JobPtt::where('created_at', '<', $threeDaysAgo)->delete();
+        $jobPtt = JobPtt::all();
+        $subCount = JobPtt::all()->count() - 100; // 維持總數=100
+
+        if($subCount > 0) // 防呆
+        {
+            for($i = 0; $i < $subCount; $i++)
+            {
+                $jobPtt[$i]->delete();
+            }
+        }
 
         $this->info('delete task finished');
     }
