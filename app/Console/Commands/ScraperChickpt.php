@@ -11,6 +11,11 @@ use App\Services\TelegramService;
 use App\Models\JobChickpt;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\File;
+use Facebook\WebDriver\Remote\RemoteWebDriver;
+use Facebook\WebDriver\Firefox\FirefoxOptions;
+use Facebook\WebDriver\WebDriverExpectedCondition;
+use Facebook\WebDriver\Remote\DesiredCapabilities;
+use Facebook\WebDriver\WebDriverBy;
 
 class ScraperChickpt extends Command {
     /**
@@ -44,9 +49,169 @@ class ScraperChickpt extends Command {
      * Execute the console command.
      */
 
+    
     public function handle()
     {
-        //$this->telegramService->sendDocument($this->chatId, $filePath, $this->fileName);
+        $baseUrl   = 'https://www.chickpt.com.tw';
+        $serverUrl = 'http://127.0.0.1:4444/wd/hub'; // Selenium 伺服器的地址
+
+        // 設定 Firefox 參數
+        $options = new FirefoxOptions();
+        $options->addArguments([
+            '--headless',  // 無頭模式
+            '--disable-gpu',  // 禁用 GPU 加速
+        ]);
+
+        // 設定 WebDriver 連接
+        $capabilities = DesiredCapabilities::firefox();
+        $capabilities->setCapability(FirefoxOptions::CAPABILITY, $options);
+
+        // 連接到 Selenium WebDriver
+        $webDriver = RemoteWebDriver::create($serverUrl, $capabilities);
+
+        // 開啟網頁
+        $webDriver->get('https://www.chickpt.com.tw/cases?is_address_no_limit=1');
+
+        // 設定頁碼與初始資料
+        $currentPage = 1; // 預設為第1頁
+        $jobs        = [];
+
+        while( true )
+        {
+            try
+            {
+                // 檢查是否有 QR code 的彈出條，如果有，點擊關閉
+                try
+                {
+                    $webDriver->wait(10)->until(
+                        WebDriverExpectedCondition::elementToBeClickable(WebDriverBy::id('qrcodebar-pc-closebtn'))
+                    );
+                    $closeButton = $webDriver->findElement(WebDriverBy::id('qrcodebar-pc-closebtn'));
+                    $closeButton->click();
+                    Log::info("QRCode bar closed.");
+                }
+                catch (Exception $e)
+                {
+                    Log::info("No QR code bar to close or error closing: " . $e->getMessage());
+                }
+
+                // 查找並點擊分頁連結
+                $link = $webDriver->findElement(WebDriverBy::linkText((string)$currentPage));
+                $link->click();
+
+                try
+                {
+                    $webDriver->wait(10)->until(
+                        WebDriverExpectedCondition::visibilityOfElementLocated(WebDriverBy::linkText((string)$currentPage))
+                    );
+                    $webDriver->wait(10)->until(
+                        WebDriverExpectedCondition::elementToBeClickable(WebDriverBy::linkText((string)$currentPage))
+                    );
+                }
+                catch (Exception $e)
+                {
+                    Log::error('Error clicking element on page ' . $currentPage . ': ' . $e->getMessage());
+                }
+
+                // 取得 job 列表
+                $jobElements = $webDriver->findElements(WebDriverBy::cssSelector('.jobs-wrap ul#job-list.job-list.show li'));
+
+                foreach( $jobElements as $jobNode )
+                {
+                    $title       = $jobNode->findElement(WebDriverBy::cssSelector('h2'))->getText();
+                    $link        = $jobNode->findElement(WebDriverBy::cssSelector('a'))->getAttribute('href');
+                    $company     = $jobNode->findElement(WebDriverBy::cssSelector('.ellipsis-job-company'))->getText();
+                    $salary      = $jobNode->findElement(WebDriverBy::cssSelector('.salary'))->getText();
+                    $place       = $jobNode->findElement(WebDriverBy::cssSelector('.place'))->getText();
+                    $update_time = $jobNode->findElement(WebDriverBy::cssSelector('.date-time'))->getText();
+
+                    $link = $baseUrl . $link;
+                    // 檢查是否已存在資料庫中
+                    if( !JobChickpt::where('link', $link)->first() )
+                    {
+                        $date = Carbon::now()->toDateString();
+                        JobChickpt::create([
+                            'title'   => $title,
+                            'link'    => $link,
+                            'company' => $company,
+                            'salary'  => $salary,
+                            'place'   => $place,
+                            'date'    => $date,
+                        ]);
+
+                        // 儲存爬取的工作資訊
+                        $jobs[] = [
+                            'title'       => trim($title),
+                            'link'        => trim($link),
+                            'company'     => trim($company),
+                            'salary'      => trim($salary),
+                            'place'       => trim($place),
+                            'update_time' => trim($update_time),
+                        ];
+                    }
+                }
+
+                // 當頁面不再有更多工作時退出
+                if( $currentPage >= 3 )
+                { // 限制掃描頁數以避免過多請求
+                    break;
+                }
+
+                // 增加頁碼
+                ++$currentPage;
+            }
+            catch (Exception $e)
+            {
+                Log::error('Error scraping page ' . $currentPage . ': ' . $e->getMessage());
+                break; // 跳出循環
+            }
+        }
+
+        $webDriver->quit(); // 完成後退出 WebDriver
+
+        // 傳送通知
+        if( !empty($jobs) )
+        {
+            $this->sendJobNotifications($jobs);
+        }
+    }
+
+    public function sendFachaiGIF()
+    {
+        $path     = public_path('assets/video/fachai/');
+        $files    = File::files($path);
+        $fileName = [];
+
+        foreach( $files as $file )
+        {
+            $fileName[] = $file->getFilename();
+        }
+        if( !empty($fileName) )
+        {
+            $randomFile     = $fileName[array_rand($fileName)];
+            $randomFilePath = $path . $randomFile;
+            $this->telegramService->sendDocument($this->chatId, $randomFilePath, $randomFile);
+        }
+    }
+
+    public function sendJobNotifications($jobs)
+    {
+        $sendNotifyText = "小雞上工任務列表\n\n";
+
+        foreach( $jobs as $job )
+        {
+            $sendNotifyText .= '標題：' . $job['title'] . "\n";
+            $sendNotifyText .= '任務連結：' . $job['link'] . "\n";
+            $sendNotifyText .= '雇主：' . $job['company'] . "\n";
+            $sendNotifyText .= '工作地方：' . $job['place'] . "\n";
+            $sendNotifyText .= '薪水：' . $job['salary'] . "\n\n";
+        }
+
+        $this->telegramService->sendMessage($this->chatId, $sendNotifyText);
+    }
+
+    public function goutteScraperProcess()
+    {
         $currentPage = 1; // 小雞上工任務頁預設為第一頁
 
         $client = new Client();
@@ -59,7 +224,7 @@ class ScraperChickpt extends Command {
         {
             try
             {
-                $link = $crawler->selectLink($currentPage)->link(); // 網頁剛好有頁碼可以這樣子抓取
+                $link = $crawler->selectLink($currentPage)->link();
             }
             catch (Exception $e)
             {
@@ -145,7 +310,6 @@ class ScraperChickpt extends Command {
 
         foreach( $jobs as $job )
         {
-            $telegramDivText = '';
             $date            = Carbon::now()->toDateString();
 
             if( !JobChickpt::where('link', $job['link'])->first() )
@@ -221,24 +385,6 @@ class ScraperChickpt extends Command {
             // 辨別已看過的訊息分隔用
             $infoText = '最後更新時間：' . Carbon::now()->setTimezone('Asia/Taipei')->format('Y-m-d H:i:s');
             $this->telegramService->sendMessage($this->chatId, $infoText);
-        }
-    }
-
-    public function sendFachaiGIF()
-    {
-        $path     = public_path('assets/video/fachai/');
-        $files    = File::files($path);
-        $fileName = [];
-
-        foreach( $files as $file )
-        {
-            $fileName[] = $file->getFilename();
-        }
-        if( !empty($fileName) )
-        {
-            $randomFile     = $fileName[array_rand($fileName)];
-            $randomFilePath = $path . $randomFile;
-            $this->telegramService->sendDocument($this->chatId, $randomFilePath, $randomFile);
         }
     }
 }
