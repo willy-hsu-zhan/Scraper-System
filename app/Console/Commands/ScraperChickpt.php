@@ -196,18 +196,25 @@ class ScraperChickpt extends Command {
 
     public function sendJobNotifications($jobs)
     {
-        $sendNotifyText = "小雞上工任務列表\n\n";
-
+        $sendNotifyText = '';
         foreach( $jobs as $job )
         {
+            $sendNotifyText = "**** 小雞上工 **** \n\n";
             $sendNotifyText .= '標題：' . $job['title'] . "\n";
             $sendNotifyText .= '任務連結：' . $job['link'] . "\n";
             $sendNotifyText .= '雇主：' . $job['company'] . "\n";
             $sendNotifyText .= '工作地方：' . $job['place'] . "\n";
             $sendNotifyText .= '薪水：' . $job['salary'] . "\n\n";
+
+            $this->telegramService->sendMessage($this->chatId, $sendNotifyText);
+            sleep(3);
+            $sendNotifyText = '';
         }
 
-        $this->telegramService->sendMessage($this->chatId, $sendNotifyText);
+        $this->sendFachaiGIF(); // 送發財圖
+        
+        $infoText = '最後更新時間：' . Carbon::now()->setTimezone('Asia/Taipei')->format('Y-m-d H:i:s');
+        $this->telegramService->sendMessage($this->chatId, $infoText);
     }
 
     public function goutteScraperProcess()
