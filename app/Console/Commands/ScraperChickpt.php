@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Support\Facades\Log;
 use App\Services\LineNotify;
 use App\Services\TelegramService;
+use App\Services\SeleniumService;
 use App\Models\JobChickpt;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\File;
@@ -35,14 +36,16 @@ class ScraperChickpt extends Command {
     public $jobs = [];
     protected $lineNotify;
     protected $telegramService;
+    protected $seleniumService;
     protected $jobTexts;
     protected $chatId = '-4664862172'; // 暫時先用全域變數 // 日後聊天室擴充再更改
 
-    public function __construct(LineNotify $lineNotify, TelegramService $telegramService)
+    public function __construct(LineNotify $lineNotify, TelegramService $telegramService, SeleniumService $seleniumService)
     {
         parent::__construct();
         $this->lineNotify      = $lineNotify;
         $this->telegramService = $telegramService;
+        $this->seleniumService = $seleniumService;
     }
 
     /**
@@ -53,21 +56,9 @@ class ScraperChickpt extends Command {
     public function handle()
     {
         $baseUrl   = 'https://www.chickpt.com.tw';
-        $serverUrl = 'http://127.0.0.1:4444/wd/hub'; // Selenium 伺服器的地址
-
-        // 設定 Firefox 參數
-        $options = new FirefoxOptions();
-        $options->addArguments([
-            '--headless',  // 無頭模式
-            '--disable-gpu',  // 禁用 GPU 加速
-        ]);
-
-        // 設定 WebDriver 連接
-        $capabilities = DesiredCapabilities::firefox();
-        $capabilities->setCapability(FirefoxOptions::CAPABILITY, $options);
 
         // 連接到 Selenium WebDriver
-        $webDriver = RemoteWebDriver::create($serverUrl, $capabilities);
+        $webDriver = $this->seleniumService->openWebDriver();
 
         // 開啟網頁
         $webDriver->get('https://www.chickpt.com.tw/cases?is_address_no_limit=1');
@@ -151,7 +142,6 @@ class ScraperChickpt extends Command {
                     }
                 }
 
-                // 當頁面不再有更多工作時退出
                 if( $currentPage >= 3 )
                 { // 限制掃描頁數以避免過多請求
                     break;
