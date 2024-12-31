@@ -18,12 +18,36 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>建造地藏廟募款 - 弘揚慈悲，護佑眾生</title>
-    <meta name="description" content="">
-    <meta name="keywords" content="">
+    <meta name="description" content="支持建造地藏廟，弘揚慈悲，護佑眾生的募款活動。歡迎了解我們的計畫與進度，共襄盛舉。">
+    <meta name="keywords" content="地藏廟募款, 慈善募款, 弘揚慈悲">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/favicon/apple-touch-icon.png') }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/favicon/favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/favicon/favicon-16x16.png') }}">
     <link rel="manifest" href="{{ asset('assets/favicon/site.webmanifest') }}">
+
+    <!-- 結構化數據 -->
+    <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "headline": "支持建造地藏廟募款活動 - 弘揚地藏菩薩慈悲精神",
+          "description": "參與建設地藏廟的募款活動，弘揚地藏菩薩慈悲精神，共護眾生，讓慈善成為信仰。",
+          "url": "https://www.ksitigarbha-bodhisattva.top/donation",
+          "image": "https://www.ksitigarbha-bodhisattva.top/assets/img/ksitigarbha-inner.jpg",
+          "author": {
+            "@type": "Organization",
+            "name": "地藏廟建設委員會"
+          },
+          "publisher": {
+            "@type": "Organization",
+            "name": "地藏廟建設委員會",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://www.ksitigarbha-bodhisattva.top/assets/img/logo.png"
+            }
+          }
+        }
+    </script>
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com" rel="preconnect">
@@ -373,7 +397,7 @@
                         <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-ksitigarbha">
                             <div class="portfolio-content h-100"
                                 style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                                <img src="assets/img/portfolio/ksitigarbha-1.jpg" class="img-fluid" alt="">
+                                <img src="assets/img/portfolio/ksitigarbha-1.jpg" class="img-fluid" alt="供奉地藏菩薩形象">
                                 <div class="portfolio-info"
                                     style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                                     <h4>南無地藏王菩薩</h4>
@@ -389,7 +413,7 @@
                         <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-ksitigarbha">
                             <div class="portfolio-content h-100"
                                 style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                                <img src="assets/img/portfolio/ksitigarbha-2.jpg" class="img-fluid" alt="">
+                                <img src="assets/img/portfolio/ksitigarbha-2.jpg" class="img-fluid" alt="供奉地藏菩薩形象">
                                 <div class="portfolio-info"
                                     style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                                     <h4>南無地藏王菩薩</h4>
@@ -405,7 +429,7 @@
                         <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-ksitigarbha">
                             <div class="portfolio-content h-100"
                                 style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                                <img src="assets/img/portfolio/ksitigarbha-3.jpg" class="img-fluid" alt="">
+                                <img src="assets/img/portfolio/ksitigarbha-3.jpg" class="img-fluid" alt="地藏菩薩的衣服">
                                 <div class="portfolio-info"
                                     style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                                     <h4>南無地藏王菩薩的衣服</h4>
@@ -421,7 +445,7 @@
                         <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-ksitigarbha">
                             <div class="portfolio-content h-100"
                                 style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                                <img src="assets/img/portfolio/ksitigarbha-4.jpg" class="img-fluid" alt="">
+                                <img src="assets/img/portfolio/ksitigarbha-4.jpg" class="img-fluid" alt="地藏菩薩的五佛冠">
                                 <div class="portfolio-info"
                                     style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                                     <h4>南無地藏菩薩的五佛冠</h4>
@@ -437,7 +461,7 @@
                         <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-ksitigarbha">
                             <div class="portfolio-content h-100"
                                 style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                                <img src="assets/img/portfolio/ksitigarbha-5.jpg" class="img-fluid" alt="">
+                                <img src="assets/img/portfolio/ksitigarbha-5.jpg" class="img-fluid" alt="對著地藏菩薩恭敬合掌">
                                 <div class="portfolio-info"
                                     style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                                     <h4>對著南無地藏王菩薩恭敬合掌</h4>
@@ -453,7 +477,7 @@
                         <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-dunjia">
                             <div class="portfolio-content h-100"
                                 style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                                <img src="assets/img/portfolio/dunjia-1.jpg" class="img-fluid" alt="">
+                                <img src="assets/img/portfolio/dunjia-1.jpg" class="img-fluid" alt="奇門遁甲">
                                 <div class="portfolio-info"
                                     style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                                     <h4>羅盤</h4>
@@ -469,7 +493,7 @@
                         <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-dunjia">
                             <div class="portfolio-content h-100"
                                 style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                                <img src="assets/img/portfolio/dunjia-2.jpg" class="img-fluid" alt="">
+                                <img src="assets/img/portfolio/dunjia-2.jpg" class="img-fluid" alt="奇門遁甲">
                                 <div class="portfolio-info"
                                     style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                                     <h4>羅盤</h4>
@@ -485,7 +509,7 @@
                         <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-zhancha">
                             <div class="portfolio-content h-100"
                                 style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                                <img src="assets/img/portfolio/zhancha-1.jpg" class="img-fluid" alt="">
+                                <img src="assets/img/portfolio/zhancha-1.jpg" class="img-fluid" alt="占察輪">
                                 <div class="portfolio-info"
                                     style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                                     <h4>占察輪</h4>
@@ -501,7 +525,7 @@
                         <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-zhancha">
                             <div class="portfolio-content h-100"
                                 style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                                <img src="assets/img/portfolio/zhancha-2.jpg" class="img-fluid" alt="">
+                                <img src="assets/img/portfolio/zhancha-2.jpg" class="img-fluid" alt="占察輪">
                                 <div class="portfolio-info"
                                     style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                                     <h4>占察輪</h4>
@@ -518,7 +542,7 @@
                         <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-zhancha">
                             <div class="portfolio-content h-100"
                                 style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                                <img src="assets/img/portfolio/zhancha-3.jpg" class="img-fluid" alt="">
+                                <img src="assets/img/portfolio/zhancha-3.jpg" class="img-fluid" alt="占察輪">
                                 <div class="portfolio-info"
                                     style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                                     <h4>占察輪</h4>
@@ -535,7 +559,7 @@
                         <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-zhancha">
                             <div class="portfolio-content h-100"
                                 style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                                <img src="assets/img/portfolio/zhancha-4.jpg" class="img-fluid" alt="">
+                                <img src="assets/img/portfolio/zhancha-4.jpg" class="img-fluid" alt="占察輪">
                                 <div class="portfolio-info"
                                     style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                                     <h4>占察輪</h4>
@@ -552,7 +576,7 @@
                         <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-zhancha">
                             <div class="portfolio-content h-100"
                                 style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                                <img src="assets/img/portfolio/zhancha-5.jpg" class="img-fluid" alt="">
+                                <img src="assets/img/portfolio/zhancha-5.jpg" class="img-fluid" alt="占察輪">
                                 <div class="portfolio-info"
                                     style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                                     <h4>占察輪</h4>
