@@ -211,7 +211,7 @@
                         </p>
                         <p>當然，我們明白每個人的能力有限，無法做到所有事，但我們相信，只要真心付出，點滴善念便能匯聚成大愛。</p>
                         <p>如果您對占察或其他修行問題有興趣，也歡迎隨時與我聯繫，或觀看我的 YouTube 頻道
-                            <strong>「周末地藏菩薩」</strong>，了解更多相關內容。感恩各位的支持與護持，阿彌陀佛！
+                            <strong><a href="https://www.youtube.com/@%E5%91%A8%E6%9C%AB%E5%9C%B0%E8%97%8F%E8%8F%A9%E8%96%A9/videos" target="_blank" style="color: #007bff; text-decoration: underline;">「周末地藏菩薩」</a></strong>，了解更多相關內容。感恩各位的支持與護持，阿彌陀佛！
                         </p>
                     </div>
                 </div>
