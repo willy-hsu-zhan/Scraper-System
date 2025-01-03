@@ -10,7 +10,13 @@ use Carbon\Carbon;
 use App\Models\JobPtt;
 use App\Services\LineNotify;
 use App\Services\TelegramService;
+use App\Services\SeleniumService;
 use Illuminate\Support\Facades\File;
+use Facebook\WebDriver\Remote\RemoteWebDriver;
+use Facebook\WebDriver\Firefox\FirefoxOptions;
+use Facebook\WebDriver\WebDriverExpectedCondition;
+use Facebook\WebDriver\Remote\DesiredCapabilities;
+use Facebook\WebDriver\WebDriverBy;
 
 class ScraperPtt extends Command {
     /**
@@ -35,13 +41,15 @@ class ScraperPtt extends Command {
     protected $lineNotify;
     protected $chatId = '-4664862172'; // 暫時先用全域變數 // 日後聊天室擴充再更改
     protected $telegramService;
+    protected $seleniumService;
     protected $jobTexts;
 
-    public function __construct(LineNotify $lineNotify, TelegramService $telegramService)
+    public function __construct(LineNotify $lineNotify, TelegramService $telegramService, SeleniumService $seleniumService)
     {
         parent::__construct();
         $this->lineNotify      = $lineNotify;
         $this->telegramService = $telegramService;
+        $this->seleniumService = $seleniumService;
     }
 
     private function fliterPlace(string $notFilterPlace): string
@@ -64,6 +72,113 @@ class ScraperPtt extends Command {
         return $filterPlace;
     }
     public function handle()
+    {
+        $originUrl = 'https://www.ptt.cc';
+        $baseUrl   = 'https://www.ptt.cc/bbs/part-time/index.html';
+        $webDriver = $this->seleniumService->openWebDriver();
+
+        try
+        {
+            $webDriver->get($baseUrl);
+
+            $jobs    = [];
+            $maxPage = 2;
+
+            for( $currentPage = 1; $currentPage <= $maxPage; $currentPage++ )
+            {
+                $jobElements = $webDriver->findElements(WebDriverBy::cssSelector('.r-ent'));
+
+                foreach( $jobElements as $element )
+                {
+                    $linkElement = $element->findElement(WebDriverBy::cssSelector('.title a'));
+                    $link        = $linkElement->getAttribute('href');
+                    $title       = $linkElement->getText();
+                    $author      = $element->findElement(WebDriverBy::cssSelector('.author'))->getText();
+                    //$date        = $element->findElement(WebDriverBy::cssSelector('.date'))->getText();
+                    $date = Carbon::now()->toDateString();
+
+                    $jobs[] = [
+                        'title'   => trim($title),
+                        'link'    => $originUrl . trim($link),
+                        'company' => trim($author),
+                        'date'    => trim($date),
+                    ];
+                }
+
+                try
+                {
+                    $nextPageLink = $webDriver->findElement(WebDriverBy::linkText('‹ 上頁'));
+                    $nextPageLink->click();
+                }
+                catch (Exception $e)
+                {
+                    Log::info('No more pages to scrape.');
+                    break;
+                }
+            }
+
+            foreach( $jobs as $job )
+            {
+
+                JobPtt::create($job);
+                $this->jobTexts[] = $this->formatJobMessage($job);
+
+            }
+
+            $this->sendNotifications();
+        }
+        catch (Exception $e)
+        {
+            Log::error('Error during scraping: ' . $e->getMessage());
+        }
+        finally
+        {
+            $webDriver->quit();
+        }
+    }
+
+    public function formatJobMessage(array $job): string
+    {
+        return "**** PTT ****\n\n" .
+            "標題：{$job['title']}\n" .
+            "任務連結：{$job['link']}\n" .
+            "雇主：{$job['company']}\n" .
+            "日期：{$job['date']}\n";
+    }
+
+    public function sendNotifications()
+    {
+        foreach( $this->jobTexts as $message )
+        {
+            $this->telegramService->sendMessage('-4664862172', $message);
+            sleep(3);
+        }
+
+        // 送發財圖
+        $this->sendFachaiGIF();
+        // 辨別已看過的訊息分隔用
+        $this->telegramService->sendMessage('-4664862172', '最後更新時間：' . Carbon::now()->format('Y-m-d H:i:s'));
+    }
+
+    public function sendFachaiGIF()
+    {
+        $path     = public_path('assets/video/fachai/');
+        $files    = File::files($path);
+        $fileName = [];
+
+        foreach( $files as $file )
+        {
+            $fileName[] = $file->getFilename();
+        }
+        if( !empty($fileName) )
+        {
+            $randomFile     = $fileName[array_rand($fileName)];
+            $randomFilePath = $path . $randomFile;
+            $this->telegramService->sendDocument($this->chatId, $randomFilePath, $randomFile);
+        }
+    }
+
+    public function goutteScraperProcess()
     {
         $currentPage = 1; // 默認第一頁為當天工作
 
@@ -300,24 +415,6 @@ class ScraperPtt extends Command {
             // 辨別已看過的訊息分隔用
             $infoText = '最後更新時間：' . Carbon::now()->setTimezone('Asia/Taipei')->format('Y-m-d H:i:s');
             $this->telegramService->sendMessage($this->chatId, $infoText);
-        }
-    }
-
-    public function sendFachaiGIF()
-    {
-        $path     = public_path('assets/video/fachai/');
-        $files    = File::files($path);
-        $fileName = [];
-
-        foreach( $files as $file )
-        {
-            $fileName[] = $file->getFilename();
-        }
-        if( !empty($fileName) )
-        {
-            $randomFile     = $fileName[array_rand($fileName)];
-            $randomFilePath = $path . $randomFile;
-            $this->telegramService->sendDocument($this->chatId, $randomFilePath, $randomFile);
         }
     }
 }
