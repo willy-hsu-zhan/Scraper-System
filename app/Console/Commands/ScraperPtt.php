@@ -148,16 +148,33 @@ class ScraperPtt extends Command {
 
     public function sendNotifications()
     {
-        foreach( $this->jobTexts as $message )
+        if(!empty($this->jobTexts))
         {
-            $this->telegramService->sendMessage('-4664862172', $message);
-            sleep(3);
+            foreach( $this->jobTexts as $message )
+            {
+                $this->telegramService->sendMessage($this->chatId, $message);
+                sleep(3);
+            }
+    
+            // 送發財圖
+            $this->sendFachaiGIF();
+            // 辨別已看過的訊息分隔用
+            $this->telegramService->sendMessage($this->chatId, '最後更新時間：' . Carbon::now()->setTimezone('Asia/Taipei')->format('Y-m-d H:i:s'));
         }
-
-        // 送發財圖
-        $this->sendFachaiGIF();
-        // 辨別已看過的訊息分隔用
-        $this->telegramService->sendMessage('-4664862172', '最後更新時間：' . Carbon::now()->setTimezone('Asia/Taipei')->format('Y-m-d H:i:s'));
+        else
+        {
+            $this->sendPeriodNoJobMsg();
+        }
+    }
+    public function sendPeriodNoJobMsg()
+    {
+        $errorMessage = "🚨 **PTT通知** 🚨\n\n";
+        $errorMessage .= "時間：" .
+            Carbon::now()->setTimezone('Asia/Taipei')->format('Y-m-d H:i:s') .
+            ' ~ ' .
+            Carbon::now()->subMinutes(30)->setTimezone('Asia/Taipei')->format('Y-m-d H:i:s') . "\n";
+        $errorMessage .= "沒有新的任務！！" . "\n";
+        $this->telegramService->sendMessage($this->chatId, $errorMessage);
     }
 
     public function sendFachaiGIF()

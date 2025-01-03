@@ -52,7 +52,7 @@ class ScraperChickpt extends Command {
      * Execute the console command.
      */
 
-    
+
     public function handle()
     {
         $baseUrl = 'https://www.chickpt.com.tw';
@@ -166,6 +166,21 @@ class ScraperChickpt extends Command {
         {
             $this->sendJobNotifications($jobs);
         }
+        else
+        {
+            $this->sendPeriodNoJobMsg();
+        }
+    }
+
+    public function sendPeriodNoJobMsg()
+    {
+        $errorMessage = "🚨 **小雞上工通知** 🚨\n\n";
+        $errorMessage .= "時間：" .
+            Carbon::now()->setTimezone('Asia/Taipei')->format('Y-m-d H:i:s') .
+            ' ~ ' .
+            Carbon::now()->subMinutes(30)->setTimezone('Asia/Taipei')->format('Y-m-d H:i:s') . "\n";
+        $errorMessage .= "沒有新的任務！！" . "\n";
+        $this->telegramService->sendMessage($this->chatId, $errorMessage);
     }
 
     public function sendErrorLog($message)
@@ -213,7 +228,7 @@ class ScraperChickpt extends Command {
         }
 
         $this->sendFachaiGIF(); // 送發財圖
-        
+
         $infoText = '最後更新時間：' . Carbon::now()->setTimezone('Asia/Taipei')->format('Y-m-d H:i:s');
         $this->telegramService->sendMessage($this->chatId, $infoText);
     }
