@@ -119,10 +119,10 @@ class ScraperPtt extends Command {
 
             foreach( $jobs as $job )
             {
-
-                JobPtt::create($job);
-                $this->jobTexts[] = $this->formatJobMessage($job);
-
+                if (!JobPtt::where('link', $job['link'])->exists()) {
+                    JobPtt::create($job);
+                    $this->jobTexts[] = $this->formatJobMessage($job);
+                }
             }
 
             $this->sendNotifications();
