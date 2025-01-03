@@ -55,7 +55,7 @@ class ScraperChickpt extends Command {
     
     public function handle()
     {
-        $baseUrl   = 'https://www.chickpt.com.tw';
+        $baseUrl = 'https://www.chickpt.com.tw';
 
         // 連接到 Selenium WebDriver
         $webDriver = $this->seleniumService->openWebDriver();
@@ -102,6 +102,7 @@ class ScraperChickpt extends Command {
                 catch (Exception $e)
                 {
                     Log::error('Error clicking element on page ' . $currentPage . ': ' . $e->getMessage());
+                    $this->sendErrorLog('Error clicking element on page ' . $currentPage . ': ' . $e->getMessage());
                 }
 
                 // 取得 job 列表
@@ -153,6 +154,7 @@ class ScraperChickpt extends Command {
             catch (Exception $e)
             {
                 Log::error('Error scraping page ' . $currentPage . ': ' . $e->getMessage());
+                $this->sendErrorLog('Error scraping page ' . $currentPage . ': ' . $e->getMessage());
                 break; // 跳出循環
             }
         }
@@ -164,6 +166,15 @@ class ScraperChickpt extends Command {
         {
             $this->sendJobNotifications($jobs);
         }
+    }
+
+    public function sendErrorLog($message)
+    {
+        $errorMessage = "🚨 **錯誤日誌通知** 🚨\n\n";
+        $errorMessage .= "錯誤訊息：\n" . $message . "\n";
+        $errorMessage .= "時間：" . Carbon::now()->setTimezone('Asia/Taipei')->format('Y-m-d H:i:s') . "\n";
+
+        $this->telegramService->sendMessage($this->chatId, $errorMessage);
     }
 
     public function sendFachaiGIF()
@@ -307,7 +318,7 @@ class ScraperChickpt extends Command {
 
         foreach( $jobs as $job )
         {
-            $date            = Carbon::now()->toDateString();
+            $date = Carbon::now()->toDateString();
 
             if( !JobChickpt::where('link', $job['link'])->first() )
             {
