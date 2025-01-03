@@ -157,7 +157,7 @@ class ScraperPtt extends Command {
         // 送發財圖
         $this->sendFachaiGIF();
         // 辨別已看過的訊息分隔用
-        $this->telegramService->sendMessage('-4664862172', '最後更新時間：' . Carbon::now()->format('Y-m-d H:i:s'));
+        $this->telegramService->sendMessage('-4664862172', '最後更新時間：' . Carbon::now()->setTimezone('Asia/Taipei')->format('Y-m-d H:i:s'));
     }
 
     public function sendFachaiGIF()
