@@ -73,7 +73,8 @@ class ScraperPtt extends Command {
     }
     public function handle()
     {
-        $originUrl = 'https://www.ptt.cc';
+        //$originUrl = 'https://www.ptt.cc';
+        $originUrl = 'https://www.pttweb.cc';
         $baseUrl   = 'https://www.ptt.cc/bbs/part-time/index.html';
         $webDriver = $this->seleniumService->openWebDriver();
 
@@ -155,7 +156,7 @@ class ScraperPtt extends Command {
                 $this->telegramService->sendMessage($this->chatId, $message);
                 sleep(3);
             }
-    
+
             // 送發財圖
             $this->sendFachaiGIF();
             // 辨別已看過的訊息分隔用
