@@ -427,7 +427,7 @@
                             </div>
                         </div><!-- End Portfolio Item -->
 
-                        <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-ksitigarbha">
+                        {{-- <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-ksitigarbha">
                             <div class="portfolio-content h-100"
                                 style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
                                 <img src="assets/img/portfolio/ksitigarbha-2.jpg" class="img-fluid" alt="供奉地藏菩薩形象">
@@ -441,7 +441,7 @@
                                             class="bi bi-link-45deg"></i></a>
                                 </div>
                             </div>
-                        </div><!-- End Portfolio Item -->
+                        </div><!-- End Portfolio Item --> --}}
 
                         <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-ksitigarbha">
                             <div class="portfolio-content h-100"
@@ -507,7 +507,7 @@
                             </div>
                         </div><!-- End Portfolio Item -->
 
-                        <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-dunjia">
+                        {{-- <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-dunjia">
                             <div class="portfolio-content h-100"
                                 style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
                                 <img src="assets/img/portfolio/dunjia-1.jpg" class="img-fluid" alt="奇門遁甲">
@@ -521,9 +521,9 @@
                                             class="bi bi-link-45deg"></i></a>
                                 </div>
                             </div>
-                        </div><!-- End Portfolio Item -->
+                        </div><!-- End Portfolio Item --> --}}
 
-                        <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-dunjia">
+                        {{-- <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-dunjia">
                             <div class="portfolio-content h-100"
                                 style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
                                 <img src="assets/img/portfolio/dunjia-2.jpg" class="img-fluid" alt="奇門遁甲">
@@ -537,7 +537,7 @@
                                             class="bi bi-link-45deg"></i></a>
                                 </div>
                             </div>
-                        </div><!-- End Portfolio Item -->
+                        </div><!-- End Portfolio Item --> --}}
 
                         <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-dunjia">
                             <div class="portfolio-content h-100"
