@@ -357,7 +357,7 @@
                                 <i class="bi bi-youtube" style="color: #fd7e14;"></i>
                             </div>
                             <h3>經營YouTube頻道</h3>
-                            <p>「周末地藏菩薩頻道」提供地藏法門相關內容，讓更多人了解佛法的智慧。</p>
+                            <p>「<a href="https://www.youtube.com/@%E5%91%A8%E6%9C%AB%E5%9C%B0%E8%97%8F%E8%8F%A9%E8%96%A9/videos" target="_blank">周末地藏菩薩頻道</a>」提供地藏法門相關內容，讓更多人了解佛法的智慧。</p>
                         </div>
                     </div><!-- End Service Item -->
 
