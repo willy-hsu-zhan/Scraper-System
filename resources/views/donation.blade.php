@@ -427,22 +427,6 @@
                             </div>
                         </div><!-- End Portfolio Item -->
 
-                        {{-- <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-ksitigarbha">
-                            <div class="portfolio-content h-100"
-                                style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                                <img src="assets/img/portfolio/ksitigarbha-2.jpg" class="img-fluid" alt="供奉地藏菩薩形象">
-                                <div class="portfolio-info"
-                                    style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-                                    <h4>南無地藏王菩薩</h4>
-                                    <a href="assets/img/portfolio/ksitigarbha-2.jpg" title="南無地藏王菩薩"
-                                        data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
-                                            class="bi bi-zoom-in"></i></a>
-                                    <a href="#" title="More Details" class="details-link"><i
-                                            class="bi bi-link-45deg"></i></a>
-                                </div>
-                            </div>
-                        </div><!-- End Portfolio Item --> --}}
-
                         <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-ksitigarbha">
                             <div class="portfolio-content h-100"
                                 style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
@@ -506,38 +490,6 @@
                                 </div>
                             </div>
                         </div><!-- End Portfolio Item -->
-
-                        {{-- <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-dunjia">
-                            <div class="portfolio-content h-100"
-                                style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                                <img src="assets/img/portfolio/dunjia-1.jpg" class="img-fluid" alt="奇門遁甲">
-                                <div class="portfolio-info"
-                                    style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-                                    <h4>羅盤</h4>
-                                    <a href="assets/img/portfolio/dunjia-1.jpg" title="羅盤"
-                                        data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
-                                            class="bi bi-zoom-in"></i></a>
-                                    <a href="#" title="More Details" class="details-link"><i
-                                            class="bi bi-link-45deg"></i></a>
-                                </div>
-                            </div>
-                        </div><!-- End Portfolio Item --> --}}
-
-                        {{-- <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-dunjia">
-                            <div class="portfolio-content h-100"
-                                style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                                <img src="assets/img/portfolio/dunjia-2.jpg" class="img-fluid" alt="奇門遁甲">
-                                <div class="portfolio-info"
-                                    style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-                                    <h4>羅盤</h4>
-                                    <a href="assets/img/portfolio/dunjia-2.jpg" title="羅盤"
-                                        data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
-                                            class="bi bi-zoom-in"></i></a>
-                                    <a href="#" title="More Details" class="details-link"><i
-                                            class="bi bi-link-45deg"></i></a>
-                                </div>
-                            </div>
-                        </div><!-- End Portfolio Item --> --}}
 
                         <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-dunjia">
                             <div class="portfolio-content h-100"
