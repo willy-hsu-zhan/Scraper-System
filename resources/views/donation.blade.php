@@ -409,6 +409,22 @@
                         <li data-filter=".filter-ksitigarbha">地藏菩薩</li>
                     </ul><!-- End Portfolio Filters -->
 
+                    <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-ksitigarbha">
+                        <div class="portfolio-content h-100"
+                            style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                            <img src="assets/img/portfolio/ksitigarbha-6.jpg" class="img-fluid" alt="南無地藏王菩薩">
+                            <div class="portfolio-info"
+                                style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                                <h4>南無地藏王菩薩</h4>
+                                <a href="assets/img/portfolio/ksitigarbha-6.jpg" title="大願地藏王菩薩真的是滿願第一，真實不虛。"
+                                    data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
+                                        class="bi bi-zoom-in"></i></a>
+                                <a href="#" title="More Details" class="details-link"><i
+                                        class="bi bi-link-45deg"></i></a>
+                            </div>
+                        </div>
+                    </div><!-- End Portfolio Item -->
+
                     <div class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">
 
                         <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-ksitigarbha">
@@ -418,7 +434,7 @@
                                 <div class="portfolio-info"
                                     style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                                     <h4>南無地藏王菩薩</h4>
-                                    <a href="assets/img/portfolio/ksitigarbha-1.jpg" title="南無地藏王菩薩"
+                                    <a href="assets/img/portfolio/ksitigarbha-1.jpg" title="周師兄點香時，地藏菩薩顯靈，香灰逆風吹進小廟裡。"
                                         data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
                                             class="bi bi-zoom-in"></i></a>
                                     <a href="#" title="More Details" class="details-link"><i
@@ -467,22 +483,6 @@
                                     style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                                     <h4>對著南無地藏王菩薩恭敬合掌</h4>
                                     <a href="assets/img/portfolio/ksitigarbha-5.jpg" title="對著南無地藏王菩薩恭敬合掌"
-                                        data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
-                                            class="bi bi-zoom-in"></i></a>
-                                    <a href="#" title="More Details" class="details-link"><i
-                                            class="bi bi-link-45deg"></i></a>
-                                </div>
-                            </div>
-                        </div><!-- End Portfolio Item -->
-
-                        <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-ksitigarbha">
-                            <div class="portfolio-content h-100"
-                                style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                                <img src="assets/img/portfolio/ksitigarbha-6.jpg" class="img-fluid" alt="南無地藏王菩薩">
-                                <div class="portfolio-info"
-                                    style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-                                    <h4>南無地藏王菩薩</h4>
-                                    <a href="assets/img/portfolio/ksitigarbha-6.jpg" title="南無地藏王菩薩"
                                         data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
                                             class="bi bi-zoom-in"></i></a>
                                     <a href="#" title="More Details" class="details-link"><i
