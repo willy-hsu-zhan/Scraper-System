@@ -562,7 +562,7 @@
                                 <div class="portfolio-info"
                                     style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                                     <h4>占察輪</h4>
-                                    <a href="assets/img/portfolio/zhancha-3.jpg" title="占察輪"
+                                    <a href="assets/img/portfolio/zhancha-3.jpg" title="為信眾使用占察輪占出來的結果"
                                         data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
                                             class="bi bi-zoom-in"></i></a>
                                     <a href="#" title="More Details" class="details-link"><i
@@ -574,10 +574,10 @@
                         <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-zhancha">
                             <div class="portfolio-content h-100"
                                 style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                                <img src="assets/img/portfolio/zhancha-6.jpg" class="img-fluid" alt="占察輪">
+                                <img src="assets/img/portfolio/zhancha-6.jpg" class="img-fluid" alt="木製手雕占察輪">
                                 <div class="portfolio-info"
                                     style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-                                    <h4>占察輪</h4>
+                                    <h4>木製手雕占察輪</h4>
                                     <a href="assets/img/portfolio/zhancha-6.jpg" title="2025年，最新版的木製手雕占察輪，將在近期內為新一代的緣主們提供占察服務"
                                         data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
                                             class="bi bi-zoom-in"></i></a>
