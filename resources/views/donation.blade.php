@@ -514,7 +514,7 @@
                                 <div class="portfolio-info"
                                     style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                                     <h4>羅盤</h4>
-                                    <a href="assets/img/portfolio/dunjia-3.jpg" title="相傳在古代，奇門遁甲原為運籌預測、行軍打仗之法，是祕而不宣的帝王之學。上古時期黃帝大戰蚩尤，一開始節節敗退，幸得九天玄女傳下的奇門遁甲，最後才能獲得勝利。在現代，周師兄承襲正宗學派，用心輔助每一位信眾。"
+                                    <a href="assets/img/portfolio/dunjia-3.jpg" title="奇門遁甲為中國古代傳下的三大祕術之一，與大六壬、太乙神數並稱「三式」，它是運用河圖洛書、易經、八卦九宮及五行相生相剋的變化等來預測未來，判斷敵我優劣，進而運籌帷幄，把握對己有利的局面。從古代演變至今，奇門遁甲成為趨吉避凶之學，它與其他術數最大的不同，就是能針對當下，選擇對自已有利的時間、方位，進行風水佈局，達到趨吉避凶的效果。"
                                         data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
                                             class="bi bi-zoom-in"></i></a>
                                     <a href="#" title="More Details" class="details-link"><i
@@ -530,7 +530,7 @@
                                 <div class="portfolio-info"
                                     style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                                     <h4>羅盤</h4>
-                                    <a href="assets/img/portfolio/dunjia-4.jpg" title="奇門遁甲為中國古代傳下的三大祕術之一，與大六壬、太乙神數並稱「三式」，它是運用河圖洛書、易經、八卦九宮及五行相生相剋的變化等來預測未來，判斷敵我優劣，進而運籌帷幄，把握對己有利的局面。從古代演變至今，奇門遁甲成為趨吉避凶之學，它與其他術數最大的不同，就是能針對當下，選擇對自已有利的時間、方位，進行風水佈局，達到趨吉避凶的效果。"
+                                    <a href="assets/img/portfolio/dunjia-4.jpg" title="相傳在古代，奇門遁甲原為運籌預測、行軍打仗之法，是祕而不宣的帝王之學。上古時期黃帝大戰蚩尤，一開始節節敗退，幸得九天玄女傳下的奇門遁甲，最後才能獲得勝利。在現代，周師兄承襲正宗學派，用心輔助每一位信眾。"
                                         data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
                                             class="bi bi-zoom-in"></i></a>
                                     <a href="#" title="More Details" class="details-link"><i
