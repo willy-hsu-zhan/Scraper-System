@@ -593,23 +593,6 @@
                         <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-zhancha">
                             <div class="portfolio-content h-100"
                                 style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                                <img src="assets/img/portfolio/zhancha-5.jpg" class="img-fluid" alt="占察輪">
-                                <div class="portfolio-info"
-                                    style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-                                    <h4>占察輪</h4>
-                                    <p>Lorem ipsum, dolor sit amet consectetur</p>
-                                    <a href="assets/img/portfolio/zhancha-5.jpg" title="占察輪"
-                                        data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
-                                            class="bi bi-zoom-in"></i></a>
-                                    <a href="#" title="More Details" class="details-link"><i
-                                            class="bi bi-link-45deg"></i></a>
-                                </div>
-                            </div>
-                        </div><!-- End Portfolio Item -->
-
-                        <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-zhancha">
-                            <div class="portfolio-content h-100"
-                                style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
                                 <img src="assets/img/portfolio/zhancha-6.jpg" class="img-fluid" alt="占察輪">
                                 <div class="portfolio-info"
                                     style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
