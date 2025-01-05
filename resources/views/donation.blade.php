@@ -562,7 +562,6 @@
                                 <div class="portfolio-info"
                                     style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                                     <h4>占察輪</h4>
-                                    <p>Lorem ipsum, dolor sit amet consectetur</p>
                                     <a href="assets/img/portfolio/zhancha-3.jpg" title="占察輪"
                                         data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
                                             class="bi bi-zoom-in"></i></a>
@@ -579,7 +578,6 @@
                                 <div class="portfolio-info"
                                     style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                                     <h4>占察輪</h4>
-                                    <p>Lorem ipsum, dolor sit amet consectetur</p>
                                     <a href="assets/img/portfolio/zhancha-4.jpg" title="占察輪"
                                         data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
                                             class="bi bi-zoom-in"></i></a>
@@ -596,7 +594,6 @@
                                 <div class="portfolio-info"
                                     style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                                     <h4>占察輪</h4>
-                                    <p>Lorem ipsum, dolor sit amet consectetur</p>
                                     <a href="assets/img/portfolio/zhancha-6.jpg" title="占察輪"
                                         data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
                                             class="bi bi-zoom-in"></i></a>
