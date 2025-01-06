@@ -697,6 +697,23 @@
                                 </p>
                             </div>
                         </div><!-- End testimonial item -->
+
+                        <div class="swiper-slide">
+                            <div class="testimonial-item">
+                                <img src="assets/img/testimonials/common2.jpg" class="testimonial-img" alt="">
+                                <h3>Yau ren</h3>
+                                <h4>Yau ren</h4>
+                                <p>
+                                    <i class="bi bi-quote quote-icon-left"></i>
+                                    <span>
+                                        調單位的過程真的讓我感到困難重重，無論如何努力都沒有進展。後來，我請教周師兄幫忙占察。占察的結果是「有所求速當得」，意思是說三天內會有答案。當時我還半信半疑，但周師兄的話真的不可思議！
+                                        結果第二天，就有另一所學校的校長主動通知我去面試，並準備讓我換單位！這一切真是太神奇了，地藏菩薩摩訶薩慈悲加持，讓事情這麼迅速順利！周師兄的占察準確到令人驚嘆，真的非常感恩！🙏🙏🙏
+                                    </span>
+                                    <i class="bi bi-quote quote-icon-right"></i>
+                                </p>
+                            </div>
+                        </div><!-- End testimonial item -->
+
                     </div>
                     <div class="swiper-pagination"></div>
                 </div>
