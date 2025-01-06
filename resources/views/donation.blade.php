@@ -244,10 +244,10 @@
                         data-aos-delay="100">
                         <h3>攜手共建地藏廟！</h3><br>
                         <h3>我們的目標是 <span style="color: #ff6600;">NT$3,500,000</span></h3><br>
-                        <h3>現已募集 <span style="color: #28a745;">NT$61,210</span>！</h3><br>
+                        <h3>現已募集 <span style="color: #28a745;">NT$61,410</span>！</h3><br>
                         <h3>您的每一分貢獻，都將幫助更多人受益，感謝您的支持！</h3>
                         <br>
-                        <h6 style="font-size: 1.1rem; color: #777;"><strong>最後更新時間：</strong> 2025-01-01</h6>
+                        <h6 style="font-size: 1.1rem; color: #777;"><strong>最後更新時間：</strong> 2025-01-06</h6>
                     </div>
                 </div>
             </div>
@@ -634,6 +634,19 @@
                                     <span>今年初，我的阿嬤因為身體急劇惡化，無法正常說話和移動，甚至有不自覺的亂動現象，讓家人非常憂心。後來請周師兄幫忙，他指出阿嬤身上有五位冤親債主，影響了她的健康狀況。
                                         依照周師兄的建議，我跪在家中的地藏菩薩像前，誦念《地藏經》，並將功德迴向給阿嬤身上的冤親債主。第一天後，阿嬤的情況有了明顯改善，身體不再亂動；第二天，她睡得更好，也開始能正常說話了。
                                         家人和親戚看到這樣的轉變，都非常驚訝，並逐漸相信《地藏經》的功效。我們全家感受到地藏菩薩的慈悲與周師兄的幫助，讓阿嬤成功脫離困境。</span>
+                                    <i class="bi bi-quote quote-icon-right"></i>
+                                </p>
+                            </div>
+                        </div><!-- End testimonial item -->
+                        <div class="swiper-slide">
+                            <div class="testimonial-item">
+                                <img src="assets/img/testimonials/common.jpg" class="testimonial-img"
+                                    alt="">
+                                <h3>Sasha</h3>
+                                <h4>Sasha</h4>
+                                <p>
+                                    <i class="bi bi-quote quote-icon-left"></i>
+                                    <span>上個月坐飛機之前一直不順，買好機票之後，竟然剛好遇到百年一見的大水災，當我剛到達機場買礦泉水，錢也被機器吃掉，為了安全起見，我詢問周師兄，他指示我我要念地藏王菩薩聖號一萬遍，我趁著等班機的時候誠心誦念，當我快唸滿萬遍時，居然有人送給我一瓶礦泉水，在登機門本來是一位不友善的剪票員在查票，我心中忐忑，沒想到換我登機時突然多了一位友善的剪票員，我也順利登機，一路上有人送巧克力給我，坐機場巴士也剛好有座位，這些都是以前坐飛機時從來沒有發生的好事，感恩地藏王菩薩。</span>
                                     <i class="bi bi-quote quote-icon-right"></i>
                                 </p>
                             </div>
