@@ -653,6 +653,21 @@
                         </div><!-- End testimonial item -->
                         <div class="swiper-slide">
                             <div class="testimonial-item">
+                                <img src="assets/img/testimonials/common2.jpg" class="testimonial-img" alt="">
+                                <h3>Yun</h3>
+                                <h4>Yun</h4>
+                                <p>
+                                    <i class="bi bi-quote quote-icon-left"></i>
+                                    <span>
+                                        我的寵物小貓咪咪因為感冒生病，看了很多寵物醫生但效果不佳，我感到十分迷惘，於是請周師兄幫忙占察。地藏菩薩的指示說明，咪咪的疾病可以康復，但需要為牠誦念《地藏經》和南無地藏王菩薩聖號。我依指示每天念誦一部《地藏經》，共21部，並念10,000遍南無地藏王菩薩聖號回向給咪咪。結果咪咪的感冒明顯好轉，健康狀況逐漸穩定下來！最特別的是，地藏菩薩的指示還顯示，咪咪是我的奶奶轉世。這讓我更加珍惜牠的存在。感恩南無地藏王菩薩的慈悲，感恩周師兄的幫助，讓我有機會幫助咪咪康復！
+                                    </span>
+                                    <i class="bi bi-quote quote-icon-right"></i>
+                                </p>
+                            </div>
+                        </div><!-- End testimonial item -->
+
+                        <div class="swiper-slide">
+                            <div class="testimonial-item">
                                 <img src="assets/img/testimonials/willy-hsu.jpg" class="testimonial-img"
                                     alt="">
                                 <h3>許詹敦惟</h3>
