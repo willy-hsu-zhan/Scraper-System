@@ -713,7 +713,23 @@
                                 </p>
                             </div>
                         </div><!-- End testimonial item -->
-
+                        <div class="swiper-slide">
+                            <div class="testimonial-item">
+                                <img src="assets/img/testimonials/common.jpg" class="testimonial-img" alt="">
+                                <h3>丁佩菁</h3>
+                                <h4>丁佩菁</h4>
+                                <p>
+                                    <i class="bi bi-quote quote-icon-left"></i>
+                                    <span>
+                                        我長期感冒都好不了，後來請周師兄幫我占察，結果真的「不可思議」！
+                                        地藏菩薩的指示是「觀所患可療治」，要我念地藏王菩薩聖號。
+                                        我依指示念了10,000遍南無地藏王菩薩聖號，結果現在感冒真的完全好了！
+                                        感恩地藏菩薩，感恩周師兄，占察的準確真是令人驚嘆！
+                                    </span>
+                                    <i class="bi bi-quote quote-icon-right"></i>
+                                </p>
+                            </div>
+                        </div><!-- End testimonial item -->
                     </div>
                     <div class="swiper-pagination"></div>
                 </div>
