@@ -208,7 +208,10 @@
                         </p>
                         <p>當然，我們明白每個人的能力有限，無法做到所有事，但我們相信，只要真心付出，點滴善念便能匯聚成大愛。</p>
                         <p>如果您對占察或其他修行問題有興趣，也歡迎隨時與我聯繫，或觀看我的 YouTube 頻道
-                            <strong><a href="https://www.youtube.com/@%E5%91%A8%E6%9C%AB%E5%9C%B0%E8%97%8F%E8%8F%A9%E8%96%A9/videos" target="_blank" style="color: #007bff; text-decoration: underline;">「周末地藏菩薩」</a></strong>，了解更多相關內容。感恩各位的支持與護持，阿彌陀佛！
+                            <strong><a
+                                    href="https://www.youtube.com/@%E5%91%A8%E6%9C%AB%E5%9C%B0%E8%97%8F%E8%8F%A9%E8%96%A9/videos"
+                                    target="_blank"
+                                    style="color: #007bff; text-decoration: underline;">「周末地藏菩薩」</a></strong>，了解更多相關內容。感恩各位的支持與護持，阿彌陀佛！
                         </p>
                     </div>
                 </div>
@@ -219,15 +222,19 @@
             <div class="container">
                 <div class="row gy-4">
                     <!-- 圖片部分 -->
-                    <div class="col-lg-6 position-relative d-flex justify-content-center align-items-center" data-aos="fade-up" data-aos-delay="100">
-                        <img src="assets/img/ksitigarbha-inner2.jpg" class="img-fluid" style="width: 75%;" alt="">
+                    <div class="col-lg-6 position-relative d-flex justify-content-center align-items-center"
+                        data-aos="fade-up" data-aos-delay="100">
+                        <img src="assets/img/ksitigarbha-inner2.jpg" class="img-fluid" style="width: 75%;"
+                            alt="">
                     </div>
                     <!-- 內容部分 -->
-                    <div class="col-lg-6 ps-lg-4 content d-flex flex-column justify-content-center" data-aos="fade-up" data-aos-delay="200">
+                    <div class="col-lg-6 ps-lg-4 content d-flex flex-column justify-content-center" data-aos="fade-up"
+                        data-aos-delay="200">
                         <br>
                         <h3 style="font-weight: 700; font-size: 2rem;">發起人的經歷</h3>
                         <br>
-                        <p>周師兄原本是在屏東一貫道拜佛，後來因為路途實在遙遠，無法一直奔波，在因緣際會下接觸到地藏經後，非常有感應。以前常常都遇到奇奇怪怪的倒霉事，自從念了地藏經之後，所有倒霉事都停歇了，最後就消失了。</p>
+                        <p>周師兄原本是在屏東一貫道拜佛，後來因為路途實在遙遠，無法一直奔波，在因緣際會下接觸到地藏經後，非常有感應。以前常常都遇到奇奇怪怪的倒霉事，自從念了地藏經之後，所有倒霉事都停歇了，最後就消失了。
+                        </p>
                         <p>地藏王菩薩藉著夢境，與周師兄說了很多關於這個世間的事，還有修行與精進的提點，最後就是蓋地藏廟的事，所以周師兄才會發願為蓋廟。</p>
                         <p>蓋地藏廟除了救度眾生外，還可以幫助大眾，像一些清寒家庭還有中低收入戶，若廟蓋好，福田箱的錢有餘下，就會拿來贊助國小國中的兒童營養午餐。</p>
                         <p>周師兄皈依在地藏王菩薩的門下，發願要弘揚地藏法門，這就是他這輩子的心願。</p>
@@ -357,7 +364,8 @@
                                 <i class="bi bi-youtube" style="color: #fd7e14;"></i>
                             </div>
                             <h3>經營YouTube頻道</h3>
-                            <p>「<a href="https://www.youtube.com/@%E5%91%A8%E6%9C%AB%E5%9C%B0%E8%97%8F%E8%8F%A9%E8%96%A9/videos" target="_blank">周末地藏菩薩頻道</a>」提供地藏法門相關內容，讓更多人了解佛法的智慧。</p>
+                            <p>「<a href="https://www.youtube.com/@%E5%91%A8%E6%9C%AB%E5%9C%B0%E8%97%8F%E8%8F%A9%E8%96%A9/videos"
+                                    target="_blank">周末地藏菩薩頻道</a>」提供地藏法門相關內容，讓更多人了解佛法的智慧。</p>
                         </div>
                     </div><!-- End Service Item -->
 
@@ -446,7 +454,8 @@
                         <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-ksitigarbha">
                             <div class="portfolio-content h-100"
                                 style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                                <img src="assets/img/portfolio/ksitigarbha-4.jpg" class="img-fluid" alt="純黃金打造的五佛冠帽子">
+                                <img src="assets/img/portfolio/ksitigarbha-4.jpg" class="img-fluid"
+                                    alt="純黃金打造的五佛冠帽子">
                                 <div class="portfolio-info"
                                     style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                                     <h4>純黃金打造的五佛冠帽子</h4>
@@ -494,7 +503,8 @@
                         <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-ksitigarbha">
                             <div class="portfolio-content h-100"
                                 style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                                <img src="assets/img/portfolio/ksitigarbha-7.jpg" class="img-fluid" alt="由18k黃金打造的金錫禪杖">
+                                <img src="assets/img/portfolio/ksitigarbha-7.jpg" class="img-fluid"
+                                    alt="由18k黃金打造的金錫禪杖">
                                 <div class="portfolio-info"
                                     style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                                     <h4>由18k黃金打造的金錫禪杖</h4>
@@ -514,7 +524,8 @@
                                 <div class="portfolio-info"
                                     style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                                     <h4>羅盤</h4>
-                                    <a href="assets/img/portfolio/dunjia-3.jpg" title="奇門遁甲為中國古代傳下的三大祕術之一，與大六壬、太乙神數並稱「三式」，它是運用河圖洛書、易經、八卦九宮及五行相生相剋的變化等來預測未來，判斷敵我優劣，進而運籌帷幄，把握對己有利的局面。從古代演變至今，奇門遁甲成為趨吉避凶之學，它與其他術數最大的不同，就是能針對當下，選擇對自已有利的時間、方位，進行風水佈局，達到趨吉避凶的效果。"
+                                    <a href="assets/img/portfolio/dunjia-3.jpg"
+                                        title="奇門遁甲為中國古代傳下的三大祕術之一，與大六壬、太乙神數並稱「三式」，它是運用河圖洛書、易經、八卦九宮及五行相生相剋的變化等來預測未來，判斷敵我優劣，進而運籌帷幄，把握對己有利的局面。從古代演變至今，奇門遁甲成為趨吉避凶之學，它與其他術數最大的不同，就是能針對當下，選擇對自已有利的時間、方位，進行風水佈局，達到趨吉避凶的效果。"
                                         data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
                                             class="bi bi-zoom-in"></i></a>
                                     <a href="#" title="More Details" class="details-link"><i
@@ -530,7 +541,8 @@
                                 <div class="portfolio-info"
                                     style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                                     <h4>羅盤</h4>
-                                    <a href="assets/img/portfolio/dunjia-4.jpg" title="相傳在古代，奇門遁甲原為運籌預測、行軍打仗之法，是祕而不宣的帝王之學。上古時期黃帝大戰蚩尤，一開始節節敗退，幸得九天玄女傳下的奇門遁甲，最後才能獲得勝利。在現代，周師兄承襲正宗學派，用心輔助每一位信眾。"
+                                    <a href="assets/img/portfolio/dunjia-4.jpg"
+                                        title="相傳在古代，奇門遁甲原為運籌預測、行軍打仗之法，是祕而不宣的帝王之學。上古時期黃帝大戰蚩尤，一開始節節敗退，幸得九天玄女傳下的奇門遁甲，最後才能獲得勝利。在現代，周師兄承襲正宗學派，用心輔助每一位信眾。"
                                         data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
                                             class="bi bi-zoom-in"></i></a>
                                     <a href="#" title="More Details" class="details-link"><i
@@ -578,7 +590,8 @@
                                 <div class="portfolio-info"
                                     style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                                     <h4>木製手雕占察輪</h4>
-                                    <a href="assets/img/portfolio/zhancha-6.jpg" title="2025年，最新版的木製手雕占察輪，將在近期內為新一代的緣主們提供占察服務"
+                                    <a href="assets/img/portfolio/zhancha-6.jpg"
+                                        title="2025年，最新版的木製手雕占察輪，將在近期內為新一代的緣主們提供占察服務"
                                         data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
                                             class="bi bi-zoom-in"></i></a>
                                     <a href="#" title="More Details" class="details-link"><i
@@ -640,8 +653,7 @@
                         </div><!-- End testimonial item -->
                         <div class="swiper-slide">
                             <div class="testimonial-item">
-                                <img src="assets/img/testimonials/common.jpg" class="testimonial-img"
-                                    alt="">
+                                <img src="assets/img/testimonials/common.jpg" class="testimonial-img" alt="">
                                 <h3>Sasha</h3>
                                 <h4>Sasha</h4>
                                 <p>
@@ -653,7 +665,8 @@
                         </div><!-- End testimonial item -->
                         <div class="swiper-slide">
                             <div class="testimonial-item">
-                                <img src="assets/img/testimonials/common2.jpg" class="testimonial-img" alt="">
+                                <img src="assets/img/testimonials/common2.jpg" class="testimonial-img"
+                                    alt="">
                                 <h3>Yun</h3>
                                 <h4>Yun</h4>
                                 <p>
@@ -700,7 +713,8 @@
 
                         <div class="swiper-slide">
                             <div class="testimonial-item">
-                                <img src="assets/img/testimonials/common2.jpg" class="testimonial-img" alt="">
+                                <img src="assets/img/testimonials/common2.jpg" class="testimonial-img"
+                                    alt="">
                                 <h3>Yau ren</h3>
                                 <h4>Yau ren</h4>
                                 <p>
@@ -732,30 +746,34 @@
                         </div><!-- End testimonial item -->
                         <div class="swiper-slide">
                             <div class="testimonial-item">
-                                <img src="assets/img/testimonials/common2.jpg" class="testimonial-img" alt="">
+                                <img src="assets/img/testimonials/common2.jpg" class="testimonial-img"
+                                    alt="">
                                 <h3>皓閎</h3>
                                 <h4>皓閎</h4>
                                 <p>
                                     <i class="bi bi-quote quote-icon-left"></i>
-                                    <span>我的兒子在兩歲多時被診斷出患有過動症與自閉症，並伴隨心智發展遲緩的症狀。這對我們家庭來說是個巨大的挑戰，無論日常生活還是情緒管理都充滿了艱難。我作為父親，感到深深的無力與焦慮，期望能找到方法幫助他。</span>
-
-                                    <span>2022年八月中，我在正德佛堂向觀世音菩薩祈求指引，開始舉辦法會，並每日誦經，踏上了修行之路。我誦讀了《地藏經》、《藥師經》、《心經》、《妙法蓮華經》以及《大悲咒》。雖然我持續誦經一年多，但兒子的病情似乎未有明顯好轉，這讓我不免疑惑，甚至懷疑自己的努力是否有意義。</span>
-
-                                    <span>為尋求答案，我多次祈求南無本師釋迦牟尼佛、南無地藏王菩薩和南無觀世音菩薩，希望在夢中能得啟示。終於，在2023年10月的一天，我做了一個令人深刻的夢：夢中，我走在鄉間小路，前方是一座山，許多人正朝山中走去。我看見地藏王菩薩，但卻超越祂繼續前行。走著走著，四周突然陷入一片黑暗，沒有月光，也看不見前路。我意識到自己正往下走，而非登上山頂。然而，我並不感到害怕，直到聽見兒子清楚的聲音念出「南無釋迦牟尼佛」，我瞬間醒來。這個夢境讓我不禁思考，是否暗示兒子的靈魂正受困於地獄。</span>
-
-
-                                    <span>這個夢成為我持續誦經的動力，我立下宏願，要誦經至兒子痊癒，並與大家分享這段經歷。2024年六月中，我透過網路認識了周師兄，並請他幫助我的兒子進行占察。地藏王菩薩開示：若我堅持誦經，兒子約六年會開始好轉，九年則能完全康復，且更努力誦經可縮短康復時間。陳師兄也提到，兒子未來將會感激我，並且會變得非常依賴我。</span>
-
-
-                                    <span>從那時起，我專注於每日誦讀《地藏經》。九月多，我在家中客廳掛上地藏王菩薩的圖像。到了十一月底，我驚喜地發現兒子的行為出現變化。他不再希望我獨自誦經，而是吵著要我陪他睡覺。雖然他的病情尚未完全痊癒，但他變得比以前更加黏我，這讓我感受到菩薩的加持與指引正在發揮作用。</span>
-
-
-                                    <span>除了兒子的事情，我也請周師兄幫忙占察我的投資。2024年七月底，我詢問了我投資的私募基金是否穩定。地藏王菩薩開示這項投資是安全的，讓我感到安心。這筆投資已經持續了十一年，儘管朋友與同事多半持懷疑態度，但我的同學身為投資公司的經理，提到其老闆過去是證券業VIP，以公司名義投資，具有極高的穩定性。這次占察更讓我深刻體會到地藏王菩薩的準確與慈悲。</span>
-
-
-                                    <span>整個過程中，我經歷了迷茫、堅持與收穫。我深信地藏王菩薩的慈悲加持，讓我在最困難的時候找到方向，並逐漸看見希望的曙光。無論是兒子的轉變還是投資的穩定，都讓我更加感恩地藏王菩薩的庇佑。未來，我會繼續誦經，以回報菩薩的恩典。</span>
-
-                                    <span>感恩地藏王菩薩！🙏🙏🙏</span>
+                                        <span>我的兒子在兩歲多時被診斷出患有過動症與自閉症，並伴隨心智發展遲緩的症狀。這對我們家庭來說是個巨大的挑戰，無論日常生活還是情緒管理都充滿了艱難。我作為父親，感到深深的無力與焦慮，期望能找到方法幫助他。</span>
+                                    <i class="bi bi-quote quote-icon-right"></i>
+                                    <i class="bi bi-quote quote-icon-left"></i>
+                                        <span>2022年八月中，我在正德佛堂向觀世音菩薩祈求指引，開始舉辦法會，並每日誦經，踏上了修行之路。我誦讀了《地藏經》、《藥師經》、《心經》、《妙法蓮華經》以及《大悲咒》。雖然我持續誦經一年多，但兒子的病情似乎未有明顯好轉，這讓我不免疑惑，甚至懷疑自己的努力是否有意義。</span>
+                                    <i class="bi bi-quote quote-icon-right"></i>
+                                    <i class="bi bi-quote quote-icon-left"></i>
+                                        <span>為尋求答案，我多次祈求南無本師釋迦牟尼佛、南無地藏王菩薩和南無觀世音菩薩，希望在夢中能得啟示。終於，在2023年10月的一天，我做了一個令人深刻的夢：夢中，我走在鄉間小路，前方是一座山，許多人正朝山中走去。我看見地藏王菩薩，但卻超越祂繼續前行。走著走著，四周突然陷入一片黑暗，沒有月光，也看不見前路。我意識到自己正往下走，而非登上山頂。然而，我並不感到害怕，直到聽見兒子清楚的聲音念出「南無釋迦牟尼佛」，我瞬間醒來。這個夢境讓我不禁思考，是否暗示兒子的靈魂正受困於地獄。</span>
+                                    <i class="bi bi-quote quote-icon-right"></i>
+                                    <i class="bi bi-quote quote-icon-left"></i>
+                                        <span>這個夢成為我持續誦經的動力，我立下宏願，要誦經至兒子痊癒，並與大家分享這段經歷。2024年六月中，我透過網路認識了周師兄，並請他幫助我的兒子進行占察。地藏王菩薩開示：若我堅持誦經，兒子約六年會開始好轉，九年則能完全康復，且更努力誦經可縮短康復時間。陳師兄也提到，兒子未來將會感激我，並且會變得非常依賴我。</span>
+                                    <i class="bi bi-quote quote-icon-right"></i>
+                                    <i class="bi bi-quote quote-icon-left"></i>
+                                        <span>從那時起，我專注於每日誦讀《地藏經》。九月多，我在家中客廳掛上地藏王菩薩的圖像。到了十一月底，我驚喜地發現兒子的行為出現變化。他不再希望我獨自誦經，而是吵著要我陪他睡覺。雖然他的病情尚未完全痊癒，但他變得比以前更加黏我，這讓我感受到菩薩的加持與指引正在發揮作用。</span>
+                                    <i class="bi bi-quote quote-icon-right"></i>
+                                    <i class="bi bi-quote quote-icon-left"></i>
+                                        <span>除了兒子的事情，我也請周師兄幫忙占察我的投資。2024年七月底，我詢問了我投資的私募基金是否穩定。地藏王菩薩開示這項投資是安全的，讓我感到安心。這筆投資已經持續了十一年，儘管朋友與同事多半持懷疑態度，但我的同學身為投資公司的經理，提到其老闆過去是證券業VIP，以公司名義投資，具有極高的穩定性。這次占察更讓我深刻體會到地藏王菩薩的準確與慈悲。</span>
+                                    <i class="bi bi-quote quote-icon-right"></i>
+                                    <i class="bi bi-quote quote-icon-left"></i>
+                                        <span>整個過程中，我經歷了迷茫、堅持與收穫。我深信地藏王菩薩的慈悲加持，讓我在最困難的時候找到方向，並逐漸看見希望的曙光。無論是兒子的轉變還是投資的穩定，都讓我更加感恩地藏王菩薩的庇佑。未來，我會繼續誦經，以回報菩薩的恩典。</span>
+                                    <i class="bi bi-quote quote-icon-right"></i>
+                                    <i class="bi bi-quote quote-icon-left"></i>
+                                        <span>感恩地藏王菩薩！🙏🙏🙏</span>
                                     <i class="bi bi-quote quote-icon-right"></i>
                                 </p>
                             </div>
