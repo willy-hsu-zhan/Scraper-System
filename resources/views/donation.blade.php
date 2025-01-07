@@ -118,7 +118,7 @@
                     <li><a href="#about">關於</a></li>
                     <li><a href="#services">服務</a></li>
                     <li><a href="#portfolio">圖片</a></li>
-                    <!-- <li><a href="#team">Team</a></li> -->
+                    <li><a href="#testimonials">案例分享</a></li>
                     <li><a href="#contact">聯絡我們</a></li>
                 </ul>
                 <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
