@@ -378,10 +378,15 @@
                             <div class="icon">
                                 <i class="bi bi-cash-stack" style="color: #0dcaf0;"></i>
                             </div>
-                            <h3 href="https://www.youtube.com/watch?v=ClQovEqt82I&list=PLKJj4i0VcDDvcDBbQssQJRLvDw1oyF8DM&index=3" target="_blank" style="color: #007bff; text-decoration: underline;">清寒家庭棺材捐贈</h3>
+                            <h3>
+                                <a href="https://www.youtube.com/watch?v=ClQovEqt82I&list=PLKJj4i0VcDDvcDBbQssQJRLvDw1oyF8DM&index=3" target="_blank" style="color: #007bff; text-decoration: underline;">
+                                    清寒家庭棺材捐贈
+                                </a>
+                            </h3>
                             <p>提供經濟困難的家庭所需的棺材協助，助他們面對親人往生的困境。</p>
                         </div>
                     </div><!-- End Service Item -->
+
                 </div>
             </div>
         </section><!-- /Services Section -->
