@@ -116,8 +116,8 @@
                 <ul>
                     <li><a href="#hero" class="active">首頁</a></li>
                     <li><a href="#about">關於</a></li>
-                    <li><a href="#testimonials">案例分享</a></li>
                     <li><a href="#services">服務</a></li>
+                    <li><a href="#testimonials">案例分享</a></li>
                     <li><a href="#portfolio">圖片</a></li>
                     <li><a href="#contact">聯絡我們</a></li>
                 </ul>
@@ -236,6 +236,70 @@
             </div>
         </section><!-- /Info Section -->
 
+        <!-- Services Section -->
+        <section id="services" class="services section light-background">
+
+            <!-- Section Title -->
+            <div class="container section-title" data-aos="fade-up">
+                <h2>我們還有提供以下服務</h2>
+                <p>周師兄發心提供多項佛法與公益服務，旨在幫助更多人修行與解決困難。</p>
+            </div><!-- End Section Title -->
+
+            <div class="container">
+                <div class="row gy-4">
+
+                    <!-- 占察輪 -->
+                    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                        <div class="service-item position-relative">
+                            <div class="icon">
+                                <i class="bi bi-chat-text" style="color: #20c997;"></i>
+                            </div>
+                            <h3>占察輪</h3>
+                            <p>占察能夠看到每個人的前世，今生和未來，是一項地藏王菩薩的神奇法門，這和坊間算命不同。因為透過占察，能夠知道前世帶來的業障為何，由於累生累世的無量劫來，每個人已累積許多業障。至於業障如何處理，如何化解？占察輪能夠針對事情對症下藥，周師兄會依照地藏菩薩的指示，仔細解讀占察輪相，達到解決事情問題的關鍵。</p>
+                        </div>
+                    </div><!-- End Service Item -->
+
+                    <!-- 經營YouTube頻道 -->
+                    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                        <div class="service-item position-relative">
+                            <div class="icon">
+                                <i class="bi bi-youtube" style="color: #fd7e14;"></i>
+                            </div>
+                            <h3>經營YouTube頻道</h3>
+                            <p>「<a href="https://www.youtube.com/@%E5%91%A8%E6%9C%AB%E5%9C%B0%E8%97%8F%E8%8F%A9%E8%96%A9/videos" target="_blank">周末地藏菩薩頻道</a>」提供地藏法門相關內容，讓更多人了解佛法的智慧。</p>
+                        </div>
+                    </div><!-- End Service Item -->
+
+                    <!-- 奇門遁甲 -->
+                    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
+                        <div class="service-item position-relative">
+                            <div class="icon">
+                                <i class="bi bi-compass" style="color: #df1529;"></i>
+                            </div>
+                            <h3>奇門遁甲</h3>
+                            <p>奇門遁甲為中國古代傳下的三大祕術之一，與大六壬、太乙神數並稱「三式」，它是運用河圖洛書、易經、八卦九宮及五行相生相剋的變化等來預測未來，判斷敵我優劣，進而運籌帷幄，把握對己有利的局面。從古代演變至今，奇門遁甲成為趨吉避凶之學，它與其他術數最大的不同，就是能針對當下，選擇對自已有利的時間、方位，進行風水佈局，達到趨吉避凶的效果。</p>
+                        </div>
+                    </div><!-- End Service Item -->
+
+                    <!-- 清寒家庭棺材捐贈 -->
+                    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                        <div class="service-item position-relative">
+                            <div class="icon">
+                                <i class="bi bi-cash-stack" style="color: #0dcaf0;"></i>
+                            </div>
+                            <h3>
+                                <a href="https://www.youtube.com/watch?v=ClQovEqt82I&list=PLKJj4i0VcDDvcDBbQssQJRLvDw1oyF8DM&index=3" target="_blank" style="color: #007bff; text-decoration: underline;">
+                                    清寒家庭棺材捐贈
+                                </a>
+                            </h3>
+                            <p>提供經濟困難的家庭所需的棺材協助，助他們面對親人往生的困境。</p>
+                        </div>
+                    </div><!-- End Service Item -->
+
+                </div>
+            </div>
+        </section><!-- /Services Section -->
+
         <section id="participate" class="about section">
             <div class="container">
                 <div class="row gy-4">
@@ -325,71 +389,6 @@
             </div>
 
         </section><!-- /Stats Section -->
-
-        <!-- Services Section -->
-        <!-- Services Section -->
-        <section id="services" class="services section light-background">
-
-            <!-- Section Title -->
-            <div class="container section-title" data-aos="fade-up">
-                <h2>我們還有提供以下服務</h2>
-                <p>周師兄發心提供多項佛法與公益服務，旨在幫助更多人修行與解決困難。</p>
-            </div><!-- End Section Title -->
-
-            <div class="container">
-                <div class="row gy-4">
-
-                    <!-- 占察輪 -->
-                    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
-                        <div class="service-item position-relative">
-                            <div class="icon">
-                                <i class="bi bi-chat-text" style="color: #20c997;"></i>
-                            </div>
-                            <h3>占察輪</h3>
-                            <p>占察能夠看到每個人的前世，今生和未來，是一項地藏王菩薩的神奇法門，這和坊間算命不同。因為透過占察，能夠知道前世帶來的業障為何，由於累生累世的無量劫來，每個人已累積許多業障。至於業障如何處理，如何化解？占察輪能夠針對事情對症下藥，周師兄會依照地藏菩薩的指示，仔細解讀占察輪相，達到解決事情問題的關鍵。</p>
-                        </div>
-                    </div><!-- End Service Item -->
-
-                    <!-- 經營YouTube頻道 -->
-                    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-                        <div class="service-item position-relative">
-                            <div class="icon">
-                                <i class="bi bi-youtube" style="color: #fd7e14;"></i>
-                            </div>
-                            <h3>經營YouTube頻道</h3>
-                            <p>「<a href="https://www.youtube.com/@%E5%91%A8%E6%9C%AB%E5%9C%B0%E8%97%8F%E8%8F%A9%E8%96%A9/videos" target="_blank">周末地藏菩薩頻道</a>」提供地藏法門相關內容，讓更多人了解佛法的智慧。</p>
-                        </div>
-                    </div><!-- End Service Item -->
-
-                    <!-- 奇門遁甲 -->
-                    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
-                        <div class="service-item position-relative">
-                            <div class="icon">
-                                <i class="bi bi-compass" style="color: #df1529;"></i>
-                            </div>
-                            <h3>奇門遁甲</h3>
-                            <p>奇門遁甲為中國古代傳下的三大祕術之一，與大六壬、太乙神數並稱「三式」，它是運用河圖洛書、易經、八卦九宮及五行相生相剋的變化等來預測未來，判斷敵我優劣，進而運籌帷幄，把握對己有利的局面。從古代演變至今，奇門遁甲成為趨吉避凶之學，它與其他術數最大的不同，就是能針對當下，選擇對自已有利的時間、方位，進行風水佈局，達到趨吉避凶的效果。</p>
-                        </div>
-                    </div><!-- End Service Item -->
-
-                    <!-- 清寒家庭棺材捐贈 -->
-                    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                        <div class="service-item position-relative">
-                            <div class="icon">
-                                <i class="bi bi-cash-stack" style="color: #0dcaf0;"></i>
-                            </div>
-                            <h3>
-                                <a href="https://www.youtube.com/watch?v=ClQovEqt82I&list=PLKJj4i0VcDDvcDBbQssQJRLvDw1oyF8DM&index=3" target="_blank" style="color: #007bff; text-decoration: underline;">
-                                    清寒家庭棺材捐贈
-                                </a>
-                            </h3>
-                            <p>提供經濟困難的家庭所需的棺材協助，助他們面對親人往生的困境。</p>
-                        </div>
-                    </div><!-- End Service Item -->
-
-                </div>
-            </div>
-        </section><!-- /Services Section -->
 
 
         <!-- Portfolio Section -->
