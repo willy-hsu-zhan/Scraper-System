@@ -346,7 +346,7 @@
                                 <i class="bi bi-chat-text" style="color: #20c997;"></i>
                             </div>
                             <h3>占察輪</h3>
-                            <p>占察是一種透過「木輪」了解三世因果和業力影響的占卜法，可協助解答生活中的障礙來源，並提供化解與趨吉避凶的指引。</p>
+                            <p>占察能夠看到每個人的前世，今生和未來，是一項地藏王菩薩的神奇法門，這和坊間算命不同。因為透過占察，能夠知道前世帶來的業障為何，由於累生累世的無量劫來，每個人已累積許多業障。至於業障如何處理，如何化解？占察輪能夠針對事情對症下藥，周師兄會依照地藏菩薩的指示，仔細解讀占察輪相，達到解決事情問題的關鍵。</p>
                         </div>
                     </div><!-- End Service Item -->
 
@@ -368,7 +368,7 @@
                                 <i class="bi bi-compass" style="color: #df1529;"></i>
                             </div>
                             <h3>奇門遁甲</h3>
-                            <p>以傳統玄學輔助解答人生疑惑，幫助規劃決策並避開不利因素。</p>
+                            <p>奇門遁甲為中國古代傳下的三大祕術之一，與大六壬、太乙神數並稱「三式」，它是運用河圖洛書、易經、八卦九宮及五行相生相剋的變化等來預測未來，判斷敵我優劣，進而運籌帷幄，把握對己有利的局面。從古代演變至今，奇門遁甲成為趨吉避凶之學，它與其他術數最大的不同，就是能針對當下，選擇對自已有利的時間、方位，進行風水佈局，達到趨吉避凶的效果。</p>
                         </div>
                     </div><!-- End Service Item -->
 
@@ -378,7 +378,7 @@
                             <div class="icon">
                                 <i class="bi bi-cash-stack" style="color: #0dcaf0;"></i>
                             </div>
-                            <h3>清寒家庭棺材捐贈</h3>
+                            <h3 href="https://www.youtube.com/watch?v=ClQovEqt82I&list=PLKJj4i0VcDDvcDBbQssQJRLvDw1oyF8DM&index=3" target="_blank" style="color: #007bff; text-decoration: underline;">清寒家庭棺材捐贈</h3>
                             <p>提供經濟困難的家庭所需的棺材協助，助他們面對親人往生的困境。</p>
                         </div>
                     </div><!-- End Service Item -->
@@ -513,7 +513,7 @@
                                 <img src="assets/img/portfolio/dunjia-3.jpg" class="img-fluid" alt="奇門遁甲">
                                 <div class="portfolio-info"
                                     style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-                                    <h4>羅盤</h4>
+                                    <h4>奇門遁甲為中國古代傳下的三大祕術之一，與大六壬、太乙神數並稱「三式」，它是運用河圖洛書、易經、八卦九宮及五行相生相剋的變化等來預測未來，判斷敵我優劣，進而運籌帷幄，把握對己有利的局面。從古代演變至今，奇門遁甲成為趨吉避凶之學，它與其他術數最大的不同，就是能針對當下，選擇對自已有利的時間、方位，進行風水佈局，達到趨吉避凶的效果。</h4>
                                     <a href="assets/img/portfolio/dunjia-3.jpg" title="奇門遁甲為中國古代傳下的三大祕術之一，與大六壬、太乙神數並稱「三式」，它是運用河圖洛書、易經、八卦九宮及五行相生相剋的變化等來預測未來，判斷敵我優劣，進而運籌帷幄，把握對己有利的局面。從古代演變至今，奇門遁甲成為趨吉避凶之學，它與其他術數最大的不同，就是能針對當下，選擇對自已有利的時間、方位，進行風水佈局，達到趨吉避凶的效果。"
                                         data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
                                             class="bi bi-zoom-in"></i></a>
@@ -529,7 +529,7 @@
                                 <img src="assets/img/portfolio/dunjia-4.jpg" class="img-fluid" alt="奇門遁甲">
                                 <div class="portfolio-info"
                                     style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-                                    <h4>羅盤</h4>
+                                    <h4>相傳在古代，奇門遁甲原為運籌預測、行軍打仗之法，是祕而不宣的帝王之學。上古時期黃帝大戰蚩尤，一開始節節敗退，幸得九天玄女傳下的奇門遁甲，最後才能獲得勝利。在現代，周師兄承襲正宗學派，用心輔助每一位信眾。</h4>
                                     <a href="assets/img/portfolio/dunjia-4.jpg" title="相傳在古代，奇門遁甲原為運籌預測、行軍打仗之法，是祕而不宣的帝王之學。上古時期黃帝大戰蚩尤，一開始節節敗退，幸得九天玄女傳下的奇門遁甲，最後才能獲得勝利。在現代，周師兄承襲正宗學派，用心輔助每一位信眾。"
                                         data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
                                             class="bi bi-zoom-in"></i></a>
@@ -639,7 +639,7 @@
                                     <span style="display:block;">感恩南無地藏王菩薩！🙏🙏🙏</span>
                                     <i class="bi bi-quote quote-icon-right"></i>
                                 </p>
-                                
+
                             </div>
                         </div><!-- End testimonial item -->
 
@@ -660,7 +660,7 @@
                                     <span style="display:block;">感恩南無地藏王菩薩！🙏🙏🙏</span>
                                     <i class="bi bi-quote quote-icon-right"></i>
                                 </p>
-                                
+
                             </div>
                         </div><!-- End testimonial item -->
                         <div class="swiper-slide">
@@ -682,7 +682,7 @@
                                     <span style="display:block;">感恩地藏王菩薩。</span>
                                     <i class="bi bi-quote quote-icon-right"></i>
                                 </p>
-                                
+
                             </div>
                         </div><!-- End testimonial item -->
                         <div class="swiper-slide">
@@ -700,7 +700,7 @@
                                     <span style="display:block;">感恩南無地藏王菩薩的慈悲，感恩周師兄的幫助，讓我有機會幫助咪咪康復！</span>
                                     <i class="bi bi-quote quote-icon-right"></i>
                                 </p>
-                                
+
                             </div>
                         </div><!-- End testimonial item -->
                         <div class="swiper-slide">
@@ -718,7 +718,7 @@
                                     <span style="display:block;">感恩地藏王菩薩的慈悲開示，也感謝周師兄的占察，讓我釐清方向，不再困惑。</span>
                                     <i class="bi bi-quote quote-icon-right"></i>
                                 </p>
-                                
+
                             </div>
                         </div><!-- End testimonial item -->
 
@@ -737,7 +737,7 @@
                                     <span style="display:block;">感謝南無地藏王菩薩。</span>
                                     <i class="bi bi-quote quote-icon-right"></i>
                                 </p>
-                                
+
                             </div>
                         </div><!-- End testimonial item -->
 
@@ -757,7 +757,7 @@
                                     <span style="display:block;">感謝南無地藏王菩薩。</span>
                                     <i class="bi bi-quote quote-icon-right"></i>
                                 </p>
-                                
+
                             </div>
                         </div><!-- End testimonial item -->
                         <div class="swiper-slide">
@@ -773,7 +773,7 @@
                                     <span style="display:block;">感恩地藏菩薩，感恩周師兄，占察的準確真是令人驚嘆！</span><br>
                                     <i class="bi bi-quote quote-icon-right"></i>
                                 </p>
-                                
+
                             </div>
                         </div><!-- End testimonial item -->
                         <div class="swiper-slide">
