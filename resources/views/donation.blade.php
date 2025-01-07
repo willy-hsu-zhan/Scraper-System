@@ -116,9 +116,9 @@
                 <ul>
                     <li><a href="#hero" class="active">首頁</a></li>
                     <li><a href="#about">關於</a></li>
+                    <li><a href="#testimonials">案例分享</a></li>
                     <li><a href="#services">服務</a></li>
                     <li><a href="#portfolio">圖片</a></li>
-                    <li><a href="#testimonials">案例分享</a></li>
                     <li><a href="#contact">聯絡我們</a></li>
                 </ul>
                 <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
@@ -733,8 +733,8 @@
                         <div class="swiper-slide">
                             <div class="testimonial-item">
                                 <img src="assets/img/testimonials/common2.jpg" class="testimonial-img" alt="">
-                                <h3>皓閎</h3>
-                                <h4>皓閎</h4>
+                                <h3>皓</h3>
+                                <h4>皓</h4>
                                 <p>
                                     <i class="bi bi-quote quote-icon-left"></i>
                                     <span style="display:block;">我的兒子在兩歲多時被診斷出患有過動症與自閉症，並伴隨心智發展遲緩的症狀。這對我們家庭來說是個巨大的挑戰，無論日常生活還是情緒管理都充滿了艱難。我作為父親，感到深深的無力與焦慮，期望能找到方法幫助他。</span>
@@ -749,7 +749,9 @@
                                     <br>
                                     <span style="display:block;">除了兒子的事情，我也請周師兄幫忙占察我的投資。2024年七月底，我詢問了我投資的私募基金是否穩定。地藏王菩薩開示這項投資是安全的，讓我感到安心。這筆投資已經持續了十一年，儘管朋友與同事多半持懷疑態度，但我的同學身為投資公司的經理，提到其老闆過去是證券業VIP，以公司名義投資，具有極高的穩定性。這次占察更讓我深刻體會到地藏王菩薩的準確與慈悲。</span>
                                     <br>
-                                    <span style="display:block;">整個過程中，我經歷了迷茫、堅持與收穫。我深信地藏王菩薩的慈悲加持，讓我在最困難的時候找到方向，並逐漸看見希望的曙光。無論是兒子的轉變還是投資的穩定，都讓我更加感恩地藏王菩薩的庇佑。未來，我會繼續誦經，以回報菩薩的恩典。感恩地藏王菩薩！🙏🙏🙏</span>
+                                    <span style="display:block;">整個過程中，我經歷了迷茫、堅持與收穫。我深信地藏王菩薩的慈悲加持，讓我在最困難的時候找到方向，並逐漸看見希望的曙光。無論是兒子的轉變還是投資的穩定，都讓我更加感恩地藏王菩薩的庇佑。未來，我會繼續誦經，以回報菩薩的恩典。</span>
+                                    <br>
+                                    <span style="display:block;">希望這篇文章能夠為那些面對與我相同情況的家庭，提供一個除了學校與復建之外的另一種可能。只要心中懷有希望，就永遠不要放棄。感恩地藏王菩薩！🙏🙏🙏</span>
                                     <i class="bi bi-quote quote-icon-right"></i>
                                 </p>
                             </div>
