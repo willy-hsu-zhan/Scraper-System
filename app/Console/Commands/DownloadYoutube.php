@@ -9,7 +9,7 @@ use App\Services\TelegramService;
 
 class DownloadYoutube extends Command
 {
-    protected $signature = 'youtube:download {url} {--format=mp4} {--resolution=720} {--audio-only}';
+    protected $signature = 'youtube:download {url?} {--format=mp4} {--resolution=720} {--audio-only}';
     protected $description = 'Download YouTube videos or get video info';
 
     protected $fileName;
