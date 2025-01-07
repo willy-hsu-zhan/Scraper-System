@@ -610,7 +610,7 @@
               "loop": true,
               "speed": 300,
               "autoplay": {
-                "delay": 10000
+                "delay": 30000
               },
               "slidesPerView": "auto",
               "pagination": {
