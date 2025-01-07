@@ -642,6 +642,27 @@
                                 
                             </div>
                         </div><!-- End testimonial item -->
+
+                        <div class="swiper-slide">
+                            <div class="testimonial-item">
+                                <img src="assets/img/testimonials/common2.jpg" class="testimonial-img"
+                                    alt="">
+                                <h3>周師兄</h3>
+                                <h4>周師兄</h4>
+                                <p>
+                                    <i class="bi bi-quote quote-icon-left"></i>
+                                    <span style="display:block;">在2024年底，我向地藏王菩薩請示占察，詢問是否會調部門。這樣的問題不僅關乎師兄的職業未來，也深深牽動著他的心情和選擇。我通過占察來請示菩薩，希望能獲得指引，解答這一困惑。</span><br>
+                                    <span style="display:block;">占察的結果顯示，「有所求得吉利」，這句話的意思是師兄將會在某個時刻得到部門調動的機會。這樣的指示讓我深感安心。事實上，師兄也在不久後得到了部門經理的詢問：“你想不想調走？”這一切似乎正如菩薩所預示的，命運的安排正在展開。</span><br>
+                                    <span style="display:block;">然而，師兄進一步了解將要調動的部門後，發現這個部門的情況並不如預期那麼理想。這正應了占察中的另一句指示：「所向處難開化」，也就是說，這個部門的情況並不像外界所描述的那樣順利，可能會面臨更多的困難和挑戰。這讓師兄感到非常矛盾，是否應該調動部門？</span><br>
+                                    <span style="display:block;">這時，菩薩的指引再次顯現：「觀怪異精進安」。這句話讓我深刻領悟，當面對困難時，我們不應急於改變，反而應保持冷靜，專注於修行。這樣的指引促使師兄決定放下對部門調動的執著，專心於佛法的修行，並保持內心的平靜。</span><br>
+                                    <span style="display:block;">最終，師兄選擇不調動部門，而是專心於自己的修行。他將更多的精力投入到念佛中，並感到內心的平靜與力量逐漸增強。隨後，師兄得知其他同事調入那個部門，並且聽說他們的情況並不如預期那般順利。這一切再次證明，菩薩的指引讓師兄做出了正確的選擇。</span><br>
+                                    <span style="display:block;">這次占察經歷讓我更加堅信，地藏王菩薩的慈悲指引能夠幫助我們在關鍵時刻做出最合適的選擇。無論未來如何，我們都應保持冷靜，專注於內心的修行，並相信菩薩會指引我們走向平穩的道路。</span><br>
+                                    <span style="display:block;">感恩南無地藏王菩薩！🙏🙏🙏</span>
+                                    <i class="bi bi-quote quote-icon-right"></i>
+                                </p>
+                                
+                            </div>
+                        </div><!-- End testimonial item -->
                         <div class="swiper-slide">
                             <div class="testimonial-item">
                                 <img src="assets/img/testimonials/common.jpg" class="testimonial-img"
