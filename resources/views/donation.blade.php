@@ -628,14 +628,18 @@
                                     alt="">
                                 <h3>許詹敦惟</h3>
                                 <h4>Willy Hsu</h4>
-
                                 <p>
                                     <i class="bi bi-quote quote-icon-left"></i>
-                                    <span>今年初，我的阿嬤因為身體急劇惡化，無法正常說話和移動，甚至有不自覺的亂動現象，讓家人非常憂心。後來請周師兄幫忙，他指出阿嬤身上有五位冤親債主，影響了她的健康狀況。
-                                        依照周師兄的建議，我跪在家中的地藏菩薩像前，誦念《地藏經》，並將功德迴向給阿嬤身上的冤親債主。第一天後，阿嬤的情況有了明顯改善，身體不再亂動；第二天，她睡得更好，也開始能正常說話了。
-                                        家人和親戚看到這樣的轉變，都非常驚訝，並逐漸相信《地藏經》的功效。我們全家感受到地藏菩薩的慈悲與周師兄的幫助，讓阿嬤成功脫離困境。</span>
+                                    <span style="display:block;">今年初，我的阿嬤因為身體急劇惡化，無法正常說話和移動，甚至有不自覺的亂動現象，讓家人非常憂心。</span><br>
+                                    <span style="display:block;">後來請周師兄幫忙，他指出阿嬤身上有五位冤親債主，影響了她的健康狀況。</span><br>
+                                    <span style="display:block;">依照周師兄的建議，我跪在家中的地藏菩薩像前，誦念《地藏經》，並將功德迴向給阿嬤身上的冤親債主。</span><br>
+                                    <span style="display:block;">第一天後，阿嬤的情況有了明顯改善，身體不再亂動；第二天，她睡得更好，也開始能正常說話了。</span><br>
+                                    <span style="display:block;">家人和親戚看到這樣的轉變，都非常驚訝，並逐漸相信《地藏經》的功效。</span><br>
+                                    <span style="display:block;">我們全家感受到地藏菩薩的慈悲與周師兄的幫助，讓阿嬤成功脫離困境。</span><br>
+                                    <span style="display:block;">感恩南無地藏王菩薩！🙏🙏🙏</span>
                                     <i class="bi bi-quote quote-icon-right"></i>
                                 </p>
+                                
                             </div>
                         </div><!-- End testimonial item -->
                         <div class="swiper-slide">
@@ -646,9 +650,18 @@
                                 <h4>Sasha</h4>
                                 <p>
                                     <i class="bi bi-quote quote-icon-left"></i>
-                                    <span>上個月坐飛機之前一直不順，買好機票之後，竟然剛好遇到百年一見的大水災，當我剛到達機場買礦泉水，錢也被機器吃掉，為了安全起見，我詢問周師兄，他指示我我要念地藏王菩薩聖號一萬遍，我趁著等班機的時候誠心誦念，當我快唸滿萬遍時，居然有人送給我一瓶礦泉水，在登機門本來是一位不友善的剪票員在查票，我心中忐忑，沒想到換我登機時突然多了一位友善的剪票員，我也順利登機，一路上有人送巧克力給我，坐機場巴士也剛好有座位，這些都是以前坐飛機時從來沒有發生的好事，感恩地藏王菩薩。</span>
+                                    <span style="display:block;">上個月坐飛機之前一直不順，買好機票之後，竟然剛好遇到百年一見的大水災，當我剛到達機場買礦泉水，錢也被機器吃掉，為了安全起見，我詢問周師兄，他指示我我要念地藏王菩薩聖號一萬遍。</span>
+                                    <br>
+                                    <span style="display:block;">我趁著等班機的時候誠心誦念，當我快唸滿萬遍時，居然有人送給我一瓶礦泉水。</span>
+                                    <br>
+                                    <span style="display:block;">在登機門本來是一位不友善的剪票員在查票，我心中忐忑，沒想到換我登機時突然多了一位友善的剪票員，我也順利登機。</span>
+                                    <br>
+                                    <span style="display:block;">一路上有人送巧克力給我，坐機場巴士也剛好有座位，這些都是以前坐飛機時從來沒有發生的好事。</span>
+                                    <br>
+                                    <span style="display:block;">感恩地藏王菩薩。</span>
                                     <i class="bi bi-quote quote-icon-right"></i>
                                 </p>
+                                
                             </div>
                         </div><!-- End testimonial item -->
                         <div class="swiper-slide">
@@ -658,11 +671,15 @@
                                 <h4>Yun</h4>
                                 <p>
                                     <i class="bi bi-quote quote-icon-left"></i>
-                                    <span>
-                                        我的寵物小貓咪咪因為感冒生病，看了很多寵物醫生但效果不佳，我感到十分迷惘，於是請周師兄幫忙占察。地藏菩薩的指示說明，咪咪的疾病可以康復，但需要為牠誦念《地藏經》和南無地藏王菩薩聖號。我依指示每天念誦一部《地藏經》，共21部，並念10,000遍南無地藏王菩薩聖號回向給咪咪。結果咪咪的感冒明顯好轉，健康狀況逐漸穩定下來！最特別的是，地藏菩薩的指示還顯示，咪咪是我的奶奶轉世。這讓我更加珍惜牠的存在。感恩南無地藏王菩薩的慈悲，感恩周師兄的幫助，讓我有機會幫助咪咪康復！
-                                    </span>
+                                    <span style="display:block;">我的寵物小貓咪咪因為感冒生病，看了很多寵物醫生但效果不佳，我感到十分迷惘，於是請周師兄幫忙占察。</span><br>
+                                    <span style="display:block;">地藏菩薩的指示說明，咪咪的疾病可以康復，但需要為牠誦念《地藏經》和南無地藏王菩薩聖號。</span><br>
+                                    <span style="display:block;">我依指示每天念誦一部《地藏經》，共21部，並念10,000遍南無地藏王菩薩聖號回向給咪咪。</span><br>
+                                    <span style="display:block;">結果咪咪的感冒明顯好轉，健康狀況逐漸穩定下來！</span><br>
+                                    <span style="display:block;">最特別的是，地藏菩薩的指示還顯示，咪咪是我的奶奶轉世。這讓我更加珍惜牠的存在。</span><br>
+                                    <span style="display:block;">感恩南無地藏王菩薩的慈悲，感恩周師兄的幫助，讓我有機會幫助咪咪康復！</span>
                                     <i class="bi bi-quote quote-icon-right"></i>
                                 </p>
+                                
                             </div>
                         </div><!-- End testimonial item -->
                         <div class="swiper-slide">
@@ -672,14 +689,15 @@
                                 <h4>Yau ren</h4>
                                 <p>
                                     <i class="bi bi-quote quote-icon-left"></i>
-                                    <span>
-                                        周師兄的占察真的非常準確，而且地藏王菩薩的指引也十分靈驗！
-                                        當我向周師兄詢問自己是否能考上博士班時，他占察後告訴我今年無法考上，這是注定要經歷的失去。地藏菩薩指示我，應該先專注於調整目前的工作單位，這比考試更為重要。這番話讓我深感認同，因為考試未果並非終點，而是讓我專注於眼前事務的契機。
-                                        此外，周師兄指出，因為有人在背後造口業，這讓我一時之間難以獲得貴人的幫助，這也是我需要注意的地方。最後，我詢問四年內是否能順利畢業，地藏菩薩指示有非人在干擾，問題並不在人，而在於環境與事物，需要改變心態與角度來看待問題。
-                                        感恩地藏王菩薩的慈悲開示，也感謝周師兄的占察，讓我釐清方向，不再困惑。
-                                    </span>
+                                    <span style="display:block;">周師兄的占察真的非常準確，而且地藏王菩薩的指引也十分靈驗！</span><br>
+                                    <span style="display:block;">當我向周師兄詢問自己是否能考上博士班時，他占察後告訴我今年無法考上，這是注定要經歷的失去。</span><br>
+                                    <span style="display:block;">地藏菩薩指示我，應該先專注於調整目前的工作單位，這比考試更為重要。這番話讓我深感認同，因為考試未果並非終點，而是讓我專注於眼前事務的契機。</span><br>
+                                    <span style="display:block;">此外，周師兄指出，因為有人在背後造口業，這讓我一時之間難以獲得貴人的幫助，這也是我需要注意的地方。</span><br>
+                                    <span style="display:block;">最後，我詢問四年內是否能順利畢業，地藏菩薩指示有非人在干擾，問題並不在人，而在於環境與事物，需要改變心態與角度來看待問題。</span><br>
+                                    <span style="display:block;">感恩地藏王菩薩的慈悲開示，也感謝周師兄的占察，讓我釐清方向，不再困惑。</span>
                                     <i class="bi bi-quote quote-icon-right"></i>
                                 </p>
+                                
                             </div>
                         </div><!-- End testimonial item -->
 
@@ -691,10 +709,14 @@
                                 <h4>Willy Hsu</h4>
                                 <p>
                                     <i class="bi bi-quote quote-icon-left"></i>
-                                    <span>起初，我好奇自己是否能發財，透過周師兄的占察輪，菩薩指示答案是肯定的。進一步詢問適合的方向，菩薩指點我從事工業相關工作，並經營社群平台。我依循指示，開始嘗試將工業作品分享到網路上，逐漸獲得更多的關注與迴響，讓我對未來的方向充滿信心，願意更努力投入。
-                                        這次的經歷，讓我感受到占察輪對指引人生道路的幫助，值得信任。</span>
+                                    <span style="display:block;">起初，我好奇自己是否能發財，透過周師兄的占察輪，菩薩指示答案是肯定的。</span><br>
+                                    <span style="display:block;">進一步詢問適合的方向，菩薩指點我從事工業相關工作，並經營社群平台。</span><br>
+                                    <span style="display:block;">我依循指示，開始嘗試將工業作品分享到網路上，逐漸獲得更多的關注與迴響，讓我對未來的方向充滿信心，願意更努力投入。</span><br>
+                                    <span style="display:block;">這次的經歷，讓我感受到占察輪對指引人生道路的幫助，值得信任。</span><br>
+                                    <span style="display:block;">感謝南無地藏王菩薩。</span>
                                     <i class="bi bi-quote quote-icon-right"></i>
                                 </p>
+                                
                             </div>
                         </div><!-- End testimonial item -->
 
@@ -705,12 +727,16 @@
                                 <h4>Yau ren</h4>
                                 <p>
                                     <i class="bi bi-quote quote-icon-left"></i>
-                                    <span>
-                                        調單位的過程真的讓我感到困難重重，無論如何努力都沒有進展。後來，我請教周師兄幫忙占察。占察的結果是「有所求速當得」，意思是說三天內會有答案。當時我還半信半疑，但周師兄的話真的不可思議！
-                                        結果第二天，就有另一所學校的校長主動通知我去面試，並準備讓我換單位！這一切真是太神奇了，地藏菩薩摩訶薩慈悲加持，讓事情這麼迅速順利！周師兄的占察準確到令人驚嘆，真的非常感恩！🙏🙏🙏
-                                    </span>
+                                    <span style="display:block;">調單位的過程真的讓我感到困難重重，無論如何努力都沒有進展。</span><br>
+                                    <span style="display:block;">後來，我請教周師兄幫忙占察。占察的結果是「有所求速當得」，意思是說三天內會有答案。</span><br>
+                                    <span style="display:block;">當時我還半信半疑，但周師兄的話真的不可思議！</span><br>
+                                    <span style="display:block;">結果第二天，就有另一所學校的校長主動通知我去面試，並準備讓我換單位！</span><br>
+                                    <span style="display:block;">這一切真是太神奇了，地藏菩薩摩訶薩慈悲加持，讓事情這麼迅速順利！</span><br>
+                                    <span style="display:block;">周師兄的占察準確到令人驚嘆，真的非常感恩！🙏🙏🙏</span><br>
+                                    <span style="display:block;">感謝南無地藏王菩薩。</span>
                                     <i class="bi bi-quote quote-icon-right"></i>
                                 </p>
+                                
                             </div>
                         </div><!-- End testimonial item -->
                         <div class="swiper-slide">
@@ -720,14 +746,13 @@
                                 <h4>丁佩菁</h4>
                                 <p>
                                     <i class="bi bi-quote quote-icon-left"></i>
-                                    <span>
-                                        我長期感冒都好不了，後來請周師兄幫我占察，結果真的「不可思議」！
-                                        地藏菩薩的指示是「觀所患可療治」，要我念地藏王菩薩聖號。
-                                        我依指示念了10,000遍南無地藏王菩薩聖號，結果現在感冒真的完全好了！
-                                        感恩地藏菩薩，感恩周師兄，占察的準確真是令人驚嘆！
-                                    </span>
+                                    <span style="display:block;">我長期感冒都好不了，後來請周師兄幫我占察，結果真的「不可思議」！</span><br>
+                                    <span style="display:block;">地藏菩薩的指示是「觀所患可療治」，要我念地藏王菩薩聖號。</span><br>
+                                    <span style="display:block;">我依指示念了10,000遍南無地藏王菩薩聖號，結果現在感冒真的完全好了！</span><br>
+                                    <span style="display:block;">感恩地藏菩薩，感恩周師兄，占察的準確真是令人驚嘆！</span><br>
                                     <i class="bi bi-quote quote-icon-right"></i>
                                 </p>
+                                
                             </div>
                         </div><!-- End testimonial item -->
                         <div class="swiper-slide">
