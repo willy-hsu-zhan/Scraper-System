@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->command('app:scraper-chickpt')->everyThirtyMinutes();
-        $schedule->command('app:scraper-ptt')->cron('15,45 * * * *'); // 改為每小時的15,45分執行使任務不衝突
+        //$schedule->command('app:scraper-ptt')->cron('15,45 * * * *'); // 改為每小時的15,45分執行使任務不衝突
         //$schedule->command('app:delete-old-record')->dailyAt('00:15')->timezone('Asia/Taipei');
     }
 
