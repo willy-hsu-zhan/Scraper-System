@@ -337,10 +337,10 @@
                         data-aos-delay="100">
                         <h3>攜手共建地藏廟！</h3><br>
                         <h3>我們的目標是 <span style="color: #ff6600;">NT$3,500,000</span></h3><br>
-                        <h3>現已募集 <span style="color: #28a745;">NT$61,410</span>！</h3><br>
+                        <h3>現已募集 <span style="color: #28a745;">NT$64,346</span>！</h3><br>
                         <h3>您的每一分貢獻，都將幫助更多人受益，感謝您的支持！</h3>
                         <br>
-                        <h6 style="font-size: 1.1rem; color: #777;"><strong>最後更新時間：</strong> 2025-01-06</h6>
+                        <h6 style="font-size: 1.1rem; color: #777;"><strong>最後更新時間：</strong> 2025-01-10</h6>
                     </div>
                 </div>
             </div>
@@ -442,8 +442,7 @@
               }
             }
           </script>
-                    <div class="swiper-wrapper">
-
+                <div class="swiper-wrapper">
                         <div class="swiper-slide">
                             <div class="testimonial-item">
                                 <img src="assets/img/testimonials/willy-hsu.jpg" class="testimonial-img"
@@ -630,205 +629,205 @@
             </div>
         </section><!-- /Testimonials Section -->
             <!-- Portfolio Section -->
-            <section id="portfolio" class="portfolio section">
-                <!-- Section Title -->
-                <div class="container section-title" data-aos="fade-up">
-                    <h2>地藏菩薩與傳統術數</h2>
-                </div><!-- End Section Title -->
-    
-                <div class="container">
-    
-                    <div class="isotope-layout" data-default-filter="*" data-layout="masonry"
-                        data-sort="original-order">
-    
-                        <ul class="portfolio-filters isotope-filters" data-aos="fade-up" data-aos-delay="100">
-                            <li data-filter="*" class="filter-active">全部</li>
-                            <li data-filter=".filter-zhancha">占察輪</li>
-                            <li data-filter=".filter-dunjia">奇門遁甲</li>
-                            <li data-filter=".filter-ksitigarbha">地藏菩薩</li>
-                        </ul><!-- End Portfolio Filters -->
-    
-                        <div class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">
-    
-                            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-ksitigarbha">
-                                <div class="portfolio-content h-100"
-                                    style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                                    <img src="assets/img/portfolio/ksitigarbha-1.jpg" class="img-fluid" alt="供奉地藏菩薩形象">
-                                    <div class="portfolio-info"
-                                        style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-                                        <h4>南無地藏王菩薩</h4>
-                                        <a href="assets/img/portfolio/ksitigarbha-1.jpg" title="周師兄點香時，地藏菩薩顯靈，香灰逆風吹進小廟裡。"
-                                            data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
-                                                class="bi bi-zoom-in"></i></a>
-                                        <a href="#" title="More Details" class="details-link"><i
-                                                class="bi bi-link-45deg"></i></a>
-                                    </div>
+        <section id="portfolio" class="portfolio section">
+            <!-- Section Title -->
+            <div class="container section-title" data-aos="fade-up">
+                <h2>地藏菩薩與傳統術數</h2>
+            </div><!-- End Section Title -->
+
+            <div class="container">
+
+                <div class="isotope-layout" data-default-filter="*" data-layout="masonry"
+                    data-sort="original-order">
+
+                    <ul class="portfolio-filters isotope-filters" data-aos="fade-up" data-aos-delay="100">
+                        <li data-filter="*" class="filter-active">全部</li>
+                        <li data-filter=".filter-zhancha">占察輪</li>
+                        <li data-filter=".filter-dunjia">奇門遁甲</li>
+                        <li data-filter=".filter-ksitigarbha">地藏菩薩</li>
+                    </ul><!-- End Portfolio Filters -->
+
+                    <div class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">
+
+                        <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-ksitigarbha">
+                            <div class="portfolio-content h-100"
+                                style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                <img src="assets/img/portfolio/ksitigarbha-1.jpg" class="img-fluid" alt="供奉地藏菩薩形象">
+                                <div class="portfolio-info"
+                                    style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                                    <h4>南無地藏王菩薩</h4>
+                                    <a href="assets/img/portfolio/ksitigarbha-1.jpg" title="周師兄點香時，地藏菩薩顯靈，香灰逆風吹進小廟裡。"
+                                        data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
+                                            class="bi bi-zoom-in"></i></a>
+                                    <a href="#" title="More Details" class="details-link"><i
+                                            class="bi bi-link-45deg"></i></a>
                                 </div>
-                            </div><!-- End Portfolio Item -->
-    
-                            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-ksitigarbha">
-                                <div class="portfolio-content h-100"
-                                    style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                                    <img src="assets/img/portfolio/ksitigarbha-3.jpg" class="img-fluid" alt="地藏菩薩的衣服">
-                                    <div class="portfolio-info"
-                                        style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-                                        <h4>南無地藏王菩薩的衣服</h4>
-                                        <a href="assets/img/portfolio/ksitigarbha-3.jpg" title="南無地藏王菩薩的衣服"
-                                            data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
-                                                class="bi bi-zoom-in"></i></a>
-                                        <a href="#" title="More Details" class="details-link"><i
-                                                class="bi bi-link-45deg"></i></a>
-                                    </div>
+                            </div>
+                        </div><!-- End Portfolio Item -->
+
+                        <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-ksitigarbha">
+                            <div class="portfolio-content h-100"
+                                style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                <img src="assets/img/portfolio/ksitigarbha-3.jpg" class="img-fluid" alt="地藏菩薩的衣服">
+                                <div class="portfolio-info"
+                                    style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                                    <h4>南無地藏王菩薩的衣服</h4>
+                                    <a href="assets/img/portfolio/ksitigarbha-3.jpg" title="南無地藏王菩薩的衣服"
+                                        data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
+                                            class="bi bi-zoom-in"></i></a>
+                                    <a href="#" title="More Details" class="details-link"><i
+                                            class="bi bi-link-45deg"></i></a>
                                 </div>
-                            </div><!-- End Portfolio Item -->
-    
-                            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-ksitigarbha">
-                                <div class="portfolio-content h-100"
-                                    style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                                    <img src="assets/img/portfolio/ksitigarbha-4.jpg" class="img-fluid" alt="純黃金打造的五佛冠帽子">
-                                    <div class="portfolio-info"
-                                        style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-                                        <h4>純黃金打造的五佛冠帽子</h4>
-                                        <a href="assets/img/portfolio/ksitigarbha-4.jpg" title="純黃金打造的五佛冠帽子"
-                                            data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
-                                                class="bi bi-zoom-in"></i></a>
-                                        <a href="#" title="More Details" class="details-link"><i
-                                                class="bi bi-link-45deg"></i></a>
-                                    </div>
+                            </div>
+                        </div><!-- End Portfolio Item -->
+
+                        <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-ksitigarbha">
+                            <div class="portfolio-content h-100"
+                                style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                <img src="assets/img/portfolio/ksitigarbha-4.jpg" class="img-fluid" alt="純黃金打造的五佛冠帽子">
+                                <div class="portfolio-info"
+                                    style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                                    <h4>純黃金打造的五佛冠帽子</h4>
+                                    <a href="assets/img/portfolio/ksitigarbha-4.jpg" title="純黃金打造的五佛冠帽子"
+                                        data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
+                                            class="bi bi-zoom-in"></i></a>
+                                    <a href="#" title="More Details" class="details-link"><i
+                                            class="bi bi-link-45deg"></i></a>
                                 </div>
-                            </div><!-- End Portfolio Item -->
-    
-                            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-ksitigarbha">
-                                <div class="portfolio-content h-100"
-                                    style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                                    <img src="assets/img/portfolio/ksitigarbha-5.jpg" class="img-fluid" alt="對著地藏菩薩恭敬合掌">
-                                    <div class="portfolio-info"
-                                        style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-                                        <h4>對著南無地藏王菩薩恭敬合掌</h4>
-                                        <a href="assets/img/portfolio/ksitigarbha-5.jpg" title="對著南無地藏王菩薩恭敬合掌"
-                                            data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
-                                                class="bi bi-zoom-in"></i></a>
-                                        <a href="#" title="More Details" class="details-link"><i
-                                                class="bi bi-link-45deg"></i></a>
-                                    </div>
+                            </div>
+                        </div><!-- End Portfolio Item -->
+
+                        <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-ksitigarbha">
+                            <div class="portfolio-content h-100"
+                                style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                <img src="assets/img/portfolio/ksitigarbha-5.jpg" class="img-fluid" alt="對著地藏菩薩恭敬合掌">
+                                <div class="portfolio-info"
+                                    style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                                    <h4>對著南無地藏王菩薩恭敬合掌</h4>
+                                    <a href="assets/img/portfolio/ksitigarbha-5.jpg" title="對著南無地藏王菩薩恭敬合掌"
+                                        data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
+                                            class="bi bi-zoom-in"></i></a>
+                                    <a href="#" title="More Details" class="details-link"><i
+                                            class="bi bi-link-45deg"></i></a>
                                 </div>
-                            </div><!-- End Portfolio Item -->
-    
-                            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-ksitigarbha">
-                                <div class="portfolio-content h-100"
-                                    style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                                    <img src="assets/img/portfolio/ksitigarbha-6.jpg" class="img-fluid" alt="南無地藏王菩薩">
-                                    <div class="portfolio-info"
-                                        style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-                                        <h4>南無地藏王菩薩</h4>
-                                        <a href="assets/img/portfolio/ksitigarbha-6.jpg" title="南無地藏王菩薩"
-                                            data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
-                                                class="bi bi-zoom-in"></i></a>
-                                        <a href="#" title="More Details" class="details-link"><i
-                                                class="bi bi-link-45deg"></i></a>
-                                    </div>
+                            </div>
+                        </div><!-- End Portfolio Item -->
+
+                        <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-ksitigarbha">
+                            <div class="portfolio-content h-100"
+                                style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                <img src="assets/img/portfolio/ksitigarbha-6.jpg" class="img-fluid" alt="南無地藏王菩薩">
+                                <div class="portfolio-info"
+                                    style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                                    <h4>南無地藏王菩薩</h4>
+                                    <a href="assets/img/portfolio/ksitigarbha-6.jpg" title="南無地藏王菩薩"
+                                        data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
+                                            class="bi bi-zoom-in"></i></a>
+                                    <a href="#" title="More Details" class="details-link"><i
+                                            class="bi bi-link-45deg"></i></a>
                                 </div>
-                            </div><!-- End Portfolio Item -->
-    
-                            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-ksitigarbha">
-                                <div class="portfolio-content h-100"
-                                    style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                                    <img src="assets/img/portfolio/ksitigarbha-7.jpg" class="img-fluid" alt="由18k黃金打造的金錫禪杖">
-                                    <div class="portfolio-info"
-                                        style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-                                        <h4>由18k黃金打造的金錫禪杖</h4>
-                                        <a href="assets/img/portfolio/ksitigarbha-7.jpg" title="由18k黃金打造的金錫禪杖"
-                                            data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
-                                                class="bi bi-zoom-in"></i></a>
-                                        <a href="#" title="More Details" class="details-link"><i
-                                                class="bi bi-link-45deg"></i></a>
-                                    </div>
+                            </div>
+                        </div><!-- End Portfolio Item -->
+
+                        <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-ksitigarbha">
+                            <div class="portfolio-content h-100"
+                                style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                <img src="assets/img/portfolio/ksitigarbha-7.jpg" class="img-fluid" alt="由18k黃金打造的金錫禪杖">
+                                <div class="portfolio-info"
+                                    style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                                    <h4>由18k黃金打造的金錫禪杖</h4>
+                                    <a href="assets/img/portfolio/ksitigarbha-7.jpg" title="由18k黃金打造的金錫禪杖"
+                                        data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
+                                            class="bi bi-zoom-in"></i></a>
+                                    <a href="#" title="More Details" class="details-link"><i
+                                            class="bi bi-link-45deg"></i></a>
                                 </div>
-                            </div><!-- End Portfolio Item -->
-    
-                            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-dunjia">
-                                <div class="portfolio-content h-100"
-                                    style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                                    <img src="assets/img/portfolio/dunjia-3.jpg" class="img-fluid" alt="奇門遁甲">
-                                    <div class="portfolio-info"
-                                        style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-                                        <h4>奇門遁甲為中國古代傳下的三大祕術之一，與大六壬、太乙神數並稱「三式」，它是運用河圖洛書、易經、八卦九宮及五行相生相剋的變化等來預測未來，判斷敵我優劣，進而運籌帷幄，把握對己有利的局面。從古代演變至今，奇門遁甲成為趨吉避凶之學，它與其他術數最大的不同，就是能針對當下，選擇對自已有利的時間、方位，進行風水佈局，達到趨吉避凶的效果。</h4>
-                                        <a href="assets/img/portfolio/dunjia-3.jpg" title="奇門遁甲為中國古代傳下的三大祕術之一，與大六壬、太乙神數並稱「三式」，它是運用河圖洛書、易經、八卦九宮及五行相生相剋的變化等來預測未來，判斷敵我優劣，進而運籌帷幄，把握對己有利的局面。從古代演變至今，奇門遁甲成為趨吉避凶之學，它與其他術數最大的不同，就是能針對當下，選擇對自已有利的時間、方位，進行風水佈局，達到趨吉避凶的效果。"
-                                            data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
-                                                class="bi bi-zoom-in"></i></a>
-                                        <a href="#" title="More Details" class="details-link"><i
-                                                class="bi bi-link-45deg"></i></a>
-                                    </div>
+                            </div>
+                        </div><!-- End Portfolio Item -->
+
+                        <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-dunjia">
+                            <div class="portfolio-content h-100"
+                                style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                <img src="assets/img/portfolio/dunjia-3.jpg" class="img-fluid" alt="奇門遁甲">
+                                <div class="portfolio-info"
+                                    style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                                    <h4>奇門遁甲為中國古代傳下的三大祕術之一，與大六壬、太乙神數並稱「三式」，它是運用河圖洛書、易經、八卦九宮及五行相生相剋的變化等來預測未來，判斷敵我優劣，進而運籌帷幄，把握對己有利的局面。從古代演變至今，奇門遁甲成為趨吉避凶之學，它與其他術數最大的不同，就是能針對當下，選擇對自已有利的時間、方位，進行風水佈局，達到趨吉避凶的效果。</h4>
+                                    <a href="assets/img/portfolio/dunjia-3.jpg" title="奇門遁甲為中國古代傳下的三大祕術之一，與大六壬、太乙神數並稱「三式」，它是運用河圖洛書、易經、八卦九宮及五行相生相剋的變化等來預測未來，判斷敵我優劣，進而運籌帷幄，把握對己有利的局面。從古代演變至今，奇門遁甲成為趨吉避凶之學，它與其他術數最大的不同，就是能針對當下，選擇對自已有利的時間、方位，進行風水佈局，達到趨吉避凶的效果。"
+                                        data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
+                                            class="bi bi-zoom-in"></i></a>
+                                    <a href="#" title="More Details" class="details-link"><i
+                                            class="bi bi-link-45deg"></i></a>
                                 </div>
-                            </div><!-- End Portfolio Item -->
-    
-                            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-dunjia">
-                                <div class="portfolio-content h-100"
-                                    style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                                    <img src="assets/img/portfolio/dunjia-4.jpg" class="img-fluid" alt="奇門遁甲">
-                                    <div class="portfolio-info"
-                                        style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-                                        <h4>相傳在古代，奇門遁甲原為運籌預測、行軍打仗之法，是祕而不宣的帝王之學。上古時期黃帝大戰蚩尤，一開始節節敗退，幸得九天玄女傳下的奇門遁甲，最後才能獲得勝利。在現代，周師兄承襲正宗學派，用心輔助每一位信眾。</h4>
-                                        <a href="assets/img/portfolio/dunjia-4.jpg" title="相傳在古代，奇門遁甲原為運籌預測、行軍打仗之法，是祕而不宣的帝王之學。上古時期黃帝大戰蚩尤，一開始節節敗退，幸得九天玄女傳下的奇門遁甲，最後才能獲得勝利。在現代，周師兄承襲正宗學派，用心輔助每一位信眾。"
-                                            data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
-                                                class="bi bi-zoom-in"></i></a>
-                                        <a href="#" title="More Details" class="details-link"><i
-                                                class="bi bi-link-45deg"></i></a>
-                                    </div>
+                            </div>
+                        </div><!-- End Portfolio Item -->
+
+                        <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-dunjia">
+                            <div class="portfolio-content h-100"
+                                style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                <img src="assets/img/portfolio/dunjia-4.jpg" class="img-fluid" alt="奇門遁甲">
+                                <div class="portfolio-info"
+                                    style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                                    <h4>相傳在古代，奇門遁甲原為運籌預測、行軍打仗之法，是祕而不宣的帝王之學。上古時期黃帝大戰蚩尤，一開始節節敗退，幸得九天玄女傳下的奇門遁甲，最後才能獲得勝利。在現代，周師兄承襲正宗學派，用心輔助每一位信眾。</h4>
+                                    <a href="assets/img/portfolio/dunjia-4.jpg" title="相傳在古代，奇門遁甲原為運籌預測、行軍打仗之法，是祕而不宣的帝王之學。上古時期黃帝大戰蚩尤，一開始節節敗退，幸得九天玄女傳下的奇門遁甲，最後才能獲得勝利。在現代，周師兄承襲正宗學派，用心輔助每一位信眾。"
+                                        data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
+                                            class="bi bi-zoom-in"></i></a>
+                                    <a href="#" title="More Details" class="details-link"><i
+                                            class="bi bi-link-45deg"></i></a>
                                 </div>
-                            </div><!-- End Portfolio Item -->
-    
-                            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-zhancha">
-                                <div class="portfolio-content h-100"
-                                    style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                                    <img src="assets/img/portfolio/zhancha-1.jpg" class="img-fluid" alt="占察輪">
-                                    <div class="portfolio-info"
-                                        style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-                                        <h4>占察輪</h4>
-                                        <a href="assets/img/portfolio/zhancha-1.jpg" title="占察輪"
-                                            data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
-                                                class="bi bi-zoom-in"></i></a>
-                                        <a href="#" title="More Details" class="details-link"><i
-                                                class="bi bi-link-45deg"></i></a>
-                                    </div>
+                            </div>
+                        </div><!-- End Portfolio Item -->
+
+                        <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-zhancha">
+                            <div class="portfolio-content h-100"
+                                style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                <img src="assets/img/portfolio/zhancha-1.jpg" class="img-fluid" alt="占察輪">
+                                <div class="portfolio-info"
+                                    style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                                    <h4>占察輪</h4>
+                                    <a href="assets/img/portfolio/zhancha-1.jpg" title="占察輪"
+                                        data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
+                                            class="bi bi-zoom-in"></i></a>
+                                    <a href="#" title="More Details" class="details-link"><i
+                                            class="bi bi-link-45deg"></i></a>
                                 </div>
-                            </div><!-- End Portfolio Item -->
-    
-                            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-zhancha">
-                                <div class="portfolio-content h-100"
-                                    style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                                    <img src="assets/img/portfolio/zhancha-3.jpg" class="img-fluid" alt="占察輪">
-                                    <div class="portfolio-info"
-                                        style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-                                        <h4>占察輪</h4>
-                                        <a href="assets/img/portfolio/zhancha-3.jpg" title="占察輪，就像是地府的三生石，可以看見一個人的前世今生"
-                                            data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
-                                                class="bi bi-zoom-in"></i></a>
-                                        <a href="#" title="More Details" class="details-link"><i
-                                                class="bi bi-link-45deg"></i></a>
-                                    </div>
+                            </div>
+                        </div><!-- End Portfolio Item -->
+
+                        <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-zhancha">
+                            <div class="portfolio-content h-100"
+                                style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                <img src="assets/img/portfolio/zhancha-3.jpg" class="img-fluid" alt="占察輪">
+                                <div class="portfolio-info"
+                                    style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                                    <h4>占察輪</h4>
+                                    <a href="assets/img/portfolio/zhancha-3.jpg" title="占察輪，就像是地府的三生石，可以看見一個人的前世今生"
+                                        data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
+                                            class="bi bi-zoom-in"></i></a>
+                                    <a href="#" title="More Details" class="details-link"><i
+                                            class="bi bi-link-45deg"></i></a>
                                 </div>
-                            </div><!-- End Portfolio Item -->
-    
-                            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-zhancha">
-                                <div class="portfolio-content h-100"
-                                    style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                                    <img src="assets/img/portfolio/zhancha-6.jpg" class="img-fluid" alt="木製手雕占察輪">
-                                    <div class="portfolio-info"
-                                        style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-                                        <h4>木製手雕占察輪</h4>
-                                        <a href="assets/img/portfolio/zhancha-6.jpg" title="2025年，最新版的木製手雕占察輪，將在近期內為新一代的緣主們提供占察服務"
-                                            data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
-                                                class="bi bi-zoom-in"></i></a>
-                                        <a href="#" title="More Details" class="details-link"><i
-                                                class="bi bi-link-45deg"></i></a>
-                                    </div>
+                            </div>
+                        </div><!-- End Portfolio Item -->
+
+                        <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-zhancha">
+                            <div class="portfolio-content h-100"
+                                style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                <img src="assets/img/portfolio/zhancha-6.jpg" class="img-fluid" alt="木製手雕占察輪">
+                                <div class="portfolio-info"
+                                    style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                                    <h4>木製手雕占察輪</h4>
+                                    <a href="assets/img/portfolio/zhancha-6.jpg" title="2025年，最新版的木製手雕占察輪，將在近期內為新一代的緣主們提供占察服務"
+                                        data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i
+                                            class="bi bi-zoom-in"></i></a>
+                                    <a href="#" title="More Details" class="details-link"><i
+                                            class="bi bi-link-45deg"></i></a>
                                 </div>
-                            </div><!-- End Portfolio Item -->
-                        </div><!-- End Portfolio Container -->
-                    </div>
+                            </div>
+                        </div><!-- End Portfolio Item -->
+                    </div><!-- End Portfolio Container -->
                 </div>
-            </section><!-- /Portfolio Section -->
+            </div>
+        </section><!-- /Portfolio Section -->
 
         <!-- Contact Section -->
         <section id="contact" class="contact section">
