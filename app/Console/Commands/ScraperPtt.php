@@ -75,7 +75,7 @@ class ScraperPtt extends Command {
     {
         //$originUrl = 'https://www.ptt.cc';
         $originUrl = 'https://www.pttweb.cc';
-        $baseUrl   = 'https://www.ptt.cc/bbs/part-time/index.html';
+        $baseUrl   = 'https://www.pttweb.cc/bbs/part-time/index.html';
         $webDriver = $this->seleniumService->openWebDriver();
 
         try

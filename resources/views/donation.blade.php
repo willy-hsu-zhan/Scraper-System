@@ -236,6 +236,35 @@
             </div>
         </section><!-- /Info Section -->
 
+        <!-- Add Story Section -->
+        <section id="story" class="story section">
+            <div class="container">
+                <div class="row gy-4">
+                    <!-- Image Section -->
+                    <div class="col-lg-6 position-relative d-flex justify-content-center align-items-center"
+                        data-aos="fade-up" data-aos-delay="100">
+                        <img src="assets/img/ksitigarbha-inner3.jpg" class="img-fluid" style="width: 75%;" alt="占察輪">
+                    </div>
+
+                    <!-- Content Section -->
+                    <div class="col-lg-6 ps-lg-4 content d-flex flex-column justify-content-center" data-aos="fade-up"
+                        data-aos-delay="200">
+                        <h3 style="font-weight: 700; font-size: 2rem;">占察輪的故事</h3>
+                        <p>一開始我唸地藏經的時候，還沒有想過要學占察！</p>
+                        <p>是在偶然的一次機會裡，有一天睡覺時，我夢見了師父地藏菩薩。師父在夢中要我學占察輪，並說：要用占察來幫助更多的眾生。</p>
+                        <p>後來我想起，之前廟裡有一位在家師父，他曾留下一組占察輪，但他後來已經去世了。因為當時沒有人會做「占察」，我便發願：我要學占察，並幫助更多的眾生。</p>
+                        <p>這個占察輪，是我師父地藏菩薩在夢境中教我的。師父告訴我：「只教一次」，所以我一次就學會了。</p>
+                        <p>這一個舊的占察輪，也曾陪伴我度過許多時光，並在我的修行中發揮了重要作用。如今，它已經化掉，還給了我師父南無地藏菩薩摩訶薩。</p>
+
+                        <h4 style="font-weight: 600; font-size: 1.5rem;">新的占察輪</h4>
+                        <p>隨著舊的占察輪的歸還，新的占察輪則是在師父允許後換上的。</p>
+                        <p>佛堂的師兄師姐們曾提到，很多人學占察，卻往往不準，有些人甚至學了二十年仍然不準。然而，我的占察非常準確，這是因為我有來自師父南無地藏菩薩摩訶薩的神通力量。</p>
+                        <p>這份神通力量，是師父賜予我的，用來幫助眾生，解決他們的困難。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Services Section -->
         <section id="services" class="services section light-background">
 
@@ -308,10 +337,10 @@
                         data-aos-delay="100">
                         <h3>攜手共建地藏廟！</h3><br>
                         <h3>我們的目標是 <span style="color: #ff6600;">NT$3,500,000</span></h3><br>
-                        <h3>現已募集 <span style="color: #28a745;">NT$61,410</span>！</h3><br>
+                        <h3>現已募集 <span style="color: #28a745;">NT$64,346</span>！</h3><br>
                         <h3>您的每一分貢獻，都將幫助更多人受益，感謝您的支持！</h3>
                         <br>
-                        <h6 style="font-size: 1.1rem; color: #777;"><strong>最後更新時間：</strong> 2025-01-06</h6>
+                        <h6 style="font-size: 1.1rem; color: #777;"><strong>最後更新時間：</strong> 2025-01-10</h6>
                     </div>
                 </div>
             </div>
@@ -390,15 +419,220 @@
 
         </section><!-- /Stats Section -->
 
+        <!-- Testimonials Section -->
+        <section id="testimonials" class="testimonials section dark-background">
 
-        <!-- Portfolio Section -->
+            <img src="assets/img/testimonials-bg.jpg" class="testimonials-bg" alt="">
+
+            <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+                <div class="swiper init-swiper">
+                    <script type="application/json" class="swiper-config">
+            {
+              "loop": true,
+              "speed": 300,
+              "autoplay": {
+                "delay": 30000
+              },
+              "slidesPerView": "auto",
+              "pagination": {
+                "el": ".swiper-pagination",
+                "type": "bullets",
+                "clickable": true
+              }
+            }
+          </script>
+                <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <div class="testimonial-item">
+                                <img src="assets/img/testimonials/willy-hsu.jpg" class="testimonial-img"
+                                    alt="">
+                                <h3>許詹敦惟</h3>
+                                <h4>Willy Hsu</h4>
+                                <p>
+                                    <i class="bi bi-quote quote-icon-left"></i>
+                                    <span style="display:block;">今年初，我的阿嬤因為身體急劇惡化，無法正常說話和移動，甚至有不自覺的亂動現象，讓家人非常憂心。</span><br>
+                                    <span style="display:block;">後來請周師兄幫忙，他指出阿嬤身上有五位冤親債主，影響了她的健康狀況。</span><br>
+                                    <span style="display:block;">依照周師兄的建議，我跪在家中的地藏菩薩像前，誦念《地藏經》，並將功德迴向給阿嬤身上的冤親債主。</span><br>
+                                    <span style="display:block;">第一天後，阿嬤的情況有了明顯改善，身體不再亂動；第二天，她睡得更好，也開始能正常說話了。</span><br>
+                                    <span style="display:block;">家人和親戚看到這樣的轉變，都非常驚訝，並逐漸相信《地藏經》的功效。</span><br>
+                                    <span style="display:block;">我們全家感受到地藏菩薩的慈悲與周師兄的幫助，讓阿嬤成功脫離困境。</span><br>
+                                    <span style="display:block;">感恩南無地藏王菩薩！🙏🙏🙏</span>
+                                    <i class="bi bi-quote quote-icon-right"></i>
+                                </p>
+
+                            </div>
+                        </div><!-- End testimonial item -->
+
+                        <div class="swiper-slide">
+                            <div class="testimonial-item">
+                                <img src="assets/img/testimonials/common2.jpg" class="testimonial-img"
+                                    alt="">
+                                <h3>周師兄</h3>
+                                <h4>周師兄</h4>
+                                <p>
+                                    <i class="bi bi-quote quote-icon-left"></i>
+                                    <span style="display:block;">在2024年底，我向地藏王菩薩請示占察，詢問是否會調部門。這樣的問題不僅關乎師兄的職業未來，也深深牽動著他的心情和選擇。我通過占察來請示菩薩，希望能獲得指引，解答這一困惑。</span><br>
+                                    <span style="display:block;">占察的結果顯示，「有所求得吉利」，這句話的意思是師兄將會在某個時刻得到部門調動的機會。這樣的指示讓我深感安心。事實上，師兄也在不久後得到了部門經理的詢問：“你想不想調走？”這一切似乎正如菩薩所預示的，命運的安排正在展開。</span><br>
+                                    <span style="display:block;">然而，師兄進一步了解將要調動的部門後，發現這個部門的情況並不如預期那麼理想。這正應了占察中的另一句指示：「所向處難開化」，也就是說，這個部門的情況並不像外界所描述的那樣順利，可能會面臨更多的困難和挑戰。這讓師兄感到非常矛盾，是否應該調動部門？</span><br>
+                                    <span style="display:block;">這時，菩薩的指引再次顯現：「觀怪異精進安」。這句話讓我深刻領悟，當面對困難時，我們不應急於改變，反而應保持冷靜，專注於修行。這樣的指引促使師兄決定放下對部門調動的執著，專心於佛法的修行，並保持內心的平靜。</span><br>
+                                    <span style="display:block;">最終，師兄選擇不調動部門，而是專心於自己的修行。他將更多的精力投入到念佛中，並感到內心的平靜與力量逐漸增強。隨後，師兄得知其他同事調入那個部門，並且聽說他們的情況並不如預期那般順利。這一切再次證明，菩薩的指引讓師兄做出了正確的選擇。</span><br>
+                                    <span style="display:block;">這次占察經歷讓我更加堅信，地藏王菩薩的慈悲指引能夠幫助我們在關鍵時刻做出最合適的選擇。無論未來如何，我們都應保持冷靜，專注於內心的修行，並相信菩薩會指引我們走向平穩的道路。</span><br>
+                                    <span style="display:block;">感恩南無地藏王菩薩！🙏🙏🙏</span>
+                                    <i class="bi bi-quote quote-icon-right"></i>
+                                </p>
+
+                            </div>
+                        </div><!-- End testimonial item -->
+                        <div class="swiper-slide">
+                            <div class="testimonial-item">
+                                <img src="assets/img/testimonials/common.jpg" class="testimonial-img"
+                                    alt="">
+                                <h3>Sasha</h3>
+                                <h4>Sasha</h4>
+                                <p>
+                                    <i class="bi bi-quote quote-icon-left"></i>
+                                    <span style="display:block;">上個月坐飛機之前一直不順，買好機票之後，竟然剛好遇到百年一見的大水災，當我剛到達機場買礦泉水，錢也被機器吃掉，為了安全起見，我詢問周師兄，他指示我我要念地藏王菩薩聖號一萬遍。</span>
+                                    <br>
+                                    <span style="display:block;">我趁著等班機的時候誠心誦念，當我快唸滿萬遍時，居然有人送給我一瓶礦泉水。</span>
+                                    <br>
+                                    <span style="display:block;">在登機門本來是一位不友善的剪票員在查票，我心中忐忑，沒想到換我登機時突然多了一位友善的剪票員，我也順利登機。</span>
+                                    <br>
+                                    <span style="display:block;">一路上有人送巧克力給我，坐機場巴士也剛好有座位，這些都是以前坐飛機時從來沒有發生的好事。</span>
+                                    <br>
+                                    <span style="display:block;">感恩地藏王菩薩。</span>
+                                    <i class="bi bi-quote quote-icon-right"></i>
+                                </p>
+
+                            </div>
+                        </div><!-- End testimonial item -->
+                        <div class="swiper-slide">
+                            <div class="testimonial-item">
+                                <img src="assets/img/testimonials/common2.jpg" class="testimonial-img" alt="">
+                                <h3>Yun</h3>
+                                <h4>Yun</h4>
+                                <p>
+                                    <i class="bi bi-quote quote-icon-left"></i>
+                                    <span style="display:block;">我的寵物小貓咪咪因為感冒生病，看了很多寵物醫生但效果不佳，我感到十分迷惘，於是請周師兄幫忙占察。</span><br>
+                                    <span style="display:block;">地藏菩薩的指示說明，咪咪的疾病可以康復，但需要為牠誦念《地藏經》和南無地藏王菩薩聖號。</span><br>
+                                    <span style="display:block;">我依指示每天念誦一部《地藏經》，共21部，並念10,000遍南無地藏王菩薩聖號回向給咪咪。</span><br>
+                                    <span style="display:block;">結果咪咪的感冒明顯好轉，健康狀況逐漸穩定下來！</span><br>
+                                    <span style="display:block;">最特別的是，地藏菩薩的指示還顯示，咪咪是我的奶奶轉世。這讓我更加珍惜牠的存在。</span><br>
+                                    <span style="display:block;">感恩南無地藏王菩薩的慈悲，感恩周師兄的幫助，讓我有機會幫助咪咪康復！</span>
+                                    <i class="bi bi-quote quote-icon-right"></i>
+                                </p>
+
+                            </div>
+                        </div><!-- End testimonial item -->
+                        <div class="swiper-slide">
+                            <div class="testimonial-item">
+                                <img src="assets/img/testimonials/common.jpg" class="testimonial-img" alt="">
+                                <h3>Yau ren</h3>
+                                <h4>Yau ren</h4>
+                                <p>
+                                    <i class="bi bi-quote quote-icon-left"></i>
+                                    <span style="display:block;">周師兄的占察真的非常準確，而且地藏王菩薩的指引也十分靈驗！</span><br>
+                                    <span style="display:block;">當我向周師兄詢問自己是否能考上博士班時，他占察後告訴我今年無法考上，這是注定要經歷的失去。</span><br>
+                                    <span style="display:block;">地藏菩薩指示我，應該先專注於調整目前的工作單位，這比考試更為重要。這番話讓我深感認同，因為考試未果並非終點，而是讓我專注於眼前事務的契機。</span><br>
+                                    <span style="display:block;">此外，周師兄指出，因為有人在背後造口業，這讓我一時之間難以獲得貴人的幫助，這也是我需要注意的地方。</span><br>
+                                    <span style="display:block;">最後，我詢問四年內是否能順利畢業，地藏菩薩指示有非人在干擾，問題並不在人，而在於環境與事物，需要改變心態與角度來看待問題。</span><br>
+                                    <span style="display:block;">感恩地藏王菩薩的慈悲開示，也感謝周師兄的占察，讓我釐清方向，不再困惑。</span>
+                                    <i class="bi bi-quote quote-icon-right"></i>
+                                </p>
+
+                            </div>
+                        </div><!-- End testimonial item -->
+
+                        <div class="swiper-slide">
+                            <div class="testimonial-item">
+                                <img src="assets/img/testimonials/willy-hsu.jpg" class="testimonial-img"
+                                    alt="">
+                                <h3>許詹敦惟</h3>
+                                <h4>Willy Hsu</h4>
+                                <p>
+                                    <i class="bi bi-quote quote-icon-left"></i>
+                                    <span style="display:block;">起初，我好奇自己是否能發財，透過周師兄的占察輪，菩薩指示答案是肯定的。</span><br>
+                                    <span style="display:block;">進一步詢問適合的方向，菩薩指點我從事工業相關工作，並經營社群平台。</span><br>
+                                    <span style="display:block;">我依循指示，開始嘗試將工業作品分享到網路上，逐漸獲得更多的關注與迴響，讓我對未來的方向充滿信心，願意更努力投入。</span><br>
+                                    <span style="display:block;">這次的經歷，讓我感受到占察輪對指引人生道路的幫助，值得信任。</span><br>
+                                    <span style="display:block;">感謝南無地藏王菩薩。</span>
+                                    <i class="bi bi-quote quote-icon-right"></i>
+                                </p>
+
+                            </div>
+                        </div><!-- End testimonial item -->
+
+                        <div class="swiper-slide">
+                            <div class="testimonial-item">
+                                <img src="assets/img/testimonials/common2.jpg" class="testimonial-img" alt="">
+                                <h3>Yau ren</h3>
+                                <h4>Yau ren</h4>
+                                <p>
+                                    <i class="bi bi-quote quote-icon-left"></i>
+                                    <span style="display:block;">調單位的過程真的讓我感到困難重重，無論如何努力都沒有進展。</span><br>
+                                    <span style="display:block;">後來，我請教周師兄幫忙占察。占察的結果是「有所求速當得」，意思是說三天內會有答案。</span><br>
+                                    <span style="display:block;">當時我還半信半疑，但周師兄的話真的不可思議！</span><br>
+                                    <span style="display:block;">結果第二天，就有另一所學校的校長主動通知我去面試，並準備讓我換單位！</span><br>
+                                    <span style="display:block;">這一切真是太神奇了，地藏菩薩摩訶薩慈悲加持，讓事情這麼迅速順利！</span><br>
+                                    <span style="display:block;">周師兄的占察準確到令人驚嘆，真的非常感恩！🙏🙏🙏</span><br>
+                                    <span style="display:block;">感謝南無地藏王菩薩。</span>
+                                    <i class="bi bi-quote quote-icon-right"></i>
+                                </p>
+
+                            </div>
+                        </div><!-- End testimonial item -->
+                        <div class="swiper-slide">
+                            <div class="testimonial-item">
+                                <img src="assets/img/testimonials/common.jpg" class="testimonial-img" alt="">
+                                <h3>丁佩菁</h3>
+                                <h4>丁佩菁</h4>
+                                <p>
+                                    <i class="bi bi-quote quote-icon-left"></i>
+                                    <span style="display:block;">我長期感冒都好不了，後來請周師兄幫我占察，結果真的「不可思議」！</span><br>
+                                    <span style="display:block;">地藏菩薩的指示是「觀所患可療治」，要我念地藏王菩薩聖號。</span><br>
+                                    <span style="display:block;">我依指示念了10,000遍南無地藏王菩薩聖號，結果現在感冒真的完全好了！</span><br>
+                                    <span style="display:block;">感恩地藏菩薩，感恩周師兄，占察的準確真是令人驚嘆！</span><br>
+                                    <i class="bi bi-quote quote-icon-right"></i>
+                                </p>
+
+                            </div>
+                        </div><!-- End testimonial item -->
+                        <div class="swiper-slide">
+                            <div class="testimonial-item">
+                                <img src="assets/img/testimonials/common2.jpg" class="testimonial-img" alt="">
+                                <h3>皓</h3>
+                                <h4>皓</h4>
+                                <p>
+                                    <i class="bi bi-quote quote-icon-left"></i>
+                                    <span style="display:block;">我的兒子在兩歲多時被診斷出患有過動症與自閉症，並伴隨心智發展遲緩的症狀。這對我們家庭來說是個巨大的挑戰，無論日常生活還是情緒管理都充滿了艱難。我作為父親，感到深深的無力與焦慮，期望能找到方法幫助他。</span>
+                                    <br>
+                                    <span style="display:block;">2022年八月中，我在正德佛堂向觀世音菩薩祈求指引，開始舉辦法會，並每日誦經，踏上了修行之路。我誦讀了《地藏經》、《藥師經》、《心經》、《妙法蓮華經》以及《大悲咒》。雖然我持續誦經一年多，但兒子的病情似乎未有明顯好轉，這讓我不免疑惑，甚至懷疑自己的努力是否有意義。</span>
+                                    <br>
+                                    <span style="display:block;">為尋求答案，我多次祈求南無本師釋迦牟尼佛、南無地藏王菩薩和南無觀世音菩薩，希望在夢中能得啟示。終於，在2023年10月的一天，我做了一個令人深刻的夢：夢中，我走在鄉間小路，前方是一座山，許多人正朝山中走去。我看見地藏王菩薩，但卻超越祂繼續前行。走著走著，四周突然陷入一片黑暗，沒有月光，也看不見前路。我意識到自己正往下走，而非登上山頂。然而，我並不感到害怕，直到聽見兒子清楚的聲音念出「南無釋迦牟尼佛」，我瞬間醒來。這個夢境讓我不禁思考，是否暗示兒子的靈魂正受困於地獄。</span>
+                                    <br>
+                                    <span style="display:block;">這個夢成為我持續誦經的動力，我立下宏願，要誦經至兒子痊癒，並與大家分享這段經歷。2024年六月中，我透過網路認識了周師兄，並請他幫助我的兒子進行占察。地藏王菩薩開示：若我堅持誦經，兒子約六年會開始好轉，九年則能完全康復，且更努力誦經可縮短康復時間。陳師兄也提到，兒子未來將會感激我，並且會變得非常依賴我。</span>
+                                    <br>
+                                    <span style="display:block;">從那時起，我專注於每日誦讀《地藏經》。九月多，我在家中客廳掛上地藏王菩薩的圖像。到了十一月底，我驚喜地發現兒子的行為出現變化。他不再希望我獨自誦經，而是吵著要我陪他睡覺。雖然他的病情尚未完全痊癒，但他變得比以前更加黏我，這讓我感受到菩薩的加持與指引正在發揮作用。</span>
+                                    <br>
+                                    <span style="display:block;">除了兒子的事情，我也請周師兄幫忙占察我的投資。2024年七月底，我詢問了我投資的私募基金是否穩定。地藏王菩薩開示這項投資是安全的，讓我感到安心。這筆投資已經持續了十一年，儘管朋友與同事多半持懷疑態度，但我的同學身為投資公司的經理，提到其老闆過去是證券業VIP，以公司名義投資，具有極高的穩定性。這次占察更讓我深刻體會到地藏王菩薩的準確與慈悲。</span>
+                                    <br>
+                                    <span style="display:block;">整個過程中，我經歷了迷茫、堅持與收穫。我深信地藏王菩薩的慈悲加持，讓我在最困難的時候找到方向，並逐漸看見希望的曙光。無論是兒子的轉變還是投資的穩定，都讓我更加感恩地藏王菩薩的庇佑。未來，我會繼續誦經，以回報菩薩的恩典。</span>
+                                    <br>
+                                    <span style="display:block;">希望這篇文章能夠為那些面對與我相同情況的家庭，提供一個除了學校與復建之外的另一種可能。只要心中懷有希望，就永遠不要放棄。感恩地藏王菩薩！🙏🙏🙏</span>
+                                    <i class="bi bi-quote quote-icon-right"></i>
+                                </p>
+                            </div>
+                        </div><!-- End testimonial item -->
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+            </div>
+        </section><!-- /Testimonials Section -->
+            <!-- Portfolio Section -->
         <section id="portfolio" class="portfolio section">
-
             <!-- Section Title -->
             <div class="container section-title" data-aos="fade-up">
                 <h2>地藏菩薩與傳統術數</h2>
-                <!-- <p>Discover the spiritual and traditional wisdom that connects the teachings of Kṣitigarbha Bodhisattva with
-          ancient divination practices.</p> -->
             </div><!-- End Section Title -->
 
             <div class="container">
@@ -590,227 +824,10 @@
                                 </div>
                             </div>
                         </div><!-- End Portfolio Item -->
-
                     </div><!-- End Portfolio Container -->
-
-
                 </div>
-
             </div>
-
         </section><!-- /Portfolio Section -->
-
-
-        <!-- Testimonials Section -->
-        <section id="testimonials" class="testimonials section dark-background">
-
-            <img src="assets/img/testimonials-bg.jpg" class="testimonials-bg" alt="">
-
-            <div class="container" data-aos="fade-up" data-aos-delay="100">
-
-                <div class="swiper init-swiper">
-                    <script type="application/json" class="swiper-config">
-            {
-              "loop": true,
-              "speed": 300,
-              "autoplay": {
-                "delay": 30000
-              },
-              "slidesPerView": "auto",
-              "pagination": {
-                "el": ".swiper-pagination",
-                "type": "bullets",
-                "clickable": true
-              }
-            }
-          </script>
-                    <div class="swiper-wrapper">
-
-                        <div class="swiper-slide">
-                            <div class="testimonial-item">
-                                <img src="assets/img/testimonials/willy-hsu.jpg" class="testimonial-img"
-                                    alt="">
-                                <h3>許詹敦惟</h3>
-                                <h4>Willy Hsu</h4>
-                                <p>
-                                    <i class="bi bi-quote quote-icon-left"></i>
-                                    <span style="display:block;">今年初，我的阿嬤因為身體急劇惡化，無法正常說話和移動，甚至有不自覺的亂動現象，讓家人非常憂心。</span><br>
-                                    <span style="display:block;">後來請周師兄幫忙，他指出阿嬤身上有五位冤親債主，影響了她的健康狀況。</span><br>
-                                    <span style="display:block;">依照周師兄的建議，我跪在家中的地藏菩薩像前，誦念《地藏經》，並將功德迴向給阿嬤身上的冤親債主。</span><br>
-                                    <span style="display:block;">第一天後，阿嬤的情況有了明顯改善，身體不再亂動；第二天，她睡得更好，也開始能正常說話了。</span><br>
-                                    <span style="display:block;">家人和親戚看到這樣的轉變，都非常驚訝，並逐漸相信《地藏經》的功效。</span><br>
-                                    <span style="display:block;">我們全家感受到地藏菩薩的慈悲與周師兄的幫助，讓阿嬤成功脫離困境。</span><br>
-                                    <span style="display:block;">感恩南無地藏王菩薩！🙏🙏🙏</span>
-                                    <i class="bi bi-quote quote-icon-right"></i>
-                                </p>
-
-                            </div>
-                        </div><!-- End testimonial item -->
-
-                        <div class="swiper-slide">
-                            <div class="testimonial-item">
-                                <img src="assets/img/testimonials/common2.jpg" class="testimonial-img"
-                                    alt="">
-                                <h3>周師兄</h3>
-                                <h4>周師兄</h4>
-                                <p>
-                                    <i class="bi bi-quote quote-icon-left"></i>
-                                    <span style="display:block;">在2024年底，我向地藏王菩薩請示占察，詢問是否會調部門。這樣的問題不僅關乎師兄的職業未來，也深深牽動著他的心情和選擇。我通過占察來請示菩薩，希望能獲得指引，解答這一困惑。</span><br>
-                                    <span style="display:block;">占察的結果顯示，「有所求得吉利」，這句話的意思是師兄將會在某個時刻得到部門調動的機會。這樣的指示讓我深感安心。事實上，師兄也在不久後得到了部門經理的詢問：“你想不想調走？”這一切似乎正如菩薩所預示的，命運的安排正在展開。</span><br>
-                                    <span style="display:block;">然而，師兄進一步了解將要調動的部門後，發現這個部門的情況並不如預期那麼理想。這正應了占察中的另一句指示：「所向處難開化」，也就是說，這個部門的情況並不像外界所描述的那樣順利，可能會面臨更多的困難和挑戰。這讓師兄感到非常矛盾，是否應該調動部門？</span><br>
-                                    <span style="display:block;">這時，菩薩的指引再次顯現：「觀怪異精進安」。這句話讓我深刻領悟，當面對困難時，我們不應急於改變，反而應保持冷靜，專注於修行。這樣的指引促使師兄決定放下對部門調動的執著，專心於佛法的修行，並保持內心的平靜。</span><br>
-                                    <span style="display:block;">最終，師兄選擇不調動部門，而是專心於自己的修行。他將更多的精力投入到念佛中，並感到內心的平靜與力量逐漸增強。隨後，師兄得知其他同事調入那個部門，並且聽說他們的情況並不如預期那般順利。這一切再次證明，菩薩的指引讓師兄做出了正確的選擇。</span><br>
-                                    <span style="display:block;">這次占察經歷讓我更加堅信，地藏王菩薩的慈悲指引能夠幫助我們在關鍵時刻做出最合適的選擇。無論未來如何，我們都應保持冷靜，專注於內心的修行，並相信菩薩會指引我們走向平穩的道路。</span><br>
-                                    <span style="display:block;">感恩南無地藏王菩薩！🙏🙏🙏</span>
-                                    <i class="bi bi-quote quote-icon-right"></i>
-                                </p>
-
-                            </div>
-                        </div><!-- End testimonial item -->
-                        <div class="swiper-slide">
-                            <div class="testimonial-item">
-                                <img src="assets/img/testimonials/common.jpg" class="testimonial-img"
-                                    alt="">
-                                <h3>Sasha</h3>
-                                <h4>Sasha</h4>
-                                <p>
-                                    <i class="bi bi-quote quote-icon-left"></i>
-                                    <span style="display:block;">上個月坐飛機之前一直不順，買好機票之後，竟然剛好遇到百年一見的大水災，當我剛到達機場買礦泉水，錢也被機器吃掉，為了安全起見，我詢問周師兄，他指示我我要念地藏王菩薩聖號一萬遍。</span>
-                                    <br>
-                                    <span style="display:block;">我趁著等班機的時候誠心誦念，當我快唸滿萬遍時，居然有人送給我一瓶礦泉水。</span>
-                                    <br>
-                                    <span style="display:block;">在登機門本來是一位不友善的剪票員在查票，我心中忐忑，沒想到換我登機時突然多了一位友善的剪票員，我也順利登機。</span>
-                                    <br>
-                                    <span style="display:block;">一路上有人送巧克力給我，坐機場巴士也剛好有座位，這些都是以前坐飛機時從來沒有發生的好事。</span>
-                                    <br>
-                                    <span style="display:block;">感恩地藏王菩薩。</span>
-                                    <i class="bi bi-quote quote-icon-right"></i>
-                                </p>
-
-                            </div>
-                        </div><!-- End testimonial item -->
-                        <div class="swiper-slide">
-                            <div class="testimonial-item">
-                                <img src="assets/img/testimonials/common2.jpg" class="testimonial-img" alt="">
-                                <h3>Yun</h3>
-                                <h4>Yun</h4>
-                                <p>
-                                    <i class="bi bi-quote quote-icon-left"></i>
-                                    <span style="display:block;">我的寵物小貓咪咪因為感冒生病，看了很多寵物醫生但效果不佳，我感到十分迷惘，於是請周師兄幫忙占察。</span><br>
-                                    <span style="display:block;">地藏菩薩的指示說明，咪咪的疾病可以康復，但需要為牠誦念《地藏經》和南無地藏王菩薩聖號。</span><br>
-                                    <span style="display:block;">我依指示每天念誦一部《地藏經》，共21部，並念10,000遍南無地藏王菩薩聖號回向給咪咪。</span><br>
-                                    <span style="display:block;">結果咪咪的感冒明顯好轉，健康狀況逐漸穩定下來！</span><br>
-                                    <span style="display:block;">最特別的是，地藏菩薩的指示還顯示，咪咪是我的奶奶轉世。這讓我更加珍惜牠的存在。</span><br>
-                                    <span style="display:block;">感恩南無地藏王菩薩的慈悲，感恩周師兄的幫助，讓我有機會幫助咪咪康復！</span>
-                                    <i class="bi bi-quote quote-icon-right"></i>
-                                </p>
-
-                            </div>
-                        </div><!-- End testimonial item -->
-                        <div class="swiper-slide">
-                            <div class="testimonial-item">
-                                <img src="assets/img/testimonials/common.jpg" class="testimonial-img" alt="">
-                                <h3>Yau ren</h3>
-                                <h4>Yau ren</h4>
-                                <p>
-                                    <i class="bi bi-quote quote-icon-left"></i>
-                                    <span style="display:block;">周師兄的占察真的非常準確，而且地藏王菩薩的指引也十分靈驗！</span><br>
-                                    <span style="display:block;">當我向周師兄詢問自己是否能考上博士班時，他占察後告訴我今年無法考上，這是注定要經歷的失去。</span><br>
-                                    <span style="display:block;">地藏菩薩指示我，應該先專注於調整目前的工作單位，這比考試更為重要。這番話讓我深感認同，因為考試未果並非終點，而是讓我專注於眼前事務的契機。</span><br>
-                                    <span style="display:block;">此外，周師兄指出，因為有人在背後造口業，這讓我一時之間難以獲得貴人的幫助，這也是我需要注意的地方。</span><br>
-                                    <span style="display:block;">最後，我詢問四年內是否能順利畢業，地藏菩薩指示有非人在干擾，問題並不在人，而在於環境與事物，需要改變心態與角度來看待問題。</span><br>
-                                    <span style="display:block;">感恩地藏王菩薩的慈悲開示，也感謝周師兄的占察，讓我釐清方向，不再困惑。</span>
-                                    <i class="bi bi-quote quote-icon-right"></i>
-                                </p>
-
-                            </div>
-                        </div><!-- End testimonial item -->
-
-                        <div class="swiper-slide">
-                            <div class="testimonial-item">
-                                <img src="assets/img/testimonials/willy-hsu.jpg" class="testimonial-img"
-                                    alt="">
-                                <h3>許詹敦惟</h3>
-                                <h4>Willy Hsu</h4>
-                                <p>
-                                    <i class="bi bi-quote quote-icon-left"></i>
-                                    <span style="display:block;">起初，我好奇自己是否能發財，透過周師兄的占察輪，菩薩指示答案是肯定的。</span><br>
-                                    <span style="display:block;">進一步詢問適合的方向，菩薩指點我從事工業相關工作，並經營社群平台。</span><br>
-                                    <span style="display:block;">我依循指示，開始嘗試將工業作品分享到網路上，逐漸獲得更多的關注與迴響，讓我對未來的方向充滿信心，願意更努力投入。</span><br>
-                                    <span style="display:block;">這次的經歷，讓我感受到占察輪對指引人生道路的幫助，值得信任。</span><br>
-                                    <span style="display:block;">感謝南無地藏王菩薩。</span>
-                                    <i class="bi bi-quote quote-icon-right"></i>
-                                </p>
-
-                            </div>
-                        </div><!-- End testimonial item -->
-
-                        <div class="swiper-slide">
-                            <div class="testimonial-item">
-                                <img src="assets/img/testimonials/common2.jpg" class="testimonial-img" alt="">
-                                <h3>Yau ren</h3>
-                                <h4>Yau ren</h4>
-                                <p>
-                                    <i class="bi bi-quote quote-icon-left"></i>
-                                    <span style="display:block;">調單位的過程真的讓我感到困難重重，無論如何努力都沒有進展。</span><br>
-                                    <span style="display:block;">後來，我請教周師兄幫忙占察。占察的結果是「有所求速當得」，意思是說三天內會有答案。</span><br>
-                                    <span style="display:block;">當時我還半信半疑，但周師兄的話真的不可思議！</span><br>
-                                    <span style="display:block;">結果第二天，就有另一所學校的校長主動通知我去面試，並準備讓我換單位！</span><br>
-                                    <span style="display:block;">這一切真是太神奇了，地藏菩薩摩訶薩慈悲加持，讓事情這麼迅速順利！</span><br>
-                                    <span style="display:block;">周師兄的占察準確到令人驚嘆，真的非常感恩！🙏🙏🙏</span><br>
-                                    <span style="display:block;">感謝南無地藏王菩薩。</span>
-                                    <i class="bi bi-quote quote-icon-right"></i>
-                                </p>
-
-                            </div>
-                        </div><!-- End testimonial item -->
-                        <div class="swiper-slide">
-                            <div class="testimonial-item">
-                                <img src="assets/img/testimonials/common.jpg" class="testimonial-img" alt="">
-                                <h3>丁佩菁</h3>
-                                <h4>丁佩菁</h4>
-                                <p>
-                                    <i class="bi bi-quote quote-icon-left"></i>
-                                    <span style="display:block;">我長期感冒都好不了，後來請周師兄幫我占察，結果真的「不可思議」！</span><br>
-                                    <span style="display:block;">地藏菩薩的指示是「觀所患可療治」，要我念地藏王菩薩聖號。</span><br>
-                                    <span style="display:block;">我依指示念了10,000遍南無地藏王菩薩聖號，結果現在感冒真的完全好了！</span><br>
-                                    <span style="display:block;">感恩地藏菩薩，感恩周師兄，占察的準確真是令人驚嘆！</span><br>
-                                    <i class="bi bi-quote quote-icon-right"></i>
-                                </p>
-
-                            </div>
-                        </div><!-- End testimonial item -->
-                        <div class="swiper-slide">
-                            <div class="testimonial-item">
-                                <img src="assets/img/testimonials/common2.jpg" class="testimonial-img" alt="">
-                                <h3>皓</h3>
-                                <h4>皓</h4>
-                                <p>
-                                    <i class="bi bi-quote quote-icon-left"></i>
-                                    <span style="display:block;">我的兒子在兩歲多時被診斷出患有過動症與自閉症，並伴隨心智發展遲緩的症狀。這對我們家庭來說是個巨大的挑戰，無論日常生活還是情緒管理都充滿了艱難。我作為父親，感到深深的無力與焦慮，期望能找到方法幫助他。</span>
-                                    <br>
-                                    <span style="display:block;">2022年八月中，我在正德佛堂向觀世音菩薩祈求指引，開始舉辦法會，並每日誦經，踏上了修行之路。我誦讀了《地藏經》、《藥師經》、《心經》、《妙法蓮華經》以及《大悲咒》。雖然我持續誦經一年多，但兒子的病情似乎未有明顯好轉，這讓我不免疑惑，甚至懷疑自己的努力是否有意義。</span>
-                                    <br>
-                                    <span style="display:block;">為尋求答案，我多次祈求南無本師釋迦牟尼佛、南無地藏王菩薩和南無觀世音菩薩，希望在夢中能得啟示。終於，在2023年10月的一天，我做了一個令人深刻的夢：夢中，我走在鄉間小路，前方是一座山，許多人正朝山中走去。我看見地藏王菩薩，但卻超越祂繼續前行。走著走著，四周突然陷入一片黑暗，沒有月光，也看不見前路。我意識到自己正往下走，而非登上山頂。然而，我並不感到害怕，直到聽見兒子清楚的聲音念出「南無釋迦牟尼佛」，我瞬間醒來。這個夢境讓我不禁思考，是否暗示兒子的靈魂正受困於地獄。</span>
-                                    <br>
-                                    <span style="display:block;">這個夢成為我持續誦經的動力，我立下宏願，要誦經至兒子痊癒，並與大家分享這段經歷。2024年六月中，我透過網路認識了周師兄，並請他幫助我的兒子進行占察。地藏王菩薩開示：若我堅持誦經，兒子約六年會開始好轉，九年則能完全康復，且更努力誦經可縮短康復時間。陳師兄也提到，兒子未來將會感激我，並且會變得非常依賴我。</span>
-                                    <br>
-                                    <span style="display:block;">從那時起，我專注於每日誦讀《地藏經》。九月多，我在家中客廳掛上地藏王菩薩的圖像。到了十一月底，我驚喜地發現兒子的行為出現變化。他不再希望我獨自誦經，而是吵著要我陪他睡覺。雖然他的病情尚未完全痊癒，但他變得比以前更加黏我，這讓我感受到菩薩的加持與指引正在發揮作用。</span>
-                                    <br>
-                                    <span style="display:block;">除了兒子的事情，我也請周師兄幫忙占察我的投資。2024年七月底，我詢問了我投資的私募基金是否穩定。地藏王菩薩開示這項投資是安全的，讓我感到安心。這筆投資已經持續了十一年，儘管朋友與同事多半持懷疑態度，但我的同學身為投資公司的經理，提到其老闆過去是證券業VIP，以公司名義投資，具有極高的穩定性。這次占察更讓我深刻體會到地藏王菩薩的準確與慈悲。</span>
-                                    <br>
-                                    <span style="display:block;">整個過程中，我經歷了迷茫、堅持與收穫。我深信地藏王菩薩的慈悲加持，讓我在最困難的時候找到方向，並逐漸看見希望的曙光。無論是兒子的轉變還是投資的穩定，都讓我更加感恩地藏王菩薩的庇佑。未來，我會繼續誦經，以回報菩薩的恩典。</span>
-                                    <br>
-                                    <span style="display:block;">希望這篇文章能夠為那些面對與我相同情況的家庭，提供一個除了學校與復建之外的另一種可能。只要心中懷有希望，就永遠不要放棄。感恩地藏王菩薩！🙏🙏🙏</span>
-                                    <i class="bi bi-quote quote-icon-right"></i>
-                                </p>
-                            </div>
-                        </div><!-- End testimonial item -->
-                    </div>
-                    <div class="swiper-pagination"></div>
-                </div>
-            </div>
-        </section><!-- /Testimonials Section -->
 
         <!-- Contact Section -->
         <section id="contact" class="contact section">
