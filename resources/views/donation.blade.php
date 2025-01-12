@@ -401,8 +401,8 @@
                 <div style="justify-content: center;" class="row gy-4">
                     <div class="col-lg-3 col-md-6">
                         <div class="stats-item text-center w-100 h-100">
-                            <span data-purecounter-start="0" data-purecounter-end="0.71"
-                                data-purecounter-duration="2" class="purecounter"></span>
+                            <span data-purecounter-start="0" data-purecounter-end="2"
+                                data-purecounter-duration="1" class="purecounter"></span>
                             <p>達成率 (%)</p>
                         </div>
                     </div><!-- End Stats Item -->
