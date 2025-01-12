@@ -337,10 +337,10 @@
                         data-aos-delay="100">
                         <h3>攜手共建地藏廟！</h3><br>
                         <h3>我們的目標是 <span style="color: #ff6600;">NT$3,500,000</span></h3><br>
-                        <h3>現已募集 <span style="color: #28a745;">NT$89,496</span>！</h3><br>
+                        <h3>現已募集 <span style="color: #28a745;">NT$104,480</span>！</h3><br>
                         <h3>您的每一分貢獻，都將幫助更多人受益，感謝您的支持！</h3>
                         <br>
-                        <h6 style="font-size: 1.1rem; color: #777;"><strong>最後更新時間：</strong> 2025-01-11</h6>
+                        <h6 style="font-size: 1.1rem; color: #777;"><strong>最後更新時間：</strong> 2025-01-12</h6>
                     </div>
                 </div>
             </div>
@@ -402,14 +402,14 @@
                     <div class="col-lg-3 col-md-6">
                         <div class="stats-item text-center w-100 h-100">
                             <span data-purecounter-start="0" data-purecounter-end="0.71"
-                                data-purecounter-duration="1" class="purecounter"></span>
+                                data-purecounter-duration="2" class="purecounter"></span>
                             <p>達成率 (%)</p>
                         </div>
                     </div><!-- End Stats Item -->
 
                     <div class="col-lg-3 col-md-6">
                         <div class="stats-item text-center w-100 h-100">
-                            <span data-purecounter-start="0" data-purecounter-end="10" data-purecounter-duration="1"
+                            <span data-purecounter-start="0" data-purecounter-end="12" data-purecounter-duration="1"
                                 class="purecounter"></span>
                             <p>參與人數</p>
                         </div>
