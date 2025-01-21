@@ -14,7 +14,7 @@ class DownloadYoutube extends Command
 
     protected $fileName;
     protected $telegramService;
-    protected $chatId = '-4664862172'; // 暫時先用全域變數 // 日後聊天室擴充再更改
+    protected $chatId = '-4661576369'; // 暫時先用全域變數 // 日後聊天室擴充再更改 音樂群
     protected $baseFilePath;
     public function __construct(TelegramService $telegramService)
     {
@@ -169,11 +169,14 @@ class DownloadYoutube extends Command
         }
 
         // send msg file name
-        $this->telegramService->sendMessage($this->chatId,$this->fileName);
+        $cleanFileName = preg_replace('/720p\.mp4$/', '', $this->fileName); // 移除結尾的 "720p.mp4"
+        $text = '歌曲名稱：' . $cleanFileName;
+        $this->telegramService->sendMessage($this->chatId, $text);
         // upload to telegram bot
         $filePath = $this->baseFilePath . $this->fileName;
         $this->telegramService->sendDocument($this->chatId, $filePath, $this->fileName);
+        //sleep(60*3); // 等待3分鐘繼續上傳
         // delete all temp files
-        $this->deleteTempFiles();
+        //$this->deleteTempFiles();
     }
 }
