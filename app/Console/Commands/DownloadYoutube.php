@@ -87,6 +87,7 @@ class DownloadYoutube extends Command
     {
         $downloadedFile = $this->getDownloadFile();
         $convertedFile = preg_replace('/\.[^.]+$/', '.mp4', $downloadedFile); // 轉換檔案名稱為 .mp4
+
         // 檢查檔案是否為 webm 格式，並使用 ffmpeg 進行轉換
         if (pathinfo($downloadedFile, PATHINFO_EXTENSION) === 'webm')
         {
@@ -100,30 +101,24 @@ class DownloadYoutube extends Command
 
             if ($returnVar === 0)
             {
-                echo "Video converted to MP4 successfully! Saved to:\n";
-                Log::info("Video converted to MP4 successfully! Saved to:\n");
-                echo $convertedFile . "\n";
-                Log::info($convertedFile . "\n");
-
+                Log::info("Video converted to MP4 successfully! Saved to: " . $convertedFile);
                 // 可選擇刪除原始的 webm 檔案
                 unlink($downloadedFile); // 刪除原始的 webm 檔案
-                echo "Original webm file deleted.\n";
-                Log::info("Original webm file deleted.\n");
-                $this->fileName = basename($convertedFile); // 設定轉換後的檔案名稱
+                Log::info("Original webm file deleted.");
+                $this->fileName = basename($convertedFile);
             }
             else
             {
-                echo "Conversion failed. Error:\n";
-                Log::info("Conversion failed. Error:\n");
-                echo implode("\n", $output);
-                Log::info(implode("\n", $output));
+                // 記錄 ffmpeg 執行錯誤的詳細信息
+                Log::error("Conversion failed. Error: " . implode("\n", $output));
+                Log::error("ffmpeg command: " . $ffmpegCommand);
+                Log::error("Return Code: " . $returnVar);
                 return 1;
             }
         }
         else
         {
-            echo "Downloaded file is not in webm format.\n";
-            Log::info("Downloaded file is not in webm format.\n");
+            Log::info("Downloaded file is not in webm format.");
             return 1;
         }
     }
