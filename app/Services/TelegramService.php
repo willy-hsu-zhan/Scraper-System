@@ -5,6 +5,7 @@ namespace App\Services;
 use Longman\TelegramBot\Telegram;
 use Longman\TelegramBot\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class TelegramService
 {
@@ -71,4 +72,9 @@ class TelegramService
         }
     }
 
+    public function handleUpdate($update)
+    {
+        echo($update);
+        Log::info($update);
+    }
 }
