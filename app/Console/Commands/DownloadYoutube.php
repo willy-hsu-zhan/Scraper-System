@@ -26,7 +26,7 @@ class DownloadYoutube extends Command
     public function handle()
     {
         // 先清檔案
-        $this->deleteTempFiles();
+        //$this->deleteTempFiles();
 
         $url = $this->argument('url');
         $format = $this->option('format');
