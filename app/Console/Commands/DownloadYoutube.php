@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\File;
 use App\Services\TelegramService;
+use Illuminate\Support\Facades\Log;
 
 class DownloadYoutube extends Command
 {
@@ -34,7 +35,7 @@ class DownloadYoutube extends Command
         $audioOnly = $this->option('audio-only');
 
         $this->info("Processing URL: $url");
-
+        Log::info("Processing URL: $url");
         // 解析 YouTube URL
         $videoId = $this->getVideoId($url);
         if (!$videoId)
