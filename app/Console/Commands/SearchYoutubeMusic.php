@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
 use App\Models\YoutubeVideo;
 use Illuminate\Support\Facades\Artisan;
+
 class SearchYoutubeMusic extends Command {
     /**
      * The name and signature of the console command.

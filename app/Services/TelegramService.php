@@ -6,6 +6,8 @@ use Longman\TelegramBot\Telegram;
 use Longman\TelegramBot\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Artisan;
 
 class TelegramService
 {
@@ -77,15 +79,95 @@ class TelegramService
         Log::info('Handling update:', $update);  // 記錄處理的訊息
 
         // 假設你正在檢查是否有文字訊息
-        if (isset($update['message']['text'])) {
+        if (isset($update['message']['text']))
+        {
             $text = $update['message']['text'];
-            // 根據訊息執行動作，例如搜尋 YouTube 或其他處理
-            if (strpos($text, '找歌') !== false) {
-                // 執行搜尋動作
-                Log::info("偵測到TELEGRAM 找歌");
-                //$this->searchSong($text);
+
+            // 找歌case
+            if (strpos($text, '找歌') !== false)
+            {
+                // 刪除 "找歌" 這兩個字
+                $text = str_replace('找歌', '', $text);
+
+                // 如果訊息不為空並且包含 "找歌"，則執行搜尋
+                if (!empty($text))
+                {
+                    // 執行搜尋動作
+                    $text = trim($text);
+                    Log::info($text);
+                    $this->searchSong($text);  // 可以在這裡執行搜尋動作
+                }
+                else
+                {
+                    Log::info('搜尋關鍵字為空');
+                }
+            }
+
+            // 下載case
+            if (strpos($text, '下載') !== false)
+            {
+                // 確保字串是有效的 URL 並且來自 YouTube
+                if (filter_var($text, FILTER_VALIDATE_URL) && preg_match('/^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w-]+$/', $text))
+                {
+                    $chatId = '-4661576369'; // 指定聊天室 ID
+                    $message = '開始下載影片...';
+                    $this->sendMessage($chatId, $message);
+                    Artisan::call('youtube:download', ['url' => $text]);
+                    Log::info("開始下載影片: $text");
+                }
+                else
+                {
+                    Log::warning("無效的 YouTube 影片網址: $text");
+                }
             }
         }
     }
 
+    public function searchSong($keyword)
+    {
+        $apiKey = env('YOUTUBE_API_KEY');
+        $searchQuery = $keyword; // 設定你的搜尋關鍵字
+        $url = 'https://www.googleapis.com/youtube/v3/search';
+
+        // 發送 GET 請求，加入搜尋關鍵字參數
+        $response = Http::get($url, [
+            'part'            => 'snippet',
+            'q'               => $searchQuery,  // 搜尋關鍵字
+            'type'            => 'video',       // 只搜尋影片
+            'videoCategoryId' => '10',          // 音樂類別
+            'maxResults'      => 4,             // 限制回傳只有4筆
+            'key'             => $apiKey,
+        ]);
+
+        if ($response->successful())
+        {
+            $videos = $response->json()['items'];
+            $chatId = '-4661576369'; // 指定聊天室 ID
+
+            $message = "🔍 搜尋關鍵字: {$keyword}\n\n";
+            foreach ($videos as $video) {
+                $videoId     = $video['id']['videoId'];
+                $title       = $video['snippet']['title'];
+                $channelName = $video['snippet']['channelTitle'];
+                $videoUrl    = "https://www.youtube.com/watch?v={$videoId}";
+
+                $message .= "🎵 *{$title}*  \n📺 頻道: {$channelName}\n🔗 [觀看影片]({$videoUrl})\n\n";
+            }
+
+            // 透過 sendMessage 方法發送訊息到聊天室
+            $this->sendMessage($chatId, $message);
+            $this->sendMessage($chatId, "請輸入下載'url'來下載影片");
+        }
+        else
+        {
+            Log::error('YouTube API 請求失敗，錯誤碼: ' . $response->status());
+        }
+    }
+
+    // public function doDownloadProcess($videoId)
+    // {
+    //     $baseUrl = 'https://www.youtube.com/watch?v=';
+    //     $url     = $baseUrl . $videoId;
+    //     Artisan::call('youtube:download', ['url' => $url]);
+    // }
 }
