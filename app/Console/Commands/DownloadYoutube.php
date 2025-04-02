@@ -17,6 +17,7 @@ class DownloadYoutube extends Command
     protected $telegramService;
     protected $chatId = '-4661576369'; // 暫時先用全域變數 // 日後聊天室擴充再更改 音樂群
     protected $baseFilePath;
+
     public function __construct(TelegramService $telegramService)
     {
         parent::__construct();
@@ -27,7 +28,7 @@ class DownloadYoutube extends Command
     public function handle()
     {
         // 先清檔案
-        //$this->deleteTempFiles();
+        $this->deleteTempFiles();
 
         $url = $this->argument('url');
         $format = $this->option('format');
@@ -36,6 +37,7 @@ class DownloadYoutube extends Command
 
         $this->info("Processing URL: $url");
         Log::info("Processing URL: $url");
+
         // 解析 YouTube URL
         $videoId = $this->getVideoId($url);
         if (!$videoId)
@@ -107,7 +109,7 @@ class DownloadYoutube extends Command
                 unlink($downloadedFile); // 刪除原始的 webm 檔案
                 echo "Original webm file deleted.\n";
                 Log::info("Original webm file deleted.\n");
-                $this->fileName = basename($convertedFile);
+                $this->fileName = basename($convertedFile); // 設定轉換後的檔案名稱
             }
             else
             {
@@ -131,11 +133,6 @@ class DownloadYoutube extends Command
         // 獲取下載的檔案名稱並轉換為 .mp4
         return glob(storage_path('app/youtube/*-720p.*'))[0]; // 假設只會有一個文件
     }
-
-    // private function getCovertedFile()
-    // {
-    //     return !empty($this->fileName) ?? $this->baseFilePath . $this->fileName;
-    // }
 
     private function deleteTempFiles()
     {
@@ -183,14 +180,23 @@ class DownloadYoutube extends Command
             return 1;
         }
 
+        // 檢查 $this->fileName 是否有效
+        if (!$this->fileName) {
+            $this->error('File name is null or empty!');
+            return 1;
+        }
+
         // send msg file name
         $cleanFileName = preg_replace('/720p\.mp4$/', '', $this->fileName); // 移除結尾的 "720p.mp4"
         $text = '歌曲名稱：' . $cleanFileName;
         $this->telegramService->sendMessage($this->chatId, $text);
+
         // upload to telegram bot
         $filePath = $this->baseFilePath . $this->fileName;
         $this->telegramService->sendDocument($this->chatId, $filePath, $this->fileName);
-        sleep(60*2); // 等待2分鐘繼續上傳
+
+        sleep(60 * 2); // 等待2分鐘繼續上傳
+
         // delete all temp files
         $this->deleteTempFiles();
     }
