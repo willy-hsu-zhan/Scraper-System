@@ -99,23 +99,29 @@ class DownloadYoutube extends Command
             if ($returnVar === 0)
             {
                 echo "Video converted to MP4 successfully! Saved to:\n";
+                Log::info("Video converted to MP4 successfully! Saved to:\n");
                 echo $convertedFile . "\n";
+                Log::info($convertedFile . "\n");
 
                 // 可選擇刪除原始的 webm 檔案
                 unlink($downloadedFile); // 刪除原始的 webm 檔案
                 echo "Original webm file deleted.\n";
+                Log::info("Original webm file deleted.\n");
                 $this->fileName = basename($convertedFile);
             }
             else
             {
                 echo "Conversion failed. Error:\n";
+                Log::info("Conversion failed. Error:\n");
                 echo implode("\n", $output);
+                Log::info(implode("\n", $output));
                 return 1;
             }
         }
         else
         {
             echo "Downloaded file is not in webm format.\n";
+            Log::info("Downloaded file is not in webm format.\n");
             return 1;
         }
     }
@@ -163,13 +169,17 @@ class DownloadYoutube extends Command
         if ($returnVar === 0)
         {
             echo "Download successful! Video saved to:\n";
+            Log::info("Download successful! Video saved to:\n");
             echo $outputPath . "\n";
+            Log::info($outputPath . "\n");
             $this->doFormatWebmToMp4Process();
         }
         else
         {
             echo "Download failed. Error:\n";
+            Log::info("Download failed. Error:\n");
             echo implode("\n", $output);
+            Log::info(implode("\n", $output));
             return 1;
         }
 
