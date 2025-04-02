@@ -74,7 +74,18 @@ class TelegramService
 
     public function handleUpdate($update)
     {
-        echo($update);
-        Log::info($update);
+        Log::info('Handling update:', $update);  // 記錄處理的訊息
+
+        // 假設你正在檢查是否有文字訊息
+        if (isset($update['message']['text'])) {
+            $text = $update['message']['text'];
+            // 根據訊息執行動作，例如搜尋 YouTube 或其他處理
+            if (strpos($text, '找歌') !== false) {
+                // 執行搜尋動作
+                Log::info("偵測到TELEGRAM 找歌");
+                //$this->searchSong($text);
+            }
+        }
     }
+
 }
