@@ -113,9 +113,9 @@ class TelegramService
                 if (!empty($text) && filter_var($text, FILTER_VALIDATE_URL) && preg_match('/^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w-]+$/', $text))
                 {
                     $chatId = '-4661576369'; // 指定聊天室 ID
-                    $message = '開始下載影片 ...';
+                    $message = '開始download影片 ...';
                     $this->sendMessage($chatId, $message);
-                    Log::info("開始下載影片: $text");
+                    Log::info("開始download影片: $text");
                     Artisan::call('youtube:download', ['url' => $text]);
                 }
                 else
@@ -159,7 +159,7 @@ class TelegramService
 
             // 透過 sendMessage 方法發送訊息到聊天室
             $this->sendMessage($chatId, $message);
-            $this->sendMessage($chatId, "請輸入 下載'URL' 來下載影片");
+            $this->sendMessage($chatId, "請輸入 download(中文)'URL' 來download(中文)影片");
         }
         else
         {
