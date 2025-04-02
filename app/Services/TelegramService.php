@@ -103,17 +103,17 @@ class TelegramService
                 }
             }
 
-            // 下載case
+            // 下載 case
             if (strpos($text, '下載') !== false)
             {
+                $text = str_replace('下載', '', $text);
+                $text = trim($text); // 確保去掉 "下載" 之後不留空格
+
                 // 確保字串是有效的 URL 並且來自 YouTube
-                if (filter_var($text, FILTER_VALIDATE_URL) && preg_match('/^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w-]+$/', $text))
+                if (!empty($text) && filter_var($text, FILTER_VALIDATE_URL) && preg_match('/^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w-]+$/', $text))
                 {
-                    $chatId = '-4661576369'; // 指定聊天室 ID
-                    $message = '開始下載影片...';
-                    $this->sendMessage($chatId, $message);
-                    Artisan::call('youtube:download', ['url' => $text]);
                     Log::info("開始下載影片: $text");
+                    Artisan::call('youtube:download', ['url' => $text]);
                 }
                 else
                 {
