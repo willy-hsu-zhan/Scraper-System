@@ -134,6 +134,7 @@ class DownloadYoutube extends Command
             File::deleteDirectory($directory); // 刪除整個資料夾
             File::makeDirectory($directory); // 重新建立空資料夾
         }
+        sleep(10); // 刪除檔案預留10秒處理
     }
 
     private function downloadVideo($videoId, $format, $resolution, $audioOnly)
@@ -175,8 +176,8 @@ class DownloadYoutube extends Command
         // upload to telegram bot
         $filePath = $this->baseFilePath . $this->fileName;
         $this->telegramService->sendDocument($this->chatId, $filePath, $this->fileName);
-        //sleep(60*3); // 等待3分鐘繼續上傳
+        sleep(60*2); // 等待2分鐘繼續上傳
         // delete all temp files
-        //$this->deleteTempFiles();
+        $this->deleteTempFiles();
     }
 }
