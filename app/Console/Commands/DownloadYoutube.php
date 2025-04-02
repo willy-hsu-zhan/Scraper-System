@@ -88,13 +88,17 @@ class DownloadYoutube extends Command
         $downloadedFile = $this->getDownloadFile();
         $convertedFile = preg_replace('/\.[^.]+$/', '.mp4', $downloadedFile); // 轉換檔案名稱為 .mp4
 
+        // 使用 escapeshellarg 來處理特殊字符
+        $downloadedFile = escapeshellarg($downloadedFile);
+        $convertedFile = escapeshellarg($convertedFile);
+
         // 檢查檔案是否為 webm 格式，並使用 ffmpeg 進行轉換
         if (pathinfo($downloadedFile, PATHINFO_EXTENSION) === 'webm')
         {
             $ffmpegCommand = sprintf(
                 'ffmpeg -i %s -c:v libx264 -c:a aac -strict experimental %s',
-                escapeshellarg($downloadedFile),
-                escapeshellarg($convertedFile)
+                $downloadedFile,
+                $convertedFile
             );
 
             exec($ffmpegCommand, $output, $returnVar);
