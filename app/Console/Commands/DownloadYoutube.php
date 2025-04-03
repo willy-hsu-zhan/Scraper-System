@@ -120,7 +120,7 @@ class DownloadYoutube extends Command
         $ytDlpPath = $this->getYtDlpPath();
         $url = 'https://www.youtube.com/watch?v=' . $videoId;
         $outputPath = $this->getOutputPath();
-        $format = 'bestvideo[height<=720][ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]';  // 強制選擇 mp4 格式 // 下載最高畫質影片
+        $format = 'bestvideo[height<=720][ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]';  // 強制選擇 mp4 格式
 
         // 使用 escapeshellarg 處理特殊符號
         $command = sprintf(
@@ -134,22 +134,34 @@ class DownloadYoutube extends Command
         // 執行下載命令
         exec($command, $output, $returnVar);
 
+        // 檢查下載結果
         if ($returnVar === 0)
         {
-            echo "Download successful! Video saved to:\n";
-            Log::info("Download successful! Video saved to:\n");
-            echo $outputPath . "\n";
-            Log::info($outputPath . "\n");
+            // 等待檔案處理完成並設定檔案名稱
+            $timeout = 60; // 設定最大等待時間
+            $startTime = time();
 
-            // 下載完成後，設定文件名稱
-            $this->fileName = basename($outputPath);
+            while (time() - $startTime < $timeout) {
+                // 取得資料夾中的所有檔案
+                $files = File::files($this->baseFilePath);
+                if (count($files) === 1) {
+                    $this->fileName = basename($files[0]); // 取得唯一檔案名稱
+                    break;
+                }
+                sleep(2); // 每2秒檢查一次
+            }
+
+            // 檢查檔案名稱是否有效
+            if (!$this->fileName) {
+                Log::info('File name is null or empty!');
+                return 1;
+            }
+
+            Log::info("Download successful! Video saved to: " . $this->baseFilePath . $this->fileName);
         }
         else
         {
-            echo "Download failed. Error:\n";
-            Log::info("Download failed. Error:\n");
-            echo implode("\n", $output);
-            Log::info(implode("\n", $output));
+            Log::info("Download failed. Error:\n" . implode("\n", $output));
             return 1;
         }
 
@@ -168,7 +180,7 @@ class DownloadYoutube extends Command
         $filePath = $this->baseFilePath . $this->fileName;
         $this->telegramService->sendDocument($this->chatId, $filePath, $this->fileName);
 
-        sleep(60 * 2); // 等待2分鐘繼續上傳
+        sleep(60); // 等待1分鐘繼續上傳
 
         // delete all temp files
         $this->deleteTempFiles();
