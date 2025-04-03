@@ -97,9 +97,10 @@ class DownloadYoutube extends Command
         {
             $ffmpegCommand = sprintf(
                 'ffmpeg -i %s -c:v libx264 -c:a aac -strict experimental %s',
-                $downloadedFile,
-                $convertedFile
+                escapeshellarg($downloadedFile),
+                escapeshellarg($convertedFile)
             );
+
 
             exec($ffmpegCommand, $output, $returnVar);
 
