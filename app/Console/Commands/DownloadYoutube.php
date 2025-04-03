@@ -86,12 +86,22 @@ class DownloadYoutube extends Command
     private function deleteAllTempFiles()
     {
         $directory = $this->baseFilePath;
-        if (File::exists($directory)) {
+
+        // 先檢查目錄是否存在，存在的話刪除
+        if (File::exists($directory))
+        {
             File::deleteDirectory($directory); // 刪除整個資料夾
-            File::makeDirectory($directory); // 重新建立空資料夾
         }
-        sleep(2); // 刪除檔案預留10秒處理
+
+        // 重新建立空資料夾，如果資料夾不存在的話
+        if (!File::exists($directory))
+        {
+            File::makeDirectory($directory, 0755, true); // 重新建立目錄，確保目錄結構
+        }
+
+        sleep(2); // 刪除檔案預留2秒處理
     }
+
 
     private function deleteTempFiles()
     {
