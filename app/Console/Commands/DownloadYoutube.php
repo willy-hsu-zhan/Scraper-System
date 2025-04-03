@@ -27,8 +27,8 @@ class DownloadYoutube extends Command
 
     public function handle()
     {
-        // 先清檔案
-        $this->deleteTempFiles();
+        // 先清所有檔案
+        $this->deleteAllTempFiles();
 
         $url = $this->argument('url');
         $format = $this->option('format');
@@ -133,14 +133,26 @@ class DownloadYoutube extends Command
         return glob(storage_path('app/youtube/*-720p.*'))[0]; // 假設只會有一個文件
     }
 
-    private function deleteTempFiles()
+    private function deleteAllTempFiles()
     {
         $directory = $this->baseFilePath;
         if (File::exists($directory)) {
             File::deleteDirectory($directory); // 刪除整個資料夾
             File::makeDirectory($directory); // 重新建立空資料夾
         }
-        sleep(10); // 刪除檔案預留10秒處理
+        sleep(2); // 刪除檔案預留10秒處理
+    }
+
+    private function deleteTempFiles()
+    {
+        // 確認檔案是否存在，並刪除指定的檔案
+        $filePath = $this->baseFilePath . $this->fileName;
+
+        if (File::exists($filePath)) {
+            File::delete($filePath); // 刪除單一檔案
+        }
+
+        sleep(2); // 刪除檔案預留10秒處理
     }
 
     private function downloadVideo($videoId, $format, $resolution, $audioOnly)
