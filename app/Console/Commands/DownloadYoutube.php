@@ -83,57 +83,6 @@ class DownloadYoutube extends Command
         return $this->baseFilePath . '%(title)s-720p.%(ext)s';
     }
 
-    private function doFormatWebmToMp4Process()
-    {
-        $downloadedFile = $this->getDownloadFile();
-        $convertedFile = preg_replace('/\.[^.]+$/', '.mp4', $downloadedFile); // 轉換檔案名稱為 .mp4
-
-        // 使用 escapeshellarg 來處理特殊字符
-        $downloadedFile = escapeshellarg($downloadedFile);
-        $convertedFile = escapeshellarg($convertedFile);
-
-        // 檢查檔案是否為 webm 格式，並使用 ffmpeg 進行轉換
-        if (pathinfo($downloadedFile, PATHINFO_EXTENSION) === 'webm')
-        {
-            $ffmpegCommand = sprintf(
-                'ffmpeg -i %s -c:v libx264 -c:a aac -strict experimental %s',
-                escapeshellarg($downloadedFile),
-                escapeshellarg($convertedFile)
-            );
-
-
-            exec($ffmpegCommand, $output, $returnVar);
-
-            if ($returnVar === 0)
-            {
-                Log::info("Video converted to MP4 successfully! Saved to: " . $convertedFile);
-                // 可選擇刪除原始的 webm 檔案
-                unlink($downloadedFile); // 刪除原始的 webm 檔案
-                Log::info("Original webm file deleted.");
-                $this->fileName = basename($convertedFile);
-            }
-            else
-            {
-                // 記錄 ffmpeg 執行錯誤的詳細信息
-                Log::error("Conversion failed. Error: " . implode("\n", $output));
-                Log::error("ffmpeg command: " . $ffmpegCommand);
-                Log::error("Return Code: " . $returnVar);
-                return 1;
-            }
-        }
-        else
-        {
-            Log::info("Downloaded file is not in webm format.");
-            return 1;
-        }
-    }
-
-    private function getDownloadFile()
-    {
-        // 獲取下載的檔案名稱並轉換為 .mp4
-        return glob(storage_path('app/youtube/*-720p.*'))[0]; // 假設只會有一個文件
-    }
-
     private function deleteAllTempFiles()
     {
         $directory = $this->baseFilePath;
@@ -161,7 +110,7 @@ class DownloadYoutube extends Command
         $ytDlpPath = $this->getYtDlpPath();
         $url = 'https://www.youtube.com/watch?v=' . $videoId;
         $outputPath = $this->getOutputPath();
-        $format = 'bestvideo[height<=720]+bestaudio'; // 下載最高畫質影片
+        $format = 'bestvideo[height<=720][ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]';  // 強制選擇 mp4 格式 // 下載最高畫質影片
 
         // 使用 escapeshellarg 處理特殊符號
         $command = sprintf(
@@ -181,7 +130,9 @@ class DownloadYoutube extends Command
             Log::info("Download successful! Video saved to:\n");
             echo $outputPath . "\n";
             Log::info($outputPath . "\n");
-            $this->doFormatWebmToMp4Process();
+
+            // 下載完成後，設定文件名稱
+            $this->fileName = basename($outputPath);
         }
         else
         {
