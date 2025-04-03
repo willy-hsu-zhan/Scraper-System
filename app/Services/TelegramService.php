@@ -114,10 +114,10 @@ class TelegramService
                 if (!empty($text) && filter_var($text, FILTER_VALIDATE_URL) && preg_match('/^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w-]+$/', $text))
                 {
                     // 檢查是否已經下載過
-                    $cacheKey = 'youtube_download_' . md5($text); // 使用 URL 的 MD5 值作為緩存鍵
+                    $cacheKey = 'youtube_download'; // 使用 URL 的 MD5 值作為緩存鍵
                     $lastDownloadTime = Cache::get($cacheKey);
 
-                    if ($lastDownloadTime && (time() - $lastDownloadTime < 600)) {  // 10分鐘
+                    if ($lastDownloadTime && (time() - $lastDownloadTime < 180)) {
                         // 若上次下載的時間小於 5 分鐘，則不進行重複下載
                         Log::info("URL $text 已在5分鐘內下載過，跳過此次下載。");
                         return; // 退出不執行下載
