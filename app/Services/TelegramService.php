@@ -123,6 +123,53 @@ class TelegramService
                     Log::warning("無效的 YouTube 影片網址: $text");
                 }
             }
+
+            if (strpos($text, '重新啟動爬蟲') !== false)
+            {
+                $chatId = '-4664862172'; // 指定聊天室 ID
+
+                // 執行 lsof -i :4444，檢查是否有佔用 4444 埠
+                exec('lsof -i :4444', $output, $status);
+
+                if ($status === 0)
+                {
+                    // 埠 4444 被佔用，終止該進程
+                    Log::info( "埠 4444 被佔用，準備終止該進程...\n");
+                    exec('kill -9 $(lsof -t -i :4444)', $killOutput, $killStatus);
+                    if ($killStatus === 0)
+                    {
+                        $this->sendMessage($chatId, "✅ 成功終止埠 4444 的進程\n");
+                        Log::info( "✅ 成功終止埠 4444 的進程\n");
+                    }
+                    else
+                    {
+                        $this->sendMessage($chatId, "❌ 無法終止埠 4444 的進程\n");
+                        Log::info( "❌ 無法終止埠 4444 的進程\n");
+                    }
+                }
+                else
+                {
+                    $this->sendMessage($chatId, "埠 4444 未被佔用\n");
+                    Log::info( "埠 4444 未被佔用\n");
+                }
+
+                // 進入指定目錄並啟動 Selenium Server
+                $this->sendMessage($chatId, "🚀 啟動 Selenium Server...\n");
+                Log::info( "🚀 啟動 Selenium Server...\n");
+                chdir('/var/www/Scraper-System/');
+                exec('java -jar selenium-server.jar standalone --selenium-manager true > selenium.log 2>&1 &', $startOutput, $startStatus);
+
+                if ($startStatus === 0)
+                {
+                    $this->sendMessage($chatId, "✅ Selenium Server 啟動成功\n");
+                    Log::info( "✅ Selenium Server 啟動成功\n");
+                }
+                else
+                {
+                    $this->sendMessage($chatId, "❌ Selenium Server 啟動失敗，請檢查 selenium.log\n");
+                    Log::info( "❌ Selenium Server 啟動失敗，請檢查 selenium.log\n");
+                }
+            }
         }
     }
 
