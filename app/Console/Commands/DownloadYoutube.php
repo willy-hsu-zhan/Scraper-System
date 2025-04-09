@@ -49,7 +49,14 @@ class DownloadYoutube extends Command
         $this->info("Extracted Video ID: $videoId");
 
         // 處理下載或資訊
-        $this->downloadVideo($videoId, $format, $resolution, $audioOnly);
+        if ($format === 'mp3')
+        {
+            $this->downloadAudio($videoId);
+        }
+        else
+        {
+            $this->downloadVideo($videoId, $format, $resolution, $audioOnly); // 下載視頻
+        }
 
         return 0;
     }
@@ -78,8 +85,15 @@ class DownloadYoutube extends Command
         return app('env') == 'local' ? '/home/vagrant/.local/bin/yt-dlp' : '/usr/local/bin/yt-dlp';
     }
 
-    private function getOutputPath()
+    private function getOutputPath($format = 'mp4')
     {
+        // 如果格式是 mp3，則將檔案擴展名改為 mp3
+        if ($format == 'mp3')
+        {
+            return $this->baseFilePath . '%(title)s.%(ext)s'; // 音訊格式不需要解析解析度，直接使用檔案名稱
+        }
+
+        // 預設影片格式，會加上 720p
         return $this->baseFilePath . '%(title)s-720p.%(ext)s';
     }
 
@@ -173,6 +187,75 @@ class DownloadYoutube extends Command
 
         // send msg file name
         $cleanFileName = preg_replace('/720p\.mp4$/', '', $this->fileName); // 移除結尾的 "720p.mp4"
+        $text = '歌曲名稱：' . $cleanFileName;
+        $this->telegramService->sendMessage($this->chatId, $text);
+
+        // upload to telegram bot
+        $filePath = $this->baseFilePath . $this->fileName;
+        $this->telegramService->sendDocument($this->chatId, $filePath, $this->fileName);
+
+        sleep(60); // 等待1分鐘繼續上傳
+
+        // delete all temp files
+        $this->deleteTempFiles();
+    }
+
+    private function downloadAudio($videoId)
+    {
+        $ytDlpPath = $this->getYtDlpPath();
+        $url = 'https://www.youtube.com/watch?v=' . $videoId;
+        $outputPath = $this->getOutputPath('mp3'); // 下載 MP3 格式
+
+        // 使用 escapeshellarg 處理特殊符號
+        $command = sprintf(
+            '%s -f bestaudio[ext=m4a] -o %s %s',
+            escapeshellarg($ytDlpPath),
+            escapeshellarg($outputPath),
+            escapeshellarg($url)
+        );
+
+        // 執行下載命令
+        exec($command, $output, $returnVar);
+
+        // 檢查下載結果
+        if ($returnVar === 0)
+        {
+            // 等待檔案處理完成並設定檔案名稱
+            $timeout = 60; // 設定最大等待時間
+            $startTime = time();
+
+            while (time() - $startTime < $timeout) {
+                // 取得資料夾中的所有檔案
+                $files = File::files($this->baseFilePath);
+                if (count($files) === 1) {
+                    $this->fileName = basename($files[0]); // 取得唯一檔案名稱
+                    break;
+                }
+                sleep(2); // 每2秒檢查一次
+            }
+
+            // 檢查檔案名稱是否有效
+            if (!$this->fileName) {
+                Log::info('File name is null or empty!');
+                return 1;
+            }
+
+            Log::info("Download successful! Audio saved to: " . $this->baseFilePath . $this->fileName);
+        }
+        else
+        {
+            Log::info("Download failed. Error:\n" . implode("\n", $output));
+            return 1;
+        }
+
+        // 檢查 $this->fileName 是否有效
+        if (!$this->fileName) {
+            $this->error('File name is null or empty!');
+            return 1;
+        }
+
+        // send msg file name
+        $cleanFileName = preg_replace('/mp3$/', '', $this->fileName); // 移除結尾的 "mp3"
         $text = '歌曲名稱：' . $cleanFileName;
         $this->telegramService->sendMessage($this->chatId, $text);
 
