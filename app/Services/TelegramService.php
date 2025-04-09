@@ -137,23 +137,16 @@ class TelegramService
                     {
                         $message = '開始下載音樂 ...';
                         Log::info("開始下載音樂: $url");
+                        $this->sendMessage($chatId, $message);
                         Artisan::call('youtube:download', ['url' => $url, '--format' => 'mp3']);
                     }
                     else if (strpos($originalText, '影片') !== false)
                     {
                         $message = '開始下載影片 ...';
                         Log::info("開始下載影片: $url");
+                        $this->sendMessage($chatId, $message);
                         Artisan::call('youtube:download', ['url' => $url, '--format' => 'mp4']);
                     }
-                    else
-                    {
-                        // 如果沒有指定格式，就預設下載影片
-                        $message = '開始下載影片 (預設格式) ...';
-                        Log::info("開始下載影片 (預設): $url");
-                        Artisan::call('youtube:download', ['url' => $url, '--format' => 'mp4']);
-                    }
-
-                    $this->sendMessage($chatId, $message);
                 }
                 else
                 {
