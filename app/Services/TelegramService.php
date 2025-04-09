@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
+use App\Models\TelegramBotLog;
 
 class TelegramService
 {
@@ -79,6 +80,17 @@ class TelegramService
     {
         Log::info('Handling update:', $update);  // 記錄處理的訊息
 
+        if (TelegramBotLog::where('update_id', $update['update_id'])->exists()) {
+            Log::info('Update ID already exists, skipping...');
+            return;
+        }
+
+        TelegramBotLog::create([
+            'update_id' => $update['update_id'],
+            'message' => json_encode($update),
+        ]);
+        Log::info('New update ID saved to database.');
+
         // 假設你正在檢查是否有文字訊息
         if (isset($update['message']['text']))
         {
@@ -113,16 +125,6 @@ class TelegramService
                 // 確保字串是有效的 URL 並且來自 YouTube
                 if (!empty($text) && filter_var($text, FILTER_VALIDATE_URL) && preg_match('/^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w-]+$/', $text))
                 {
-                    // 檢查是否已經下載過
-                    $cacheKey = 'youtube_download'; // 使用 URL 的 MD5 值作為緩存鍵
-                    $lastDownloadTime = Cache::get($cacheKey);
-
-                    if ($lastDownloadTime && (time() - $lastDownloadTime < 180)) {
-                        // 若上次下載的時間小於 5 分鐘，則不進行重複下載
-                        Log::info("URL $text 已在5分鐘內下載過，跳過此次下載。");
-                        return; // 退出不執行下載
-                    }
-
                     $chatId = '-4661576369'; // 指定聊天室 ID
                     $message = '開始下載影片 ...';
                     $this->sendMessage($chatId, $message);
