@@ -123,7 +123,7 @@ class TelegramService
                 $text = trim($text); // 確保去掉 "下載" 之後不留空格
 
                 // 確保字串是有效的 URL 並且來自 YouTube
-                if (!empty($text) && filter_var($text, FILTER_VALIDATE_URL) && preg_match('/^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w-]+$/', $text))
+                if (!empty($text) && filter_var($text, FILTER_VALIDATE_URL))
                 {
                     $chatId = '-4661576369'; // 指定聊天室 ID
                     $message = '';
