@@ -119,33 +119,48 @@ class TelegramService
             // 下載 case
             if (strpos($text, '下載') !== false)
             {
-                $text = str_replace('下載', '', $text);
-                $text = trim($text); // 確保去掉 "下載" 之後不留空格
+                // 儲存原始文字以供後續判斷「音樂」或「影片」
+                $originalText = $text;
 
-                // 確保字串是有效的 URL 並且來自 YouTube
-                if (!empty($text) && filter_var($text, FILTER_VALIDATE_URL))
+                // 嘗試從文字中提取出 YouTube URL
+                preg_match('/https?:\/\/[^\s]+/', $text, $matches);
+                $url = $matches[0] ?? null;
+
+                // 驗證網址是否為有效的 YouTube 網址
+                if (!empty($url) && filter_var($url, FILTER_VALIDATE_URL) &&
+                    preg_match('/^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w-]+$/', $url))
                 {
-                    $chatId = '-4661576369'; // 指定聊天室 ID
+                    $chatId = '-4661576369';
                     $message = '';
-                    if (strpos($text, '音樂') !== false)
+
+                    if (strpos($originalText, '音樂') !== false)
                     {
                         $message = '開始下載音樂 ...';
-                        Log::info("開始下載音樂: $text");
-                        Artisan::call('youtube:download', ['url' => $text, '--format' => 'mp3']);
+                        Log::info("開始下載音樂: $url");
+                        Artisan::call('youtube:download', ['url' => $url, '--format' => 'mp3']);
                     }
-                    else if (strpos($text, '影片') !== false)
+                    else if (strpos($originalText, '影片') !== false)
                     {
                         $message = '開始下載影片 ...';
-                        Log::info("開始下載影片: $text");
-                        Artisan::call('youtube:download', ['url' => $text, '--format' => 'mp4']);
+                        Log::info("開始下載影片: $url");
+                        Artisan::call('youtube:download', ['url' => $url, '--format' => 'mp4']);
                     }
+                    else
+                    {
+                        // 如果沒有指定格式，就預設下載影片
+                        $message = '開始下載影片 (預設格式) ...';
+                        Log::info("開始下載影片 (預設): $url");
+                        Artisan::call('youtube:download', ['url' => $url, '--format' => 'mp4']);
+                    }
+
                     $this->sendMessage($chatId, $message);
                 }
                 else
                 {
-                    Log::warning("無效的 YouTube 影片網址: $text");
+                    Log::warning("無效的 YouTube 影片網址: $url");
                 }
             }
+
 
             if (strpos($text, '重新啟動爬蟲') !== false)
             {
