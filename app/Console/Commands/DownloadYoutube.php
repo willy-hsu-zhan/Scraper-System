@@ -187,7 +187,7 @@ class DownloadYoutube extends Command
 
         // send msg file name
         $cleanFileName = preg_replace('/720p\.mp4$/', '', $this->fileName); // 移除結尾的 "720p.mp4"
-        $text = '歌曲名稱：' . $cleanFileName;
+        $text = '影片名稱：' . $cleanFileName;
         $this->telegramService->sendMessage($this->chatId, $text);
 
         // upload to telegram bot
