@@ -148,6 +148,7 @@ class ScraperRent591 extends Command
     {
         foreach ($rents as $rent) {
             $sendNotifyText  = "**** 591 租屋新資訊 ****\n\n";
+            $sendNotifyText .= '城市：' . $rent['region'] . "\n";
             $sendNotifyText .= '標題：' . $rent['title'] . "\n";
             $sendNotifyText .= '租屋連結：' . $rent['link'] . "\n";
             $sendNotifyText .= '價格：' . $rent['price'] . "\n";
