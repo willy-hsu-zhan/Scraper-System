@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('app:scraper-chickpt')->everyThirtyMinutes();
         $schedule->command('app:scraper-ptt')->cron('15,45 * * * *'); // 改為每小時的15,45分執行使任務不衝突
         $schedule->command('app:search-youtube-music')->dailyAt('18:05')->timezone('Asia/Taipei'); // 每天6.05抓最新熱門歌單
+        $schedule->command('app:scraper-rent591')->twiceDaily(0, 12)->timezone('Asia/Taipei'); //租屋資料抓取，每天 00:00 與 12:00 執行
     }
 
     /**
