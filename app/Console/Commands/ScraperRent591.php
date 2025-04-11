@@ -169,7 +169,7 @@ class ScraperRent591 extends Command
     {
         $errorMessage  = "🚨 **591 租屋通知** 🚨\n\n";
         $errorMessage .= "時間：" .
-            Carbon::now()->subHours(12)->setTimezone('Asia/Taipei')->format('Y-m-d H:i:s') .
+            Carbon::now()->subHours(6)->setTimezone('Asia/Taipei')->format('Y-m-d H:i:s') .
             ' ~ ' .
             Carbon::now()->setTimezone('Asia/Taipei')->format('Y-m-d H:i:s') . "\n";
         $errorMessage .= "目前沒有新的租屋資訊喔！🥲";
