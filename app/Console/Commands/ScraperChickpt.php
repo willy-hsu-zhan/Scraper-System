@@ -165,7 +165,7 @@ class ScraperChickpt extends Command {
                 catch (Exception $e)
                 {
                     Log::error('Error scraping page ' . $currentPage . ': ' . $e->getMessage());
-                    $this->sendErrorLog('Error scraping page ' . $currentPage . ': ' . $e->getMessage());
+                    //$this->sendErrorLog('Error scraping page ' . $currentPage . ': ' . $e->getMessage());
                     break; // 跳出循環
                 }
             }
