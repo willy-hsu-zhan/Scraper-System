@@ -164,7 +164,7 @@ class ScraperPtt extends Command {
         }
         else
         {
-            $this->sendPeriodNoJobMsg();
+            //$this->sendPeriodNoJobMsg();
         }
     }
     public function sendPeriodNoJobMsg()

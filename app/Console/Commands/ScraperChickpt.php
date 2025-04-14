@@ -181,7 +181,7 @@ class ScraperChickpt extends Command {
         }
         else
         {
-            $this->sendPeriodNoJobMsg();
+            //$this->sendPeriodNoJobMsg();
         }
     }
 
