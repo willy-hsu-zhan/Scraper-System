@@ -56,78 +56,106 @@ class ScraperChickpt extends Command {
     public function handle()
     {
         $baseUrl = 'https://www.chickpt.com.tw';
+
+        // 連接到 Selenium WebDriver
         $webDriver = $this->seleniumService->openWebDriver();
 
-        $areas = [
-            '不限地區' => 'https://www.chickpt.com.tw/cases?is_address_no_limit=1',
-            '台北'     => 'https://www.chickpt.com.tw/cases?area=Taipei',
-            '新北'     => 'https://www.chickpt.com.tw/cases?area=NewTaipei',
-            '基隆'     => 'https://www.chickpt.com.tw/cases?area=Keelung',
-        ];
+        // 開啟網頁
+        $webDriver->get('https://www.chickpt.com.tw/cases?is_address_no_limit=1');
 
-        $newJobs = [];
+        // 設定頁碼與初始資料
+        $currentPage = 1; // 預設為第1頁
+        $jobs        = [];
 
-        foreach ($areas as $areaName => $url)
+        while( true )
         {
-            $webDriver->get($url);
-            sleep(2); // 等待頁面加載
-
-            for ($page = 1; $page <= 3; $page++)
+            try
             {
-                if ($page > 1)
+                // 檢查是否有 QR code 的彈出條，如果有，點擊關閉
+                try
                 {
-                    try {
-                        $pageLink = $webDriver->findElement(WebDriverBy::linkText((string)$page));
-                        $pageLink->click();
-                        sleep(2); // 等待分頁載入
-                    }
-                    catch (\Exception $e)
+                    $webDriver->wait(10)->until(
+                        WebDriverExpectedCondition::elementToBeClickable(WebDriverBy::id('qrcodebar-pc-closebtn'))
+                    );
+                    $closeButton = $webDriver->findElement(WebDriverBy::id('qrcodebar-pc-closebtn'));
+                    $closeButton->click();
+                    Log::info("QRCode bar closed.");
+                }
+                catch (Exception $e)
+                {
+                    Log::info("No QR code bar to close or error closing: " . $e->getMessage());
+                }
+
+                // 查找並點擊分頁連結
+                $link = $webDriver->findElement(WebDriverBy::linkText((string)$currentPage));
+                $link->click();
+
+                try
+                {
+                    $webDriver->wait(10)->until(
+                        WebDriverExpectedCondition::visibilityOfElementLocated(WebDriverBy::linkText((string)$currentPage))
+                    );
+                    $webDriver->wait(10)->until(
+                        WebDriverExpectedCondition::elementToBeClickable(WebDriverBy::linkText((string)$currentPage))
+                    );
+                }
+                catch (Exception $e)
+                {
+                    Log::error('Error clicking element on page ' . $currentPage . ': ' . $e->getMessage());
+                    $this->sendErrorLog('Error clicking element on page ' . $currentPage . ': ' . $e->getMessage());
+                }
+
+                // 取得 job 列表
+                $jobElements = $webDriver->findElements(WebDriverBy::cssSelector('.jobs-wrap ul#job-list.job-list.show li'));
+
+                foreach( $jobElements as $jobNode )
+                {
+                    $title       = $jobNode->findElement(WebDriverBy::cssSelector('h2'))->getText();
+                    $link        = $jobNode->findElement(WebDriverBy::cssSelector('a'))->getAttribute('href');
+                    $company     = $jobNode->findElement(WebDriverBy::cssSelector('.ellipsis-job-company'))->getText();
+                    $salary      = $jobNode->findElement(WebDriverBy::cssSelector('.salary'))->getText();
+                    $place       = $jobNode->findElement(WebDriverBy::cssSelector('.place'))->getText();
+                    $update_time = $jobNode->findElement(WebDriverBy::cssSelector('.date-time'))->getText();
+
+                    $link = $baseUrl . $link;
+                    // 檢查是否已存在資料庫中
+                    if( !JobChickpt::where('link', $link)->first() )
                     {
-                        Log::warning("找不到第 {$page} 頁，地區：{$areaName}");
-                        break;
+                        $date = Carbon::now()->toDateString();
+                        JobChickpt::create([
+                            'title'   => $title,
+                            'link'    => $link,
+                            'company' => $company,
+                            'salary'  => $salary,
+                            'place'   => $place,
+                            'date'    => $date,
+                        ]);
+
+                        // 儲存爬取的工作資訊
+                        $jobs[] = [
+                            'title'       => trim($title),
+                            'link'        => trim($link),
+                            'company'     => trim($company),
+                            'salary'      => trim($salary),
+                            'place'       => trim($place),
+                            'update_time' => trim($update_time),
+                        ];
                     }
                 }
 
-                $jobElements = $webDriver->findElements(WebDriverBy::cssSelector('ul#job-list.job-list.show li'));
-
-                foreach ($jobElements as $element)
-                {
-                    try
-                    {
-                        $title = $element->findElement(WebDriverBy::cssSelector('h2'))->getText();
-                        $link = $element->findElement(WebDriverBy::cssSelector('a'))->getAttribute('href');
-                        $company = $element->findElement(WebDriverBy::cssSelector('.ellipsis-job-company'))->getText();
-                        $salary = $element->findElement(WebDriverBy::cssSelector('.salary'))->getText();
-                        $place = $element->findElement(WebDriverBy::cssSelector('.place'))->getText();
-                        $update_time = $element->findElement(WebDriverBy::cssSelector('.date-time'))->getText();
-
-                        $link = $baseUrl . $link;
-
-                        if (!JobChickpt::where('link', $link)->exists()) {
-                            JobChickpt::create([
-                                'title' => trim($title),
-                                'link' => trim($link),
-                                'company' => trim($company),
-                                'salary' => trim($salary),
-                                'place' => trim($place),
-                                'date' => Carbon::now()->toDateString(),
-                            ]);
-
-                            $newJobs[] = [
-                                'title' => $title,
-                                'link' => $link,
-                                'company' => $company,
-                                'salary' => $salary,
-                                'place' => $place,
-                            ];
-                        }
-                    }
-                    catch (\Exception $e)
-                    {
-                        Log::error("解析工作資料錯誤（{$areaName}）：{$e->getMessage()}");
-                        continue;
-                    }
+                if( $currentPage >= 3 )
+                { // 限制掃描頁數以避免過多請求
+                    break;
                 }
+
+                // 增加頁碼
+                ++$currentPage;
+            }
+            catch (Exception $e)
+            {
+                Log::error('Error scraping page ' . $currentPage . ': ' . $e->getMessage());
+                $this->sendErrorLog('Error scraping page ' . $currentPage . ': ' . $e->getMessage());
+                break; // 跳出循環
             }
         }
 
