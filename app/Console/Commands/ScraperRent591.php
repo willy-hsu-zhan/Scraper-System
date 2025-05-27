@@ -61,6 +61,8 @@ class ScraperRent591 extends Command
              ['name' => '台北市', 'region' => 1],
              ['name' => '基隆市', 'region' => 2],
              ['name' => '新北市', 'region' => 3],
+             ['name' => '新竹市', 'region' => 4],
+             ['name' => '新竹縣', 'region' => 5],
              ['name' => '桃園市', 'region' => 6],
              ['name' => '台中市', 'region' => 8],
          ];
