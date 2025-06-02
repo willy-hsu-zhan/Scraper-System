@@ -128,7 +128,7 @@ class ScraperChickpt extends Command {
                         $place       = $jobNode->findElement(WebDriverBy::cssSelector('.place'))->getText();
                         $update_time = $jobNode->findElement(WebDriverBy::cssSelector('.date-time'))->getText();
 
-                        //$link = $baseUrl . $link;
+                        $link = $baseUrl . $link;
                         // 檢查是否已存在資料庫中
                         if( !JobChickpt::where('link', $link)->first() )
                         {
