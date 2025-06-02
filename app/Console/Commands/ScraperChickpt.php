@@ -189,9 +189,10 @@ class ScraperChickpt extends Command {
     {
         $totalPrice = 0;
 
-        foreach( $jobs as $job )
-        {
-            $totalPrice += preg_match('/\d+/', $job['salary']);
+        foreach ($jobs as $job) {
+            if (preg_match('/\d+/', $job['salary'], $matches)) {
+                $totalPrice += (int) $matches[0];
+            }
         }
 
         return $totalPrice;
