@@ -128,7 +128,7 @@ class ScraperChickpt extends Command {
                         $place       = $jobNode->findElement(WebDriverBy::cssSelector('.place'))->getText();
                         $update_time = $jobNode->findElement(WebDriverBy::cssSelector('.date-time'))->getText();
 
-                        $link = $baseUrl . $link;
+                        //$link = $baseUrl . $link;
                         // 檢查是否已存在資料庫中
                         if( !JobChickpt::where('link', $link)->first() )
                         {
@@ -240,7 +240,7 @@ class ScraperChickpt extends Command {
             $sendNotifyText = '';
         }
 
-        $this->sendFachaiGIF(); // 送發財圖
+        //$this->sendFachaiGIF(); // 送發財圖
 
         $infoText = '最後更新時間：' . Carbon::now()->setTimezone('Asia/Taipei')->format('Y-m-d H:i:s');
         $this->telegramService->sendMessage($this->chatId, $infoText);
