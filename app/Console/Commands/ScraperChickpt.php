@@ -185,6 +185,18 @@ class ScraperChickpt extends Command {
         }
     }
 
+    public function sumTotalPrice($jobs)
+    {
+        $totalPrice = 0;
+
+        foreach( $jobs as $job )
+        {
+            $totalPrice += (int)preg_match('/\$(\d+)/', $job['salary']);
+        }
+
+        return $totalPrice;
+    }
+
     public function sendPeriodNoJobMsg()
     {
         $errorMessage = "🚨 **小雞上工通知** 🚨\n\n";
@@ -240,7 +252,15 @@ class ScraperChickpt extends Command {
             $sendNotifyText = '';
         }
 
-        //$this->sendFachaiGIF(); // 送發財圖
+        $totalPrice = $this->sumTotalPrice($jobs);
+
+        if($totalPrice >= 1000) // 本次掃描工作職缺若有超過1000就送發財圖
+        {
+            $this->sendFachaiGIF(); // 送發財圖
+        }
+
+        $infoText = '本回任務含金量總共為：' . $totalPrice . '元整';
+        $this->telegramService->sendMessage($this->chatId, $infoText);
 
         $infoText = '最後更新時間：' . Carbon::now()->setTimezone('Asia/Taipei')->format('Y-m-d H:i:s');
         $this->telegramService->sendMessage($this->chatId, $infoText);
