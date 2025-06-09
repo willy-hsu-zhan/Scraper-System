@@ -65,6 +65,8 @@ class ScraperRent591 extends Command
              ['name' => '新竹縣', 'region' => 5],
              ['name' => '桃園市', 'region' => 6],
              ['name' => '台中市', 'region' => 8],
+             ['name' => '台南市', 'region' => 15],
+             ['name' => '高雄市', 'region' => 17],
          ];
 
          $price_info = '5000元以內';
