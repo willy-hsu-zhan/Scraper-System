@@ -12,10 +12,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('app:scraper-chickpt')->everyThirtyMinutes();
-        $schedule->command('app:scraper-ptt')->cron('15,45 * * * *'); // 改為每小時的15,45分執行使任務不衝突
-        $schedule->command('app:search-youtube-music')->dailyAt('18:05')->timezone('Asia/Taipei'); // 每天6.05抓最新熱門歌單
-        $schedule->command('app:scraper-rent591')->everySixHours()->timezone('Asia/Taipei'); // 每6小時執行一次
+        $schedule->command('app:scraper-chickpt')->everyThirtyMinutes()->withoutOverlapping();
+        $schedule->command('app:scraper-ptt')->cron('15,45 * * * *')->withoutOverlapping(); // 改為每小時的15,45分執行使任務不衝突
+        $schedule->command('app:search-youtube-music')->dailyAt('18:05')->timezone('Asia/Taipei')->withoutOverlapping(); // 每天6.05抓最新熱門歌單
+        $schedule->command('app:scraper-rent591')->hourly()->timezone('Asia/Taipei')->withoutOverlapping(); // 每1小時執行一次
     }
 
     /**
