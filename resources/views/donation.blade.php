@@ -337,10 +337,10 @@
                         data-aos-delay="100">
                         <h3>攜手共建地藏廟！</h3><br>
                         <h3>我們的目標是 <span style="color: #ff6600;">NT$5,000,000</span></h3><br>
-                        <h3>現已募集 <span style="color: #28a745;">NT$433,783</span>！</h3><br>
+                        <h3>現已募集 <span style="color: #28a745;">NT$461,517</span>！</h3><br>
                         <h3>您的每一分貢獻，都將幫助更多人受益，感謝您的支持！</h3>
                         <br>
-                        <h6 style="font-size: 1.1rem; color: #777;"><strong>最後更新時間：</strong> 2025-05-27</h6>
+                        <h6 style="font-size: 1.1rem; color: #777;"><strong>最後更新時間：</strong> 2025-06-18</h6>
                     </div>
                 </div>
             </div>
@@ -479,28 +479,6 @@
                                     <span style="display:block;">最終，師兄選擇不調動部門，而是專心於自己的修行。他將更多的精力投入到念佛中，並感到內心的平靜與力量逐漸增強。隨後，師兄得知其他同事調入那個部門，並且聽說他們的情況並不如預期那般順利。這一切再次證明，菩薩的指引讓師兄做出了正確的選擇。</span><br>
                                     <span style="display:block;">這次占察經歷讓我更加堅信，地藏王菩薩的慈悲指引能夠幫助我們在關鍵時刻做出最合適的選擇。無論未來如何，我們都應保持冷靜，專注於內心的修行，並相信菩薩會指引我們走向平穩的道路。</span><br>
                                     <span style="display:block;">感恩南無地藏王菩薩！🙏🙏🙏</span>
-                                    <i class="bi bi-quote quote-icon-right"></i>
-                                </p>
-
-                            </div>
-                        </div><!-- End testimonial item -->
-                        <div class="swiper-slide">
-                            <div class="testimonial-item">
-                                <img src="assets/img/testimonials/common.jpg" class="testimonial-img"
-                                    alt="">
-                                <h3>Sasha</h3>
-                                <h4>Sasha</h4>
-                                <p>
-                                    <i class="bi bi-quote quote-icon-left"></i>
-                                    <span style="display:block;">上個月坐飛機之前一直不順，買好機票之後，竟然剛好遇到百年一見的大水災，當我剛到達機場買礦泉水，錢也被機器吃掉，為了安全起見，我詢問周師兄，他指示我我要念地藏王菩薩聖號一萬遍。</span>
-                                    <br>
-                                    <span style="display:block;">我趁著等班機的時候誠心誦念，當我快唸滿萬遍時，居然有人送給我一瓶礦泉水。</span>
-                                    <br>
-                                    <span style="display:block;">在登機門本來是一位不友善的剪票員在查票，我心中忐忑，沒想到換我登機時突然多了一位友善的剪票員，我也順利登機。</span>
-                                    <br>
-                                    <span style="display:block;">一路上有人送巧克力給我，坐機場巴士也剛好有座位，這些都是以前坐飛機時從來沒有發生的好事。</span>
-                                    <br>
-                                    <span style="display:block;">感恩地藏王菩薩。</span>
                                     <i class="bi bi-quote quote-icon-right"></i>
                                 </p>
 
