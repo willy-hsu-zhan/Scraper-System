@@ -402,7 +402,7 @@
                     <div class="col-lg-3 col-md-6">
                         <div class="stats-item text-center w-100 h-100">
                             <span data-purecounter-start="0" data-purecounter-end="9"
-                                data-purecounter-duration="9" class="purecounter"></span>
+                                data-purecounter-duration="2" class="purecounter"></span>
                             <p>達成率 (%)</p>
                         </div>
                     </div><!-- End Stats Item -->
