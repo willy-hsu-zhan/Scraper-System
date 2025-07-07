@@ -23,6 +23,9 @@ class SeleniumService
 
         $profile = new FirefoxProfile();
         $profile->setPreference('general.useragent.override', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36');
+        $profile->setPreference('security.enterprise_roots.enabled', true);  // 使用系統憑證
+        $profile->setPreference('webdriver_accept_untrusted_certs', true);  // 接受不受信憑證
+        $profile->setPreference('webdriver_assume_untrusted_issuer', false);
 
         $options = new FirefoxOptions();
         $options->setProfile($profile);
