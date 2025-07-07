@@ -36,6 +36,7 @@ class SeleniumService
 
         $capabilities = DesiredCapabilities::firefox();
         $capabilities->setCapability(FirefoxOptions::CAPABILITY, $options);
+        $capabilities->setCapability('acceptInsecureCerts', true);
 
         try {
             $webDriver = RemoteWebDriver::create($serverUrl, $capabilities);
