@@ -18,7 +18,7 @@ class SeleniumService
 
     public function openWebDriver()
     {
-        $serverUrl = 'http://127.0.0.1:4444/wd/hub'; // Selenium 伺服器的地址
+        $serverUrl = 'http://127.0.0.1:4444'; // Selenium 伺服器的地址
 
         // 設定 Firefox 參數 先寫死默認都用firefox
         $options = new FirefoxOptions();
