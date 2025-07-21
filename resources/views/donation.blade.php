@@ -337,10 +337,10 @@
                         data-aos-delay="100">
                         <h3>攜手共建地藏廟！</h3><br>
                         <h3>我們的目標是 <span style="color: #ff6600;">NT$5,000,000</span></h3><br>
-                        <h3>現已募集 <span style="color: #28a745;">NT$461,517</span>！</h3><br>
+                        <h3>現已募集 <span style="color: #28a745;">NT$663,607</span>！</h3><br>
                         <h3>您的每一分貢獻，都將幫助更多人受益，感謝您的支持！</h3>
                         <br>
-                        <h6 style="font-size: 1.1rem; color: #777;"><strong>最後更新時間：</strong> 2025-06-18</h6>
+                        <h6 style="font-size: 1.1rem; color: #777;"><strong>最後更新時間：</strong> 2025-07-1821</h6>
                     </div>
                 </div>
             </div>
