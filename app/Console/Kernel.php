@@ -16,6 +16,8 @@ class Kernel extends ConsoleKernel
         //$schedule->command('app:scraper-ptt')->cron('15,45 * * * *'); // 改為每小時的15,45分執行使任務不衝突
         $schedule->command('app:search-youtube-music')->dailyAt('18:05')->timezone('Asia/Taipei'); // 每天6.05抓最新熱門歌單
         $schedule->command('app:scraper-rent591')->everySixHours()->timezone('Asia/Taipei'); // 每6小時執行一次
+        $schedule->command('app:notify-today-open-govojt')->dailyAt('07:00')->timezone('Asia/Taipei');; // 通知今日可報名的課程
+        $schedule->command('app:scraper-ojt')->dailyAt('03:00')->timezone('Asia/Taipei');; // 通知並記錄將來開放的課程
     }
 
     /**

@@ -12,6 +12,7 @@ use App\Services\SeleniumService;
 use Illuminate\Support\Facades\Log;
 use Facebook\WebDriver\Interactions\WebDriverActions;
 use Facebook\WebDriver\WebDriverKeys;
+use App\Models\GovOjt;
 
 class ScraperOjt extends Command
 {
@@ -173,9 +174,39 @@ class ScraperOjt extends Command
                 // 等待避免對伺服器壓力太大
                 sleep(5);
             }
-            dd($allData);
+
             // 發送 Telegram
             foreach ($allData as $course) {
+                // 以 trainingUnitUrl 為唯一鍵查找
+                $exists = GovOjt::where('training_unit_url', $course['trainingUnitUrl'])->exists();
+
+                if ($exists) {
+                    // 資料已存在，略過
+                    $this->info("⚠️ 課程已存在，略過通知：{$course['courseName']}");
+                    continue;
+                }
+
+                [$registrationStartAt, $registrationEndAt] = $this->convertTaiwanDatetimeRange($course['registrationDate']);
+                [$scheduledStartDate, $scheduledEndDate] = $this->convertTaiwanDateRange($course['scheduledPeriod']);
+
+                GovOjt::create([
+                    'training_unit_url' => $course['trainingUnitUrl'],
+                    'course_code' => $course['courseCode'],
+                    'course_name' => $course['courseName'],
+                    'training_count' => $course['trainingCount'],
+                    'training_hours' => $course['trainingHours'],
+                    'student_cost' => str_replace(',', '', $course['studentCost']),
+                    'government_cost' => str_replace(',', '', $course['governmentCost']),
+                    'training_location' => $course['trainingLocation'],
+                    'registration_start_at' => $registrationStartAt,
+                    'registration_end_at' => $registrationEndAt,
+                    'enrollment_status' => $course['enrollmentStatus'],
+                    'scheduled_start_date' => $scheduledStartDate,
+                    'scheduled_end_date' => $scheduledEndDate,
+                    'payment_method' => $course['paymentMethod'],
+                ]);
+
+                // 發送 Telegram 通知
                 $message = "【課程名稱】" . $course['courseName'] . "\n"
                         . "【課程代碼】" . $course['courseCode'] . "\n"
                         . "【訓練班別網址】" . $course['trainingUnitUrl'] . "\n"
@@ -193,6 +224,7 @@ class ScraperOjt extends Command
                 sleep(2);
             }
 
+
             $this->info("✅ 所有課程已發送至 Telegram 群組");
 
         } catch (\Exception $e) {
@@ -206,8 +238,6 @@ class ScraperOjt extends Command
             }
         }
     }
-
-
 
     protected function clickElement(RemoteWebDriver $driver, string $cssSelector)
     {
@@ -231,5 +261,35 @@ class ScraperOjt extends Command
             ]);
             throw $e;
         }
+    }
+    protected function convertTaiwanDatetimeRange($range) {
+        [$startStr, $endStr] = explode(' ~ ', $range);
+
+        return [
+            $this->convertTaiwanDatetime($startStr),
+            $this->convertTaiwanDatetime($endStr),
+        ];
+    }
+
+    protected function convertTaiwanDateRange($range) {
+        [$startStr, $endStr] = explode(' ~ ', $range);
+
+        return [
+            $this->convertTaiwanDate($startStr),
+            $this->convertTaiwanDate($endStr),
+        ];
+    }
+
+    protected function convertTaiwanDatetime($taiwanDatetime) {
+        // 轉西元年
+        $parts = explode(' ', $taiwanDatetime);
+        [$y, $m, $d] = explode('/', $parts[0]);
+        $hour = $parts[1] ?? '00:00:00';
+        return (intval($y) + 1911) . "-$m-$d $hour";
+    }
+
+    protected function convertTaiwanDate($taiwanDate) {
+        [$y, $m, $d] = explode('/', $taiwanDate);
+        return (intval($y) + 1911) . "-$m-$d";
     }
 }
