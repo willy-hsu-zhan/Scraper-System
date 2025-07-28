@@ -35,163 +35,179 @@ class ScraperOjt extends Command
     {
         $this->info("🚀 開始抓取台灣就業通課程資料...");
 
+        $regions = [
+            "台北市" => "#Form_CTID_SHOW_1",
+            "基隆市" => "#Form_CTID_SHOW_2",
+            "新北市" => "#Form_CTID_SHOW_3"
+        ];
+
+        $allData = [];
+
         try {
-            $driver = $this->seleniumService->openWebDriver();
+            foreach ($regions as $regionName => $cssSelector) {
+                // 開啟瀏覽器
+                $driver = $this->seleniumService->openWebDriver();
+                // $driver->manage()->deleteAllCookies();
 
-            $driver->get('https://ojt.wda.gov.tw/ClassSearch');
-            $this->waitForElement($driver, 'body', 10);
-            sleep(1);
+                $driver->get('https://ojt.wda.gov.tw/ClassSearch');
+                $this->waitForElement($driver, 'body', 10);
+                sleep(5);
 
-            // 先等待 radio 按鈕存在 Form_PlanType_1 = 產業人才投資方案
-            $this->waitForElement($driver, '#Form_PlanType_1', 10);
+                // 點選「產業人才投資方案」radio
+                $this->waitForElement($driver, '#Form_PlanType_1', 10);
+                $this->clickElement($driver, '#Form_PlanType_1');
+                sleep(5);
 
-            // 再點擊該 radio
-            $this->clickElement($driver, '#Form_PlanType_1');
+                $this->info("👉 開始抓取地區：{$regionName}");
 
-            // 強制等待 3 秒 // 點擊 radio btn 時會重新渲染
-            sleep(3);
+                // 等待並點選地區選項
+                $this->waitForElement($driver, $cssSelector, 10);
+                $this->clickElement($driver, $cssSelector);
+                sleep(5);
 
-            // 等待元素出現 (不限可見性)
-            $this->waitForElement($driver, '#Form_CTID_SHOW_1', 10);
+                // 送出查詢
+                $this->clickElement($driver, 'button.btn-orange[title="送出"]');
 
-            // 勾選地區（value 分別為 1、2、4）
-            $this->clickElement($driver, '#Form_CTID_SHOW_1'); // 台北市
-            // $this->clickElement($driver, '#Form_CTID_SHOW_3'); // 新北市
-            // $this->clickElement($driver, '#Form_CTID_SHOW_2'); // 基隆市
+                // 等待結果表格及分頁選項出現
+                $this->waitForElement($driver, '#PagingInfo_PageSize', 10);
 
-            sleep(1); // 等待操作穩定
+                // 按 ESC 鍵關閉可能的彈窗
+                try {
+                    $body = $driver->findElement(WebDriverBy::tagName('body'));
+                    $actions = new WebDriverActions($driver);
+                    $actions->sendKeys($body, WebDriverKeys::ESCAPE)->perform();
+                } catch (\Facebook\WebDriver\Exception\StaleElementReferenceException $e) {
+                    sleep(5);
+                    $body = $driver->findElement(WebDriverBy::tagName('body'));
+                    $actions = new WebDriverActions($driver);
+                    $actions->sendKeys($body, WebDriverKeys::ESCAPE)->perform();
+                }
 
-            // 點擊「送出」按鈕
-            $this->clickElement($driver, 'button.btn-orange[title="送出"]');
+                // 設定每頁顯示100筆
+                $pageSizeSelect = $driver->findElement(WebDriverBy::cssSelector('#PagingInfo_PageSize'));
+                $driver->executeScript("arguments[0].value = '100'; arguments[0].dispatchEvent(new Event('change'));", [$pageSizeSelect]);
+                sleep(5);
+                $this->clickElement($driver, '#btnGoRecCount');
 
-            // 等待結果表格初步出現（頁數下拉選單也會出現）
-            $this->waitForElement($driver, '#PagingInfo_PageSize', 10);
+                // 等待表格出現且有資料
+                $driver->wait(15)->until(function($driver) {
+                    $rows = $driver->findElements(WebDriverBy::cssSelector('table tbody tr'));
+                    return count($rows) > 15;
+                });
 
-            try {
-                $body = $driver->findElement(WebDriverBy::tagName('body'));
+                // 抓取資料，重新取得每一列元素，避免 stale element
+                $rows = $driver->findElements(WebDriverBy::xpath('//table//tr[@valign="middle"]'));
+                $data = [];
 
-                $actions = new WebDriverActions($driver);
-                $actions->sendKeys($body, WebDriverKeys::ESCAPE)->perform();
-            } catch (\Facebook\WebDriver\Exception\StaleElementReferenceException $e) {
-                echo "元素失效，重新取得...\n";
+                foreach ($rows as $row) {
+                    try {
+                        $cols = $row->findElements(WebDriverBy::tagName('td'));
+                        if (count($cols) < 12) {
+                            continue;
+                        }
 
-                // 再試一次
-                sleep(1);
-                $body = $driver->findElement(WebDriverBy::tagName('body'));
-                $actions = new WebDriverActions($driver);
-                $actions->sendKeys($body, WebDriverKeys::ESCAPE)->perform();
+                        $linkElement = $cols[1]->findElement(WebDriverBy::xpath('.//a[contains(text(), "另開新視窗")]'));
+                        $href = trim($linkElement->getAttribute('href'));
+                        $baseUrl = 'https://ojt.wda.gov.tw';
+
+                        if (strpos($href, 'http') !== 0) {
+                            $trainingUnitUrl = $baseUrl . $href;
+                        } else {
+                            $trainingUnitUrl = $href;
+                        }
+
+                        $courseName = trim($driver->executeScript('return arguments[0].innerText;', [$cols[1]]));
+                        $courseName = str_replace('●「另開新視窗」', '', $courseName);
+                        $courseName = trim($courseName);
+                        $courseCode = trim(strip_tags($driver->executeScript('return arguments[0].innerHTML;', [$cols[2]])));
+
+                        if ($courseCode === '') {
+                            continue;
+                        }
+
+                        $trainingCount = trim($driver->executeScript('return arguments[0].innerText;', [$cols[3]]));
+                        $trainingHours = trim($driver->executeScript('return arguments[0].innerText;', [$cols[4]]));
+                        $studentCost = trim($driver->executeScript('return arguments[0].innerText;', [$cols[5]]));
+                        $governmentCost = trim($driver->executeScript('return arguments[0].innerText;', [$cols[6]]));
+                        $trainingLocation = trim($driver->executeScript('return arguments[0].innerText;', [$cols[7]]));
+                        $trainingLocation = str_replace(["\n", "\r"], ' ', $trainingLocation);
+                        $trainingLocation = preg_replace('/\s+/', ' ', $trainingLocation);
+
+                        $registrationDate = trim($driver->executeScript('return arguments[0].innerText;', [$cols[8]]));
+                        $registrationDateParts = explode('|', $registrationDate);
+                        $registrationDate = trim($registrationDateParts[0]) . ' ~ ' . trim($registrationDateParts[1]);
+
+                        $enrollmentStatus = trim($driver->executeScript('return arguments[0].innerText;', [$cols[9]]));
+                        $scheduledPeriod = trim($driver->executeScript('return arguments[0].innerText;', [$cols[10]]));
+                        $scheduledPeriodParts = explode('|', $scheduledPeriod);
+                        $scheduledPeriod = trim($scheduledPeriodParts[0]) . ' ~ ' . trim($scheduledPeriodParts[1]);
+
+                        $paymentMethod = trim($driver->executeScript('return arguments[0].innerText;', [$cols[11]]));
+
+                        $data[] = [
+                            'trainingUnitUrl' => $trainingUnitUrl,
+                            'courseCode' => $courseCode,
+                            'courseName' => $courseName,
+                            'trainingCount' => $trainingCount,
+                            'trainingHours' => $trainingHours,
+                            'studentCost' => $studentCost,
+                            'governmentCost' => $governmentCost,
+                            'trainingLocation' => $trainingLocation,
+                            'registrationDate' => $registrationDate,
+                            'enrollmentStatus' => $enrollmentStatus,
+                            'scheduledPeriod' => $scheduledPeriod,
+                            'paymentMethod' => $paymentMethod,
+                        ];
+                    } catch (\Facebook\WebDriver\Exception\StaleElementReferenceException $e) {
+                        $this->warn("⚠️ 發生 stale element，該列資料跳過");
+                        continue;
+                    }
+                }
+
+                $allData = array_merge($allData, $data);
+
+                $this->info("✅ 地區 {$regionName} 抓取完成，共 " . count($data) . " 筆資料");
+
+                // 關閉瀏覽器
+                $driver->quit();
+                // 等待避免對伺服器壓力太大
+                sleep(5);
             }
-
-            // 選擇每頁 100 筆
-            $pageSizeSelect = $driver->findElement(WebDriverBy::cssSelector('#PagingInfo_PageSize'));
-            $driver->executeScript("arguments[0].value = '100'; arguments[0].dispatchEvent(new Event('change'));", [$pageSizeSelect]);
-
-            sleep(1); // 等待選單變更穩定
-
-            // 點擊每頁筆數的送出按鈕
-            $this->clickElement($driver, '#btnGoRecCount');
-            // 等待結果表格出現
-            $driver->wait(15)->until(function($driver) {
-                $rows = $driver->findElements(WebDriverBy::cssSelector('table tbody tr'));
-                return count($rows) > 10; // 等待至少10筆資料出現
-            });
-
-            $rows = $driver->findElements(WebDriverBy::xpath('//table//tr[@valign="middle"]'));
-            $data = [];
-
-            foreach ($rows as $row) {
-                $cols = $row->findElements(WebDriverBy::tagName('td'));
-                if (count($cols) < 12) {
-                    continue; // 過濾開頭幾個無用元素，影響foreach
-                }
-
-               // 找第二欄的「另開新視窗」連結
-                $linkElement = $cols[1]->findElement(WebDriverBy::xpath('.//a[contains(text(), "另開新視窗")]'));
-                $href = trim($linkElement->getAttribute('href'));
-                $baseUrl = 'https://ojt.wda.gov.tw';
-
-                // 判斷 href 是不是以 http 開頭（絕對網址），如果不是就加上 baseUrl
-                if (strpos($href, 'http') !== 0) {
-                    $trainingUnitUrl = $baseUrl . $href;
-                } else {
-                    $trainingUnitUrl = $href;
-                }
-
-                $courseName = trim($driver->executeScript('return arguments[0].innerText;', [$cols[1]]));
-                $courseName = str_replace('●「另開新視窗」', '', $courseName);
-                $courseName = trim($courseName);
-                $courseCode = trim(strip_tags($driver->executeScript('return arguments[0].innerHTML;', [$cols[2]])));
-
-                if ($courseCode === '') {
-                    continue; // 無課程代碼跳過
-                }
-
-                $trainingCount = trim($driver->executeScript('return arguments[0].innerText;', [$cols[3]]));
-                $trainingHours = trim($driver->executeScript('return arguments[0].innerText;', [$cols[4]]));
-                $studentCost = trim($driver->executeScript('return arguments[0].innerText;', [$cols[5]]));
-                $governmentCost = trim($driver->executeScript('return arguments[0].innerText;', [$cols[6]]));
-
-                $trainingLocation = trim($driver->executeScript('return arguments[0].innerText;', [$cols[7]]));
-                $trainingLocation = str_replace(["\n", "\r"], ' ', $trainingLocation);
-                $trainingLocation = preg_replace('/\s+/', ' ', $trainingLocation); // 把多餘空白合併
-
-
-                $registrationDate = trim($driver->executeScript('return arguments[0].innerText;', [$cols[8]]));
-                $registrationDateParts = explode('|', $registrationDate);
-                $registrationDate = trim($registrationDateParts[0]) . ' ~ ' . trim($registrationDateParts[1]);
-
-                $enrollmentStatus = trim($driver->executeScript('return arguments[0].innerText;', [$cols[9]]));
-
-                $scheduledPeriod = trim($driver->executeScript('return arguments[0].innerText;', [$cols[10]]));
-                $scheduledPeriodParts = explode('|', $scheduledPeriod);
-                $scheduledPeriod = trim($scheduledPeriodParts[0]) . ' ~ ' . trim($scheduledPeriodParts[1]);
-
-                $paymentMethod = trim($driver->executeScript('return arguments[0].innerText;', [$cols[11]]));
-
-                $data[] = [
-                    'trainingUnitUrl' => $trainingUnitUrl,
-                    'courseCode' => $courseCode,
-                    'courseName' => $courseName,
-                    'trainingCount' => $trainingCount,
-                    'trainingHours' => $trainingHours,
-                    'studentCost' => $studentCost,
-                    'governmentCost' => $governmentCost,
-                    'trainingLocation' => $trainingLocation,
-                    'registrationDate' => $registrationDate,
-                    'enrollmentStatus' => $enrollmentStatus,
-                    'scheduledPeriod' => $scheduledPeriod,
-                    'paymentMethod' => $paymentMethod,
-                ];
-            }
-
-            // 發送 Telegram 訊息時包含 URL
-            foreach ($data as $course) {
+            dd($allData);
+            // 發送 Telegram
+            foreach ($allData as $course) {
                 $message = "【課程名稱】" . $course['courseName'] . "\n"
-                         . "【課程代碼】" . $course['courseCode'] . "\n"
-                         . "【訓練班別網址】" . $course['trainingUnitUrl'] . "\n"
-                         . "【訓練人數】" . $course['trainingCount'] . "\n"
-                         . "【訓練時數】" . $course['trainingHours'] . "\n"
-                         . "【學員負擔】" . $course['studentCost'] . "\n"
-                         . "【政府負擔】" . $course['governmentCost'] . "\n"
-                         . "【訓練地點】" . $course['trainingLocation'] . "\n"
-                         . "【報名日期】" . $course['registrationDate'] . "\n"
-                         . "【招生狀態】" . $course['enrollmentStatus'] . "\n"
-                         . "【預訂訓練期間】" . $course['scheduledPeriod'] . "\n"
-                         . "【報名繳費方式】" . $course['paymentMethod'];
+                        . "【課程代碼】" . $course['courseCode'] . "\n"
+                        . "【訓練班別網址】" . $course['trainingUnitUrl'] . "\n"
+                        . "【訓練人數】" . $course['trainingCount'] . "\n"
+                        . "【訓練時數】" . $course['trainingHours'] . "\n"
+                        . "【學員負擔】" . $course['studentCost'] . "\n"
+                        . "【政府負擔】" . $course['governmentCost'] . "\n"
+                        . "【訓練地點】" . $course['trainingLocation'] . "\n"
+                        . "【報名日期】" . $course['registrationDate'] . "\n"
+                        . "【招生狀態】" . $course['enrollmentStatus'] . "\n"
+                        . "【預訂訓練期間】" . $course['scheduledPeriod'] . "\n"
+                        . "【報名繳費方式】" . $course['paymentMethod'];
 
                 $this->telegramService->sendMessage($this->chatId, $message);
                 sleep(2);
             }
 
-        $this->info("✅ 所有課程已發送至 Telegram 群組");
+            $this->info("✅ 所有課程已發送至 Telegram 群組");
+
         } catch (\Exception $e) {
             $this->error("❌ 發生錯誤：" . $e->getMessage());
             Log::error('[ScraperOjt] 錯誤', [
                 'message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
+            if (isset($driver)) {
+                $driver->quit();
+            }
         }
     }
+
+
 
     protected function clickElement(RemoteWebDriver $driver, string $cssSelector)
     {
