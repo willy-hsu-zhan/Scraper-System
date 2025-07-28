@@ -347,49 +347,77 @@
         </section>
 
         <section id="participate1" class="about section" style="padding: 60px 0; background-color: #f9f9f9;">
-            <div class="container">
-                <div class="row gy-4">
-                    <!-- 匯款帳號資訊區 -->
-                    <div class="col-lg-6"
-                        style="padding: 20px; background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);"
-                        data-aos="fade-up" data-aos-delay="100">
-                        <div class="content">
-                            <h4 style="font-weight: bold; font-size: 1.8rem; color: #333; margin-bottom: 20px;">匯款帳號資訊
-                            </h4>
+        <div class="container">
+            <div class="row gy-4">
 
-                            <!-- 國內匯款 -->
-                            <div style="margin-bottom: 20px;">
-                                <br>
-                                <h5 style="font-size: 1.4rem; font-weight: bold;">國內匯款：</h5>
-                                <p style="font-size: 1.2rem; color: #555;"><strong>銀行代碼：</strong> 808</p>
-                                <p style="font-size: 1.2rem; color: #555;"><strong>銀行匯款帳號：</strong> 1230979154915</p>
-                                <br>
-                            </div>
+                <!-- 免責聲明區塊 -->
+                <div class="col-lg-8 offset-lg-2"
+                    style="padding: 20px; background-color: #fff3cd; border: 1px solid #ffeeba; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <h4 style="font-weight: bold; font-size: 1.5rem; color: #856404;">捐款聲明 Donation Disclaimer</h4>
+                    <p style="color: #856404; font-size: 1.1rem; margin-top: 15px;">
+                        捐款人確認並同意，此筆捐款是出於自願及誠心，無任何強迫、誤導或交換利益之情況。所有收到的捐款將專款專用於建廟及相關維護用途。<br><br>
+                        一經捐出，捐款恕不退還。捐款人不得事後主張被詐騙、誤導或以其他理由要求退款。<br><br>
+                        我們建議捐款人在捐款前，充分了解本募款用途。如有任何疑問，歡迎您於捐款前與我們聯繫，以獲得進一步說明。<br><br>
+                        By proceeding with this donation, the donor acknowledges and confirms that the contribution is made voluntarily, out of goodwill, and with no expectation of personal benefit or return. All donations received will be used solely for the stated purpose of building and maintaining the temple.<br><br>
+                        Once a donation is made, it is non-refundable, and donors shall not be entitled to claim that they were misled, coerced, or otherwise induced into making the contribution.<br><br>
+                        We strongly encourage all donors to ensure they understand the purpose of the donation before proceeding. If you have any questions or require further clarification, please contact us before making a contribution.
+                    </p>
 
-                            <!-- 國外匯款 -->
-                            <div style="margin-bottom: 20px;">
-                                <h5 style="font-size: 1.4rem; font-weight: bold;">國外匯款：</h5>
-                                <p style="font-size: 1.2rem; color: #555;">海外的信眾也可以進行匯款，請使用 PayPal 匯款至以下電子郵件：</p>
-                                <a href="mailto:zzzzz20102@gmail.com">
-                                    <h5 style="color: #007bff; font-size: 1.2rem; font-weight: bold;">
-                                        zzzzz20102@gmail.com</h5>
-                                </a>
-                                <br>
-                                <p style="font-size: 1.2rem; color: #555;">如果您沒有 PayPal 帳戶，也可以聯繫我們，我們將提供其他匯款方式。</p>
-                            </div>
+                    <div class="text-center mt-4">
+                        <button id="agreeBtn"
+                            style="padding: 12px 30px; background-color: #28a745; color: #fff; font-size: 1.2rem; border: none; border-radius: 5px; cursor: pointer;">
+                            我同意，顯示匯款資訊
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 匯款帳號資訊區（預設隱藏） -->
+                <div id="bankInfo" class="col-lg-6"
+                    style="display: none; padding: 20px; background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);"
+                    data-aos="fade-up" data-aos-delay="100">
+                    <div class="content">
+                        <h4 style="font-weight: bold; font-size: 1.8rem; color: #333; margin-bottom: 20px;">匯款帳號資訊</h4>
+
+                        <!-- 國內匯款 -->
+                        <div style="margin-bottom: 20px;">
+                            <h5 style="font-size: 1.4rem; font-weight: bold;">國內匯款：</h5>
+                            <p style="font-size: 1.2rem; color: #555;"><strong>銀行代碼：</strong> 808</p>
+                            <p style="font-size: 1.2rem; color: #555;"><strong>銀行匯款帳號：</strong> 1230979154915</p>
+                            <br>
                         </div>
 
-                        <!-- 聯絡我們按鈕 -->
-                        <div class="d-flex mt-4 justify-content-center justify-content-md-start">
-                            <a href="#contact" class="cta-btn"
-                                style="padding: 12px 30px; background-color: #ff6600; color: #fff; font-size: 1.2rem; text-align: center; text-decoration: none; border-radius: 5px; transition: background-color 0.3s;">聯絡我們</a>
+                        <!-- 國外匯款 -->
+                        <div style="margin-bottom: 20px;">
+                            <h5 style="font-size: 1.4rem; font-weight: bold;">國外匯款：</h5>
+                            <p style="font-size: 1.2rem; color: #555;">海外的信眾也可以進行匯款，請使用 PayPal 匯款至以下電子郵件：</p>
+                            <a href="mailto:zzzzz20102@gmail.com">
+                                <h5 style="color: #007bff; font-size: 1.2rem; font-weight: bold;">
+                                    zzzzz20102@gmail.com
+                                </h5>
+                            </a>
+                            <br>
+                            <p style="font-size: 1.2rem; color: #555;">如果您沒有 PayPal 帳戶，也可以聯繫我們，我們將提供其他匯款方式。</p>
                         </div>
+                    </div>
+
+                    <!-- 聯絡我們按鈕 -->
+                    <div class="d-flex mt-4 justify-content-center justify-content-md-start">
+                        <a href="#contact" class="cta-btn"
+                            style="padding: 12px 30px; background-color: #ff6600; color: #fff; font-size: 1.2rem; text-align: center; text-decoration: none; border-radius: 5px; transition: background-color 0.3s;">
+                            聯絡我們
+                        </a>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-
+    <script>
+        document.getElementById('agreeBtn').addEventListener('click', function () {
+            document.getElementById('bankInfo').style.display = 'block';
+            this.closest('.col-lg-8').style.display = 'none';
+        });
+    </script>
 
         <!-- Stats Section -->
         <section id="stats" class="stats section light-background">
