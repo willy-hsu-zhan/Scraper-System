@@ -10,6 +10,8 @@ use App\Services\LineNotify;
 use App\Services\TelegramService;
 use App\Services\SeleniumService;
 use Illuminate\Support\Facades\Log;
+use Facebook\WebDriver\Interactions\WebDriverActions;
+use Facebook\WebDriver\WebDriverKeys;
 
 class ScraperOjt extends Command
 {
@@ -54,18 +56,44 @@ class ScraperOjt extends Command
 
             // 勾選地區（value 分別為 1、2、4）
             $this->clickElement($driver, '#Form_CTID_SHOW_1'); // 台北市
-            $this->clickElement($driver, '#Form_CTID_SHOW_3'); // 新北市
-            $this->clickElement($driver, '#Form_CTID_SHOW_5'); // 基隆市
+            // $this->clickElement($driver, '#Form_CTID_SHOW_3'); // 新北市
+            // $this->clickElement($driver, '#Form_CTID_SHOW_2'); // 基隆市
 
             sleep(1); // 等待操作穩定
 
             // 點擊「送出」按鈕
             $this->clickElement($driver, 'button.btn-orange[title="送出"]');
 
+            // 等待結果表格初步出現（頁數下拉選單也會出現）
+            $this->waitForElement($driver, '#PagingInfo_PageSize', 10);
+
+            try {
+                $body = $driver->findElement(WebDriverBy::tagName('body'));
+
+                $actions = new WebDriverActions($driver);
+                $actions->sendKeys($body, WebDriverKeys::ESCAPE)->perform();
+            } catch (\Facebook\WebDriver\Exception\StaleElementReferenceException $e) {
+                echo "元素失效，重新取得...\n";
+
+                // 再試一次
+                sleep(1);
+                $body = $driver->findElement(WebDriverBy::tagName('body'));
+                $actions = new WebDriverActions($driver);
+                $actions->sendKeys($body, WebDriverKeys::ESCAPE)->perform();
+            }
+
+            // 選擇每頁 100 筆
+            $pageSizeSelect = $driver->findElement(WebDriverBy::cssSelector('#PagingInfo_PageSize'));
+            $driver->executeScript("arguments[0].value = '100'; arguments[0].dispatchEvent(new Event('change'));", [$pageSizeSelect]);
+
+            sleep(1); // 等待選單變更穩定
+
+            // 點擊每頁筆數的送出按鈕
+            $this->clickElement($driver, '#btnGoRecCount');
             // 等待結果表格出現
             $driver->wait(15)->until(function($driver) {
                 $rows = $driver->findElements(WebDriverBy::cssSelector('table tbody tr'));
-                return count($rows) > 1; // 等待至少兩筆資料出現
+                return count($rows) > 10; // 等待至少10筆資料出現
             });
 
             $rows = $driver->findElements(WebDriverBy::xpath('//table//tr[@valign="middle"]'));
