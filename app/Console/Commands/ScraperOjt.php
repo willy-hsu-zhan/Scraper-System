@@ -102,10 +102,22 @@ class ScraperOjt extends Command
                 $trainingHours = trim($driver->executeScript('return arguments[0].innerText;', [$cols[4]]));
                 $studentCost = trim($driver->executeScript('return arguments[0].innerText;', [$cols[5]]));
                 $governmentCost = trim($driver->executeScript('return arguments[0].innerText;', [$cols[6]]));
+
                 $trainingLocation = trim($driver->executeScript('return arguments[0].innerText;', [$cols[7]]));
+                $trainingLocation = str_replace(["\n", "\r"], ' ', $trainingLocation);
+                $trainingLocation = preg_replace('/\s+/', ' ', $trainingLocation); // 把多餘空白合併
+
+
                 $registrationDate = trim($driver->executeScript('return arguments[0].innerText;', [$cols[8]]));
+                $registrationDateParts = explode('|', $registrationDate);
+                $registrationDate = trim($registrationDateParts[0]) . ' ~ ' . trim($registrationDateParts[1]);
+
                 $enrollmentStatus = trim($driver->executeScript('return arguments[0].innerText;', [$cols[9]]));
+
                 $scheduledPeriod = trim($driver->executeScript('return arguments[0].innerText;', [$cols[10]]));
+                $scheduledPeriodParts = explode('|', $scheduledPeriod);
+                $scheduledPeriod = trim($scheduledPeriodParts[0]) . ' ~ ' . trim($scheduledPeriodParts[1]);
+
                 $paymentMethod = trim($driver->executeScript('return arguments[0].innerText;', [$cols[11]]));
 
                 $data[] = [
