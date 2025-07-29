@@ -12,7 +12,7 @@ use Carbon\Carbon;
 
 class NotifyOpenGovCourses extends Command
 {
-    protected $signature = 'app:notify-today-open-govojt';
+    protected $signature = 'app:notify-open-govojt';
 
     protected $description = '通知今天開放報名的政府訓練課程';
 
@@ -112,6 +112,8 @@ class NotifyOpenGovCourses extends Command
                     "📍 *地點：* {$course->training_location}\n" .
                     "💰 *學員自付：* {$course->student_cost} 元\n" .
                     "🔗 *報名網址：* {$course->training_unit_url}";
+
+            sleep(2);
 
             $this->telegramService->sendMessage($this->chatId, $message);
 
