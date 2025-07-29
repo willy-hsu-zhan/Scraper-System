@@ -16,7 +16,7 @@ use App\Models\GovOjt;
 
 class ScraperOjt extends Command
 {
-    protected $signature = 'app:scraper-ojt';
+    protected $signature = 'app:scraper-ojt {regionCode?}';
     protected $description = '抓取台灣就業通產業人才投資方案課程資訊，並發送 Telegram 通知';
 
     protected $lineNotify;
@@ -36,18 +36,40 @@ class ScraperOjt extends Command
     {
         $this->info("🚀 開始抓取台灣就業通課程資料...");
 
+        // 取得英文參數 regionCode
+        $regionCode = $this->argument('regionCode');
+
+        // 定義英文縮寫對應的 CSS 選擇器
         $regions = [
-            "台北市" => "#Form_CTID_SHOW_1",
-            "基隆市" => "#Form_CTID_SHOW_2",
-            "新北市" => "#Form_CTID_SHOW_3"
+            'TPE' => '#Form_CTID_SHOW_1', // 台北市
+            'KEE' => '#Form_CTID_SHOW_2', // 基隆市
+            'NWT' => '#Form_CTID_SHOW_3', // 新北市
         ];
+
+        // 如果有帶參數，判斷是否存在於支援列表
+        if ($regionCode) {
+            if (!array_key_exists($regionCode, $regions)) {
+                $this->error("Unsupported region code: {$regionCode}");
+                return 1; // 直接結束
+            }
+            // 只保留指定的區域
+            $regions = [
+                $regionCode => $regions[$regionCode],
+            ];
+        }
+        else {
+            $this->error("請帶入參數 (TPE KEE NWT) ");
+            return 1; // 直接結束
+        }
 
         $allData = [];
 
         try {
             foreach ($regions as $regionName => $cssSelector) {
                 // 開啟瀏覽器
-                $driver = $this->seleniumService->openWebDriver();
+                // 203.74.125.18:8888
+                $proxy_ip = '59.124.62.9:3128';
+                $driver = $this->seleniumService->openWebDriver(true, $proxy_ip);
                 // $driver->manage()->deleteAllCookies();
 
                 $driver->get('https://ojt.wda.gov.tw/ClassSearch');

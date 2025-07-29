@@ -16,7 +16,7 @@ class SeleniumService
 
     }
 
-    public function openWebDriver()
+    public function openWebDriver(bool $useProxy = false, string $proxyIpPort = '')
     {
         $serverUrl = 'http://127.0.0.1:4444'; // Selenium 伺服器的地址
 
@@ -27,6 +27,18 @@ class SeleniumService
             '--disable-gpu',  // 停止 GPU 加速
         ]);
 
+        // 若要使用 proxy，解析 IP 與 Port 並加入 Firefox profile 設定
+        if ($useProxy && !empty($proxyIpPort)) {
+            [$ip, $port] = explode(':', $proxyIpPort);
+
+            // 設定 HTTP 和 HTTPS 代理
+            $options->setPreference('network.proxy.type', 1);
+            $options->setPreference('network.proxy.http', $ip);
+            $options->setPreference('network.proxy.http_port', (int)$port);
+            $options->setPreference('network.proxy.ssl', $ip);
+            $options->setPreference('network.proxy.ssl_port', (int)$port);
+        }
+        
         $capabilities = DesiredCapabilities::firefox();
         $capabilities->setCapability(FirefoxOptions::CAPABILITY, $options);
 
