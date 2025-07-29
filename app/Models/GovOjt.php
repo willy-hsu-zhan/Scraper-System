@@ -24,6 +24,9 @@ class GovOjt extends Model
         'scheduled_start_date',
         'scheduled_end_date',
         'payment_method',
+        'notified_3days_before',
+        'notified_1day_before',
+        'notified_1hour_before',
     ];
 
     protected $casts = [
