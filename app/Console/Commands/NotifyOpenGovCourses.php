@@ -59,6 +59,9 @@ class NotifyOpenGovCourses extends Command
             '⏰ 課程將在一小時後開放報名！'
         );
 
+        // 補通知漏掉的
+        $this->notifyMissedCourses($now->copy(), '📣 課程已開放報名（補通知）');
+
         $this->info("✅ 所有時間點的課程通知完成。");
         return Command::SUCCESS;
     }
@@ -90,6 +93,35 @@ class NotifyOpenGovCourses extends Command
 
             Log::info("🔔 已發送「{$prefix}」通知：{$course->course_name}");
             $this->info("✅ 已通知：{$course->course_name} ({$notifyField})");
+        }
+    }
+
+    protected function notifyMissedCourses($now, $prefix)
+    {
+        $courses = GovOjt::where('registration_start_at', '<=', $now)
+                    ->whereNull('notified_3days_before')
+                    ->whereNull('notified_1day_before')
+                    ->whereNull('notified_1hour_before')
+                    ->get();
+
+        foreach ($courses as $course) {
+            $message = "{$prefix}\n\n" .
+                    "📘 *課程名稱：* {$course->course_name}\n" .
+                    "📅 *訓練日期：* {$course->scheduled_start_date} ~ {$course->scheduled_end_date}\n" .
+                    "🕒 *報名時間：* {$course->registration_start_at}\n" .
+                    "📍 *地點：* {$course->training_location}\n" .
+                    "💰 *學員自付：* {$course->student_cost} 元\n" .
+                    "🔗 *報名網址：* {$course->training_unit_url}";
+
+            $this->telegramService->sendMessage($this->chatId, $message);
+
+            // 只記錄補通知時間到其中一個欄位，例如 notified_1hour_before
+            $course->update([
+                'notified_1hour_before' => now('Asia/Taipei')
+            ]);
+
+            Log::info("📣 已補發通知：{$course->course_name}");
+            $this->info("✅ 已補通知：{$course->course_name}");
         }
     }
 }
