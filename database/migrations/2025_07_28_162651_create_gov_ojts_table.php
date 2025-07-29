@@ -27,7 +27,6 @@ return new class extends Migration
             $table->string('scheduled_start_date')->nullable();
             $table->string('scheduled_end_date')->nullable();
             $table->string('payment_method')->nullable();
-            $table->dateTime('notified_at')->nullable();
             $table->timestamps();
         });
     }

@@ -19,7 +19,7 @@ class NotifyTodayOpenGovCourses extends Command
     protected $lineNotify;
     protected $telegramService;
     protected $seleniumService;
-    protected $chatId = '-4968260856';
+    protected $chatId = '-4937576377';
 
     public function __construct(LineNotify $lineNotify, TelegramService $telegramService, SeleniumService $seleniumService)
     {
@@ -31,36 +31,36 @@ class NotifyTodayOpenGovCourses extends Command
 
     public function handle()
     {
-        $today = Carbon::today('Asia/Taipei')->format('Y-m-d');
+        $now = Carbon::now('Asia/Taipei');
 
-        $courses = GovOjt::whereDate('registration_start_at', $today)
-                         ->whereNull('notified_at')
-                         ->get();
+        $this->notifyCourses($now->copy()->addDays(3)->startOfDay(), 'notified_3days_before', '📢 課程將在三天後開放報名！');
+        $this->notifyCourses($now->copy()->addDay()->startOfDay(), 'notified_1day_before', '📢 課程將在明天開放報名！');
+        $this->notifyCourses($now->copy()->addHour()->format('Y-m-d H:00:00'), 'notified_1hour_before', '⏰ 課程將在一小時後開放報名！');
 
-        if ($courses->isEmpty()) {
-            $this->info('✅ 今天沒有開放報名的新課程。');
-            return Command::SUCCESS;
-        }
+        $this->info("✅ 所有時間點的課程通知完成。");
+        return Command::SUCCESS;
+    }
+
+    protected function notifyCourses($targetTime, $notifyField, $prefix)
+    {
+        $courses = GovOjt::where('registration_start_at', $targetTime)
+                        ->whereNull($notifyField)
+                        ->get();
 
         foreach ($courses as $course) {
-            $message = "📢 *新課程開放報名！*\n\n" .
-                       "📘 *課程名稱：* {$course->course_name}\n" .
-                       "📅 *訓練日期：* {$course->scheduled_start_date} ~ {$course->scheduled_end_date}\n" .
-                       "📍 *地點：* {$course->training_location}\n" .
-                       "💰 *學員自付：* {$course->student_cost} 元\n" .
-                       "🔗 *報名網址：* {$course->training_unit_url}";
+            $message = "{$prefix}\n\n" .
+                    "📘 *課程名稱：* {$course->course_name}\n" .
+                    "📅 *訓練日期：* {$course->scheduled_start_date} ~ {$course->scheduled_end_date}\n" .
+                    "📍 *地點：* {$course->training_location}\n" .
+                    "💰 *學員自付：* {$course->student_cost} 元\n" .
+                    "🔗 *報名網址：* {$course->training_unit_url}";
 
-            // 發送到 Telegram 群組
             $this->telegramService->sendMessage($this->chatId, $message);
 
-            // 記錄已通知
-            $course->update(['notified_at' => now('Asia/Taipei')]);
+            $course->update([$notifyField => now('Asia/Taipei')]);
 
-            Log::info("🎓 已通知：{$course->course_name}");
-            $this->info("✅ 已通知：{$course->course_name}");
+            Log::info("🔔 已發送「{$prefix}」通知：{$course->course_name}");
+            $this->info("✅ 已通知：{$course->course_name} ({$notifyField})");
         }
-
-        $this->info("🎯 共發送通知 {$courses->count()} 筆開放報名的課程。");
-        return Command::SUCCESS;
     }
 }
