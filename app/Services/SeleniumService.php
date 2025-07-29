@@ -37,8 +37,11 @@ class SeleniumService
             $options->setPreference('network.proxy.http_port', (int)$port);
             $options->setPreference('network.proxy.ssl', $ip);
             $options->setPreference('network.proxy.ssl_port', (int)$port);
+        }  else {
+            // 明確關閉代理
+            $options->setPreference('network.proxy.type', 0);
         }
-        
+
         $capabilities = DesiredCapabilities::firefox();
         $capabilities->setCapability(FirefoxOptions::CAPABILITY, $options);
 

@@ -60,8 +60,6 @@ class ScraperChickpt extends Command {
         // 連接到 Selenium WebDriver
         $webDriver = $this->seleniumService->openWebDriver();
 
-
-
         // 初始資料
         $jobs = [];
 
