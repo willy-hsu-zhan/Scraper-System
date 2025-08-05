@@ -258,6 +258,11 @@ class ScraperOjt extends Command
             if (isset($driver)) {
                 $driver->quit();
             }
+        } finally {
+            if ($driver) {
+                $driver->quit(); // 無論成功或失敗都關
+            }
+            sleep(5);
         }
     }
 
