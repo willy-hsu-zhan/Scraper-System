@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 use Facebook\WebDriver\Interactions\WebDriverActions;
 use Facebook\WebDriver\WebDriverKeys;
 use App\Models\GovOjt;
+use Carbon\Carbon;
 
 class ScraperOjt extends Command
 {
@@ -240,7 +241,8 @@ class ScraperOjt extends Command
                         . "【報名日期】" . $course['registrationDate'] . "\n"
                         . "【招生狀態】" . $course['enrollmentStatus'] . "\n"
                         . "【預訂訓練期間】" . $course['scheduledPeriod'] . "\n"
-                        . "【報名繳費方式】" . $course['paymentMethod'];
+                        . "【報名繳費方式】" . $course['paymentMethod'] . "\n"
+                        . "【加入Google日曆提醒】 " . $this->generateGoogleCalendarLink($course);
 
                 $this->telegramService->sendMessage($this->chatId, $message);
                 sleep(2);
@@ -318,5 +320,37 @@ class ScraperOjt extends Command
     protected function convertTaiwanDate($taiwanDate) {
         [$y, $m, $d] = explode('/', $taiwanDate);
         return (intval($y) + 1911) . "-$m-$d";
+    }
+
+    protected function toGoogleCalendarDateTime($dateString)
+    {
+        $dt = Carbon::createFromFormat('Y-m-d', $dateString, 'Asia/Taipei');
+        return $dt->copy()->setTimezone('UTC')->format('Ymd\THis\Z');
+    }
+
+    /**
+     * 產生 Google 日曆事件新增連結
+     */
+    protected function generateGoogleCalendarLink(array $course): string
+    {
+        $title = urlencode($course['courseName']);
+        $details = urlencode("報名網址：" . $course['trainingUnitUrl']);
+        $location = urlencode($course['trainingLocation']);
+
+        // 將報名開始與結束時間轉成 Google Calendar 格式
+        [$start, $end] = $this->convertTaiwanDatetimeRange($course['registrationDate']);
+        $startUTC = $this->toGoogleCalendarDateTime($start);
+        $endUTC = $this->toGoogleCalendarDateTime($end);
+
+        $dates = "{$startUTC}/{$endUTC}";
+
+        $url = "https://calendar.google.com/calendar/render?action=TEMPLATE";
+        $url .= "&text={$title}";
+        $url .= "&dates={$dates}";
+        $url .= "&details={$details}";
+        $url .= "&location={$location}";
+        $url .= "&sf=true&output=xml";
+
+        return $url;
     }
 }
