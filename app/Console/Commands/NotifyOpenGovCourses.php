@@ -75,16 +75,18 @@ class NotifyOpenGovCourses extends Command
                         ->get();
 
         foreach ($courses as $course) {
+            $calendarLink = $this->generateGoogleCalendarLink($course);
             $message = "{$prefix}\n\n" .
                     "📘 *課程名稱：* {$course->course_name}\n" .
                     "📅 *訓練日期：* {$course->scheduled_start_date} ~ {$course->scheduled_end_date}\n" .
                     "🕒 *報名時間：* {$course->registration_start_at}\n" .
                     "📍 *地點：* {$course->training_location}\n" .
                     "💰 *學員自付：* {$course->student_cost} 元\n" .
-                    "🔗 *報名網址：* {$course->training_unit_url}";
-                    
+                    "🔗 *報名網址：* {$course->training_unit_url}\n".
+                    "📅 *加入 Google 日曆提醒：* {$calendarLink}";
+
             sleep(2);
-            
+
             $this->telegramService->sendMessage($this->chatId, $message);
 
             $course->update([
@@ -105,13 +107,15 @@ class NotifyOpenGovCourses extends Command
                     ->get();
 
         foreach ($courses as $course) {
+            $calendarLink = $this->generateGoogleCalendarLink($course);
             $message = "{$prefix}\n\n" .
                     "📘 *課程名稱：* {$course->course_name}\n" .
                     "📅 *訓練日期：* {$course->scheduled_start_date} ~ {$course->scheduled_end_date}\n" .
                     "🕒 *報名時間：* {$course->registration_start_at}\n" .
                     "📍 *地點：* {$course->training_location}\n" .
                     "💰 *學員自付：* {$course->student_cost} 元\n" .
-                    "🔗 *報名網址：* {$course->training_unit_url}";
+                    "🔗 *報名網址：* {$course->training_unit_url}\n".
+                    "📅 *加入 Google 日曆提醒：* {$calendarLink}";
 
             sleep(2);
 
@@ -125,5 +129,68 @@ class NotifyOpenGovCourses extends Command
             Log::info("📣 已補發通知：{$course->course_name}");
             $this->info("✅ 已補通知：{$course->course_name}");
         }
+    }
+
+    /**
+     * 產生 Google 日曆事件新增連結
+     */
+    protected function generateGoogleCalendarLink(array $course): string
+    {
+        $title = urlencode($course['courseName']);
+        $details = urlencode("報名網址：" . $course['trainingUnitUrl']);
+        $location = urlencode($course['trainingLocation']);
+
+        // 將報名開始與結束時間轉成 Google Calendar 格式
+        [$start, $end] = $this->convertTaiwanDatetimeRange($course['registrationDate']);
+        $startUTC = $this->toGoogleCalendarDateTime($start);
+        $endUTC = $this->toGoogleCalendarDateTime($end);
+
+        $dates = "{$startUTC}/{$endUTC}";
+
+        $url = "https://calendar.google.com/calendar/render?action=TEMPLATE";
+        $url .= "&text={$title}";
+        $url .= "&dates={$dates}";
+        $url .= "&details={$details}";
+        $url .= "&location={$location}";
+        $url .= "&sf=true&output=xml";
+
+        return $url;
+    }
+
+    protected function convertTaiwanDatetimeRange($range) {
+        [$startStr, $endStr] = explode(' ~ ', $range);
+
+        return [
+            $this->convertTaiwanDatetime($startStr),
+            $this->convertTaiwanDatetime($endStr),
+        ];
+    }
+
+    protected function convertTaiwanDateRange($range) {
+        [$startStr, $endStr] = explode(' ~ ', $range);
+
+        return [
+            $this->convertTaiwanDate($startStr),
+            $this->convertTaiwanDate($endStr),
+        ];
+    }
+
+    protected function convertTaiwanDatetime($taiwanDatetime) {
+        // 轉西元年
+        $parts = explode(' ', $taiwanDatetime);
+        [$y, $m, $d] = explode('/', $parts[0]);
+        $hour = $parts[1] ?? '00:00:00';
+        return (intval($y) + 1911) . "-$m-$d $hour";
+    }
+
+    protected function convertTaiwanDate($taiwanDate) {
+        [$y, $m, $d] = explode('/', $taiwanDate);
+        return (intval($y) + 1911) . "-$m-$d";
+    }
+
+    protected function toGoogleCalendarDateTime($dateString)
+    {
+        $dt = Carbon::createFromFormat('Y-m-d', $dateString, 'Asia/Taipei');
+        return $dt->copy()->setTimezone('UTC')->format('Ymd\THis\Z');
     }
 }
