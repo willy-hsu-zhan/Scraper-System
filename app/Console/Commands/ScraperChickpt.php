@@ -65,9 +65,11 @@ class ScraperChickpt extends Command {
 
         $areas = [
             '不限地區' => 'https://www.chickpt.com.tw/cases?is_address_no_limit=1',
-            '台北'     => 'https://www.chickpt.com.tw/cases?area=Taipei',
-            '新北'     => 'https://www.chickpt.com.tw/cases?area=NewTaipei',
-            '基隆'     => 'https://www.chickpt.com.tw/cases?area=Keelung',
+            //'台北'     => 'https://www.chickpt.com.tw/cases?area=Taipei',
+            //'新北'     => 'https://www.chickpt.com.tw/cases?area=NewTaipei',
+            //'基隆'     => 'https://www.chickpt.com.tw/cases?area=Keelung',
+            '台南'     => 'https://www.chickpt.com.tw/cases?area=Tainan',
+            '高雄'     => 'https://www.chickpt.com.tw/cases?area=Kaohsiung',
         ];
 
         foreach ($areas as $areaName => $url)
