@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use Facebook\WebDriver\Remote\RemoteWebDriver;
-use Facebook\WebDriver\Chrome\ChromeOptions;
+use Facebook\WebDriver\Firefox\FirefoxOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 
 class SeleniumService
@@ -20,31 +20,32 @@ class SeleniumService
     {
         $serverUrl = 'http://127.0.0.1:4444'; // Selenium 伺服器的地址
 
-        $options = new ChromeOptions();
+        // 設定 Firefox 參數 先寫死默認都用firefox
+        $options = new FirefoxOptions();
         $options->addArguments([
-            '--headless',          // 無視窗模式
-            '--disable-gpu',       // 停止 GPU 加速
-            '--no-sandbox',        // Linux 環境必要
-            '--disable-dev-shm-usage', // Docker 或低記憶體環境
+            '--headless',  // 無視窗模式
+            '--disable-gpu',  // 停止 GPU 加速
         ]);
 
-        // Proxy 設定 (Chrome)
-        if ($useProxy && !empty($proxyIpPort) && str_contains($proxyIpPort, ':')) {
-            [$ip, $port] = explode(':', $proxyIpPort, 2);
-            $options->addArguments([
-                "--proxy-server=http://$ip:$port"
-            ]);
+        // 若要使用 proxy，解析 IP 與 Port 並加入 Firefox profile 設定
+        if ($useProxy && !empty($proxyIpPort)) {
+            [$ip, $port] = explode(':', $proxyIpPort);
+
+            // 設定 HTTP 和 HTTPS 代理
+            $options->setPreference('network.proxy.type', 1);
+            $options->setPreference('network.proxy.http', $ip);
+            $options->setPreference('network.proxy.http_port', (int)$port);
+            $options->setPreference('network.proxy.ssl', $ip);
+            $options->setPreference('network.proxy.ssl_port', (int)$port);
+        }  else {
+            // 明確關閉代理
+            $options->setPreference('network.proxy.type', 0);
         }
 
-        // 配置 capabilities
-        $capabilities = DesiredCapabilities::chrome();
-        $capabilities->setCapability(ChromeOptions::CAPABILITY, $options);
+        $capabilities = DesiredCapabilities::firefox();
+        $capabilities->setCapability(FirefoxOptions::CAPABILITY, $options);
 
-        try {
-            $webDriver = RemoteWebDriver::create($serverUrl, $capabilities);
-        } catch (\Exception $e) {
-            throw new \RuntimeException("無法連接 Selenium Server: " . $e->getMessage());
-        }
+        $webDriver = RemoteWebDriver::create($serverUrl, $capabilities);
 
         return $webDriver;
     }
