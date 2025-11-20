@@ -16,36 +16,42 @@ class SeleniumService
 
     }
 
-    public function openWebDriver(bool $useProxy = false, string $proxyIpPort = '')
+    public function openWebDriver(bool $useProxy = false, string $proxyIpPort = '', bool $headless = true)
     {
-        $serverUrl = 'http://127.0.0.1:4444'; // Selenium 伺服器的地址
+        $serverUrl = 'http://127.0.0.1:4444'; // Selenium 伺服器地址
 
-        // 設定 Firefox 參數 先寫死默認都用firefox
         $options = new FirefoxOptions();
-        $options->addArguments([
-            '--headless',  // 無視窗模式
-            '--disable-gpu',  // 停止 GPU 加速
-        ]);
 
-        // 若要使用 proxy，解析 IP 與 Port 並加入 Firefox profile 設定
+        if ($headless) {
+            $options->addArguments([
+                '--headless',
+                '--disable-gpu',
+            ]);
+        }
+
         if ($useProxy && !empty($proxyIpPort)) {
             [$ip, $port] = explode(':', $proxyIpPort);
 
-            // 設定 HTTP 和 HTTPS 代理
             $options->setPreference('network.proxy.type', 1);
             $options->setPreference('network.proxy.http', $ip);
             $options->setPreference('network.proxy.http_port', (int)$port);
             $options->setPreference('network.proxy.ssl', $ip);
             $options->setPreference('network.proxy.ssl_port', (int)$port);
-        }  else {
-            // 明確關閉代理
-            $options->setPreference('network.proxy.type', 0);
+            $options->setPreference('network.proxy.no_proxies_on', ''); // 所有網站都走 proxy
+        } else {
+            $options->setPreference('network.proxy.type', 0); // 不使用 proxy
         }
 
         $capabilities = DesiredCapabilities::firefox();
         $capabilities->setCapability(FirefoxOptions::CAPABILITY, $options);
 
-        $webDriver = RemoteWebDriver::create($serverUrl, $capabilities);
+        // 增加連線與命令 timeout 避免 proxy 慢導致錯誤
+        $webDriver = RemoteWebDriver::create(
+            $serverUrl,
+            $capabilities,
+            300000, // 連線 timeout 5 分鐘
+            300000  // 命令 timeout 5 分鐘
+        );
 
         return $webDriver;
     }
