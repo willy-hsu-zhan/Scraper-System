@@ -61,7 +61,7 @@ class ScraperChickpt extends Command {
         //$webDriver = $this->seleniumService->openWebDriver();
         // 開啟瀏覽器
         // 203.74.125.18:8888
-        $proxy_ip = '59.124.62.9:3128';
+        $proxy_ip = '44.199.110.54:3128';
         $webDriver = $this->seleniumService->openWebDriver(true, $proxy_ip);
 
         // 初始資料
