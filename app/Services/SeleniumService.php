@@ -19,8 +19,8 @@ class SeleniumService
     public function openWebDriver(bool $useProxy = false, string $proxyIpPort = '', bool $headless = true)
     {
         // 你自己啟動的 ChromeDriver 位置
-        // 建議用: chromedriver --port=9515
-        $serverUrl = 'http://127.0.0.1:9515';
+        // 建議用: chromedriver --port=4444
+        $serverUrl = 'http://127.0.0.1:4444';
 
         $options = new ChromeOptions();
 
