@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use Facebook\WebDriver\Remote\RemoteWebDriver;
-use Facebook\WebDriver\Firefox\FirefoxOptions;
+use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 
 class SeleniumService
@@ -18,41 +18,43 @@ class SeleniumService
 
     public function openWebDriver(bool $useProxy = false, string $proxyIpPort = '', bool $headless = true)
     {
-        $serverUrl = 'http://127.0.0.1:4444'; // Selenium 伺服器地址
+        // 你自己啟動的 ChromeDriver 位置
+        // 建議用: chromedriver --port=9515
+        $serverUrl = 'http://127.0.0.1:9515';
 
-        $options = new FirefoxOptions();
+        $options = new ChromeOptions();
 
+        // Headless 模式
         if ($headless) {
             $options->addArguments([
-                '--headless',
+                '--headless=new',
+                '--no-sandbox',
                 '--disable-gpu',
+                '--disable-dev-shm-usage',
+                '--disable-software-rasterizer',
+                '--disable-extensions',
+                '--disable-infobars',
+                '--window-size=1920,1080',
             ]);
         }
 
+        // Proxy 設定
         if ($useProxy && !empty($proxyIpPort)) {
-            [$ip, $port] = explode(':', $proxyIpPort);
-
-            $options->setPreference('network.proxy.type', 1);
-            $options->setPreference('network.proxy.http', $ip);
-            $options->setPreference('network.proxy.http_port', (int)$port);
-            $options->setPreference('network.proxy.ssl', $ip);
-            $options->setPreference('network.proxy.ssl_port', (int)$port);
-            $options->setPreference('network.proxy.no_proxies_on', ''); // 所有網站都走 proxy
-        } else {
-            $options->setPreference('network.proxy.type', 0); // 不使用 proxy
+            $options->addArguments([
+                "--proxy-server=http://{$proxyIpPort}",
+            ]);
         }
 
-        $capabilities = DesiredCapabilities::firefox();
-        $capabilities->setCapability(FirefoxOptions::CAPABILITY, $options);
+        // 設定能力
+        $capabilities = DesiredCapabilities::chrome();
+        $capabilities->setCapability(ChromeOptions::CAPABILITY, $options);
 
-        // 增加連線與命令 timeout 避免 proxy 慢導致錯誤
-        $webDriver = RemoteWebDriver::create(
+        // 建立 WebDriver（timeout 設長一點）
+        return RemoteWebDriver::create(
             $serverUrl,
             $capabilities,
-            300000, // 連線 timeout 5 分鐘
-            300000  // 命令 timeout 5 分鐘
+            300000,
+            300000
         );
-
-        return $webDriver;
     }
 }
