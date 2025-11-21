@@ -134,16 +134,18 @@ class NotifyOpenGovCourses extends Command
     /**
      * 產生 Google 日曆事件新增連結
      */
-    protected function generateGoogleCalendarLink(array $course): string
+    protected function generateGoogleCalendarLink(GovOjt $course): string
     {
-        $title = urlencode($course['courseName']);
-        $details = urlencode("報名網址：" . $course['trainingUnitUrl']);
-        $location = urlencode($course['trainingLocation']);
+        $title = urlencode($course->course_name);
+        $details = urlencode("報名網址：" . $course->training_unit_url);
+        $location = urlencode($course->training_location ?? '');
 
-        // 將報名開始與結束時間轉成 Google Calendar 格式
-        [$start, $end] = $this->convertTaiwanDatetimeRange($course['registrationDate']);
-        $startUTC = $this->toGoogleCalendarDateTime($start);
-        $endUTC = $this->toGoogleCalendarDateTime($end);
+        // 報名開始時間（台灣）
+        $start = Carbon::parse($course->registration_start_at, 'Asia/Taipei');
+        $end = $start->copy()->addHour(); // 事件給 1 小時
+
+        $startUTC = $start->copy()->setTimezone('UTC')->format('Ymd\THis\Z');
+        $endUTC = $end->copy()->setTimezone('UTC')->format('Ymd\THis\Z');
 
         $dates = "{$startUTC}/{$endUTC}";
 

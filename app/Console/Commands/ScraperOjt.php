@@ -68,8 +68,8 @@ class ScraperOjt extends Command
         try {
             foreach ($regions as $regionName => $cssSelector) {
                 // 開啟瀏覽器
-                // 203.74.125.18:8888
-                $proxy_ip = '59.124.62.9:3128';
+                // 44.199.110.54:3128
+                $proxy_ip = '44.199.110.54:3128';
                 $driver = $this->seleniumService->openWebDriver(true, $proxy_ip);
                 // $driver->manage()->deleteAllCookies();
 
