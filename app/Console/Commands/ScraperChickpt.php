@@ -58,11 +58,11 @@ class ScraperChickpt extends Command {
         $baseUrl = 'https://www.chickpt.com.tw';
 
         // 連接到 Selenium WebDriver
-        $webDriver = $this->seleniumService->openWebDriver();
+        //$webDriver = $this->seleniumService->openWebDriver();
         // 開啟瀏覽器
         // 203.74.125.18:8888
-        //$proxy_ip = '44.199.110.54:3128';
-        //$webDriver = $this->seleniumService->openWebDriver(true, $proxy_ip);
+        $proxy_ip = '44.199.110.54:3128';
+        $webDriver = $this->seleniumService->openWebDriver(true, $proxy_ip);
 
         // 初始資料
         $jobs = [];
