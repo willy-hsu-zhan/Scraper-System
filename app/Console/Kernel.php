@@ -12,6 +12,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
+        $schedule->command('app:scraper-delivery-coupon')
+            ->weeklyOn(1, '09:30') // 每週一 09:30
+            ->timezone('Asia/Taipei');
+
         $schedule->command('app:scraper-chickpt')
             ->cron('15,45 * * * *')
             ->timezone('Asia/Taipei')
