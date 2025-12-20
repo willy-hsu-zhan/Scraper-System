@@ -409,29 +409,6 @@ class ScraperChickpt extends Command {
             }
         }
 
-        // 暫時先隱藏line notify
-        // if (!empty($sendNotifyText))
-        // {
-        //     $this->info('send line notify start');
-
-        //     $response = $this->lineNotify->sendMessage($sendNotifyText);
-
-        //     $data = json_decode($response);
-
-        //     if ($data->status != '200' && $data->message != 'ok')
-        //     {
-        //         Log::error('send notify error! ' . $data->message);
-        //     }
-        //     else
-        //     {
-        //         $this->info('send notify success');
-        //     }
-        // }
-        // else
-        // {
-        //     $this->info('no recent job period!');
-        // }
-
         if( !empty($this->jobTexts) )
         {
             foreach( $this->jobTexts as $index => $jobText )
@@ -440,13 +417,6 @@ class ScraperChickpt extends Command {
                 $this->telegramService->sendMessage($this->chatId, $message);
                 sleep(3);
             }
-            /* 隱藏多餘資訊
-            // 送發財圖
-            $this->sendFachaiGIF();
-            // 辨別已看過的訊息分隔用
-            $infoText = '最後更新時間：' . Carbon::now()->setTimezone('Asia/Taipei')->format('Y-m-d H:i:s');
-            $this->telegramService->sendMessage($this->chatId, $infoText);
-            */
         }
     }
 }
