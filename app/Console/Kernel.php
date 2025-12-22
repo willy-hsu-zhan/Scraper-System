@@ -16,6 +16,10 @@ class Kernel extends ConsoleKernel
             ->weeklyOn(1, '09:30') // 每週一 09:30
             ->timezone('Asia/Taipei');
 
+        $schedule->command('app:scraper-birthday-discount')
+            ->weeklyOn(2, '09:00') // 每週二 09:30
+            ->timezone('Asia/Taipei');
+
         $schedule->command('app:scraper-chickpt')
             ->cron('15,45 * * * *')
             ->timezone('Asia/Taipei')
