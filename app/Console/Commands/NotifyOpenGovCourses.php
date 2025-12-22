@@ -85,7 +85,7 @@ class NotifyOpenGovCourses extends Command
                     "🔗 *報名網址：* {$course->training_unit_url}\n".
                     "📅 *加入 Google 日曆提醒：* {$calendarLink}";
 
-            sleep(2);
+            sleep(5);
 
             $this->telegramService->sendMessage($this->chatId, $message);
 
