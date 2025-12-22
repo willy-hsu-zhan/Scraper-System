@@ -6,18 +6,19 @@ use Illuminate\Console\Command;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\WebDriverExpectedCondition;
 use Facebook\WebDriver\WebDriverBy;
-use App\Services\LineNotify;
 use App\Services\TelegramService;
 use App\Services\SeleniumService;
 use Illuminate\Support\Facades\Log;
 use Facebook\WebDriver\Interactions\WebDriverActions;
 use Facebook\WebDriver\WebDriverKeys;
 use App\Models\GovOjt;
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 use Carbon\Carbon;
 
 class ScraperOjt extends Command
 {
-    protected $signature = 'app:scraper-ojt {regionCode?}';
+    protected $signature = 'app:scraper-ojt';
     protected $description = '抓取台灣就業通產業人才投資方案課程資訊，並發送 Telegram 通知';
 
     protected $lineNotify;
@@ -25,10 +26,9 @@ class ScraperOjt extends Command
     protected $seleniumService;
     protected $chatId = '-4968260856'; // Telegram 群組 ID
 
-    public function __construct(LineNotify $lineNotify, TelegramService $telegramService, SeleniumService $seleniumService)
+    public function __construct(TelegramService $telegramService, SeleniumService $seleniumService)
     {
         parent::__construct();
-        $this->lineNotify = $lineNotify;
         $this->telegramService = $telegramService;
         $this->seleniumService = $seleniumService;
     }
@@ -37,8 +37,6 @@ class ScraperOjt extends Command
     {
         $this->info("🚀 開始抓取台灣就業通課程資料...");
 
-        // 取得英文參數 regionCode
-        $regionCode = $this->argument('regionCode');
 
         // 定義英文縮寫對應的 CSS 選擇器
         $regions = [
@@ -47,30 +45,12 @@ class ScraperOjt extends Command
             'NWT' => '#Form_CTID_SHOW_3', // 新北市
         ];
 
-        // 如果有帶參數，判斷是否存在於支援列表
-        if ($regionCode) {
-            if (!array_key_exists($regionCode, $regions)) {
-                $this->error("Unsupported region code: {$regionCode}");
-                return 1; // 直接結束
-            }
-            // 只保留指定的區域
-            $regions = [
-                $regionCode => $regions[$regionCode],
-            ];
-        }
-        else {
-            $this->error("請帶入參數 (TPE KEE NWT) ");
-            return 1; // 直接結束
-        }
 
         $allData = [];
 
         try {
-            foreach ($regions as $regionName => $cssSelector) {
                 // 開啟瀏覽器
-                // 44.199.110.54:3128
-                $proxy_ip = '44.199.110.54:3128';
-                $driver = $this->seleniumService->openWebDriver(true, $proxy_ip);
+                $driver = $this->seleniumService->openWebDriver();
                 // $driver->manage()->deleteAllCookies();
 
                 $driver->get('https://ojt.wda.gov.tw/ClassSearch');
@@ -82,19 +62,21 @@ class ScraperOjt extends Command
                 $this->clickElement($driver, '#Form_PlanType_1');
                 sleep(5);
 
-                $this->info("👉 開始抓取地區：{$regionName}");
+                $this->info("👉 開始抓取地區：{'TPE','KEE','NWT'}");
 
-                // 等待並點選地區選項
-                $this->waitForElement($driver, $cssSelector, 10);
-                $this->clickElement($driver, $cssSelector);
+                // 等待並點選地區選項 // 台北 新北 基隆
+                $this->waitForElement($driver, '#Form_CTID_SHOW_1', 10);
+                $this->clickElement($driver, '#Form_CTID_SHOW_1');
+                $this->clickElement($driver, '#Form_CTID_SHOW_2');
+                $this->clickElement($driver, '#Form_CTID_SHOW_3');
                 sleep(5);
 
                 // 送出查詢
                 $this->clickElement($driver, 'button.btn-orange[title="送出"]');
 
                 // 等待結果表格及分頁選項出現
-                $this->waitForElement($driver, '#PagingInfo_PageSize', 10);
-
+                //$this->waitForElement($driver, '#PagingInfo_PageSize', 10);
+                $this->waitForElement($driver, 'table tbody tr', 25);
                 // 按 ESC 鍵關閉可能的彈窗
                 try {
                     $body = $driver->findElement(WebDriverBy::tagName('body'));
@@ -190,13 +172,12 @@ class ScraperOjt extends Command
 
                 $allData = array_merge($allData, $data);
 
-                $this->info("✅ 地區 {$regionName} 抓取完成，共 " . count($data) . " 筆資料");
+                $this->info("✅ 抓取完成，共 " . count($data) . " 筆資料");
 
                 // 關閉瀏覽器
                 $driver->quit();
                 // 等待避免對伺服器壓力太大
                 sleep(5);
-            }
 
             // 發送 Telegram
             foreach ($allData as $course) {
@@ -244,12 +225,9 @@ class ScraperOjt extends Command
                         . "【報名繳費方式】" . $course['paymentMethod'] . "\n"
                         . "【加入Google日曆提醒】 " . $this->generateGoogleCalendarLink($course);
 
-                $this->telegramService->sendMessage($this->chatId, $message);
+                //$this->telegramService->sendMessage($this->chatId, $message);
                 sleep(2);
             }
-
-
-            $this->info("✅ 所有課程已發送至 Telegram 群組");
 
         } catch (\Exception $e) {
             $this->error("❌ 發生錯誤：" . $e->getMessage());
@@ -266,6 +244,32 @@ class ScraperOjt extends Command
             }
             sleep(5);
         }
+        // 同步localDB to prod
+        $this->runSyncShell();
+    }
+
+    protected function runSyncShell()
+    {
+        $scriptPath = '/var/www/Scraper-System/bin/sync_gov_ojts.sh';
+
+        $process = new Process(['/bin/bash', $scriptPath]);
+        $process->setTimeout(3600); // 最多跑 1 小時
+        $process->run();
+
+        if (! $process->isSuccessful()) {
+            Log::error('[ScraperOjt] Sync shell failed', [
+                'error' => $process->getErrorOutput(),
+            ]);
+
+            $this->error('❌ 同步 prod 失敗，請查看 log');
+            return;
+        }
+
+        Log::info('[ScraperOjt] Sync shell success', [
+            'output' => $process->getOutput(),
+        ]);
+
+        $this->info('✅ 已成功執行同步 shell');
     }
 
     protected function clickElement(RemoteWebDriver $driver, string $cssSelector)
@@ -324,7 +328,14 @@ class ScraperOjt extends Command
 
     protected function toGoogleCalendarDateTime($dateString)
     {
-        $dt = Carbon::createFromFormat('Y-m-d', $dateString, 'Asia/Taipei');
+        $dateString = trim($dateString);
+
+        $format = str_contains($dateString, ':')
+            ? 'Y-m-d H:i:s'
+            : 'Y-m-d';
+
+        $dt = Carbon::createFromFormat($format, $dateString, 'Asia/Taipei');
+
         return $dt->copy()->setTimezone('UTC')->format('Ymd\THis\Z');
     }
 
