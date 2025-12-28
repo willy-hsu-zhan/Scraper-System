@@ -25,11 +25,11 @@ class Kernel extends ConsoleKernel
         }
 
         $schedule->command('app:scraper-delivery-coupon')
-            ->weeklyOn(1, '09:30') // 每週一 09:30
+            ->daily()
             ->timezone('Asia/Taipei');
 
         $schedule->command('app:scraper-birthday-discount')
-            ->weeklyOn(2, '09:00') // 每週二 09:30
+            ->daily()
             ->timezone('Asia/Taipei');
 
         $schedule->command('app:scraper-chickpt')
