@@ -29,7 +29,7 @@ class Kernel extends ConsoleKernel
             ->timezone('Asia/Taipei');
 
         $schedule->command('app:scraper-birthday-discount')
-            ->daily()
+            ->twiceDaily(10, 22)
             ->timezone('Asia/Taipei');
 
         $schedule->command('app:scraper-chickpt')
