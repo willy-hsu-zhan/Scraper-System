@@ -170,27 +170,20 @@ class ScraperBirthdayDiscount extends Command {
             return;
         }
 
-        $chunks = $events->chunk(50);
-
-        foreach ($chunks as $chunkIndex => $chunk) {
+        foreach ($events as $index => $event) {
 
             $text  = "🎂 本月壽星優惠整理（" . Carbon::now()->format('Y/m') . "）\n";
-            $text .= "📦 第 " . ($chunkIndex + 1) . " 批，共 " . $chunk->count() . " 筆\n\n";
-
-            foreach ($chunk as $i => $event) {
-                $text .= '【' . ($chunkIndex * 50 + $i + 1) . "】\n";
-                $text .= '🎉 ' . $event->title . "\n";
-                $text .= '⏰ 截止：' . $event->expire_date . "\n";
-                $text .= '🔗 ' . $event->link . "\n\n";
-            }
+            $text .= "📦 第 " . ($index + 1) . " 筆\n\n";
+            $text .= '🎉 ' . $event->title . "\n";
+            $text .= '⏰ 截止：' . $event->expire_date . "\n";
+            $text .= '🔗 ' . $event->link . "\n";
 
             // 推播
             $this->telegramService->sendMessage($this->chatId, $text);
-            sleep(2);
+            sleep(7);
 
             // 推播成功後，立刻標記 is_push
-            BirthdayDiscount::whereIn('id', $chunk->pluck('id'))
-                ->update(['is_push' => true]);
+            $event->update(['is_push' => true]);
         }
     }
 }
