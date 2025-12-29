@@ -154,103 +154,63 @@ class ScraperDeliveryCoupon extends Command {
         }
 
         if (!empty($newCoupons)) {
-            $groupedCoupons = [];
-
-            foreach ($newCoupons as $coupon) {
-                $groupedCoupons[$coupon['platform']][] = $coupon;
-            }
 
             $skipPlatforms = [
                 '蝦皮美食外送',
                 'Deliveroo',
             ];
 
-            foreach ($groupedCoupons as $platform => $couponsByPlatform) {
+            foreach ($newCoupons as $index => $coupon) {
+
+                $platform = $coupon['platform'];
+
                 // 停止營運的平台
                 if (in_array($platform, $skipPlatforms, true)) {
                     $this->info("Skip platform push: {$platform}");
                     continue;
                 }
-                // 每10筆切一包
-                $chunks = $this->chunkCoupons($couponsByPlatform, 10);
 
-                foreach ($chunks as $chunkIndex => $couponChunk) {
+                $message = $this->formatPlatformCouponMessage(
+                    $platform,
+                    $coupon,
+                    $index + 1
+                );
 
-                    $message = $this->formatPlatformSummaryMessage(
-                        $platform,
-                        $couponChunk,
-                        $chunkIndex + 1,
-                        count($chunks)
-                    );
-
-                    $this->telegramService->sendMessage($this->chatId, $message);
-                    sleep(2);
-                }
+                $this->telegramService->sendMessage($this->chatId, $message);
+                sleep(7);
             }
 
-            $this->info('Telegram pushed. Platforms: ' . count($groupedCoupons));
+            $this->info('Telegram pushed. Coupons: ' . count($newCoupons));
 
         } else {
             $this->info('No new coupons, no push.');
         }
+
     }
 
-    private function formatPlatformSummaryMessage(
+    private function formatPlatformCouponMessage(
         string $platform,
-        array $coupons,
-        int $page = 1,
-        int $totalPages = 1
+        array $coupon,
+        int $index
     ): string
     {
-        switch ($platform) {
-            case 'UberEats':
-                $title = '🍔 Uber Eats｜首購優惠彙整';
-                break;
-            case 'foodpanda':
-                $title = '🐼 foodpanda｜首購優惠彙整';
-                break;
-            case 'foodomo':
-                $title = '🍱 foodomo｜首購優惠彙整';
-                break;
-            case '蝦皮美食外送':
-                $title = '🦐 蝦皮美食外送｜首購優惠彙整';
-                break;
-            case 'Deliveroo':
-                $title = '🚴 Deliveroo｜首購優惠彙整';
-                break;
-            default:
-                $title = '🍽 外送平台｜首購優惠彙整';
-        }
+        $text  = $this->getPlatformTitle($platform) . "\n";
+        $text .= "📦 第 {$index} 筆\n\n";
 
-        $title = match ($platform) {
-            'UberEats' => '🍔 Uber Eats｜優惠彙整',
-            'foodpanda' => '🐼 foodpanda｜優惠彙整',
-            'foodomo' => '🍱 foodomo｜優惠彙整',
-            default => '🍽 外送平台｜優惠彙整',
-        };
+        $text .= '📌 ' . $coupon['content'] . "\n";
 
-        if ($totalPages > 1) {
-            $title .= "（{$page}/{$totalPages}）";
-        }
-
-        $text = $title . "\n\n";
-
-        foreach ($coupons as $index => $coupon) {
-
-            $text .= '【' . ($index + 1) . "】\n";
-            $text .= '📌 ' . $coupon['content'] . "\n";
+        if (!empty($coupon['expire_date'])) {
             $text .= '⏰ 期限：' . $coupon['expire_date'] . "\n";
-
-            if (!empty($coupon['code'])) {
-                $text .= '🎟 優惠碼：' . $coupon['code'] . "\n";
-            }
-
-            // if (!empty($coupon['link'])) {
-            //     $text .= '🔗 ' . $coupon['link'] . "\n";
-            // }
-
-            $text .= "\n";
         }
+
+        if (!empty($coupon['code'])) {
+            $text .= '🎟 優惠碼：' . $coupon['code'] . "\n";
+        }
+
+        // 若未來要開 link 再打開即可
+        // if (!empty($coupon['link'])) {
+        //     $text .= '🔗 ' . $coupon['link'] . "\n";
+        // }
 
         return $text;
     }
@@ -276,9 +236,16 @@ class ScraperDeliveryCoupon extends Command {
         return $date->lt(Carbon::today());
     }
 
-    private function chunkCoupons(array $coupons, int $size = 10): array
+    private function getPlatformTitle(string $platform): string
     {
-        return array_chunk($coupons, $size);
+        return match ($platform) {
+            'UberEats' => '🍔 Uber Eats｜優惠',
+            'foodpanda' => '🐼 foodpanda｜優惠',
+            'foodomo' => '🍱 foodomo｜優惠',
+            '蝦皮美食外送' => '🦐 蝦皮美食外送｜優惠',
+            'Deliveroo' => '🚴 Deliveroo｜優惠',
+            default => '🍽 外送平台｜優惠',
+        };
     }
 
 }
