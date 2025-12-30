@@ -4,87 +4,97 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use App\Models\YoutubeVideo;
-use Illuminate\Support\Facades\Artisan;
+use App\Services\TelegramService;
+use Longman\TelegramBot\Entities\InlineKeyboard;
+use Longman\TelegramBot\Request;
 
-class SearchYoutubeMusic extends Command {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
+class SearchYoutubeMusic extends Command
+{
     protected $signature = 'app:search-youtube-music';
+    protected $description = 'Fetch popular YouTube music and push to Telegram with download buttons';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Command description';
+    protected TelegramService $telegramService;
+    protected string $chatId = '-4661576369';
 
-    /**
-     * Execute the console command.
-     */
+    public function __construct(TelegramService $telegramService)
+    {
+        parent::__construct();
+        $this->telegramService = $telegramService;
+    }
+
     public function handle()
     {
         $apiKey = env('YOUTUBE_API_KEY');
 
-        $url = 'https://www.googleapis.com/youtube/v3/videos';
-
-        // 發送 GET 請求
-        $response = Http::get($url, [
-            'part'            => 'snippet,contentDetails,statistics',
+        $response = Http::get('https://www.googleapis.com/youtube/v3/videos', [
+            'part'            => 'snippet',
             'chart'           => 'mostPopular',
             'regionCode'      => 'TW',
-            'videoCategoryId' => '10', // 音樂類別
-            'maxResults'      => 4, // 限制回傳只有4筆
+            'videoCategoryId' => '10',
+            'maxResults'      => 4,
             'key'             => $apiKey,
         ]);
 
-        if( $response->successful() )
-        {
-            $videos = $response->json()['items'];
+        if (!$response->successful()) {
+            Log::error('YouTube API failed', ['status' => $response->status()]);
+            return 1;
+        }
 
-            $recentDate = Carbon::now()->subWeeks(2)->toIso8601String(); // 最近兩週
+        $recentLimit = Carbon::now()->subWeeks(2);
 
-            foreach( $videos as $video )
-            {
-                $publishedAtIso = $video['snippet']['publishedAt']; // ISO 格式
-                $publishedAt    = Carbon::parse($publishedAtIso)->toDateTimeString(); // 轉為 MySQL 格式
+        foreach ($response->json('items') as $video) {
 
-                if( $publishedAt >= $recentDate )
-                {
-                    $videoExists = YoutubeVideo::where('video_id', $video['id'])->exists();
-
-                    if( !$videoExists )
-                    {
-                        YoutubeVideo::create([
-                            'video_id'     => $video['id'],
-                            'title'        => $video['snippet']['title'],
-                            'channel_name' => $video['snippet']['channelTitle'],
-                            'published_at' => $publishedAt, // 正確格式
-                        ]);
-                        $this->doDownloadProcess($video['id']); // 下載影片並上傳到telegram
-                        $this->info('影片已儲存: ' . $video['snippet']['title']);
-                    }
-                    else
-                    {
-                        $this->info('影片已存在: ' . $video['snippet']['title']);
-                    }
-                }
+            $publishedAt = Carbon::parse($video['snippet']['publishedAt']);
+            if ($publishedAt->lt($recentLimit)) {
+                continue;
             }
-        }
-        else
-        {
-            $this->error('Failed to fetch data. Error: ' . $response->status());
-        }
-    }
 
-    public function doDownloadProcess($videoId)
-    {
-        $baseUrl = 'https://www.youtube.com/watch?v=';
-        $url     = $baseUrl . $videoId;
-        Artisan::call('youtube:download', ['url' => $url]);
+            $videoId = $video['id'];
+
+            // 已推播過就跳過
+            if (YoutubeVideo::where('video_id', $videoId)->exists()) {
+                continue;
+            }
+
+            YoutubeVideo::create([
+                'video_id'     => $videoId,
+                'title'        => $video['snippet']['title'],
+                'channel_name' => $video['snippet']['channelTitle'],
+                'published_at' => $publishedAt->toDateTimeString(),
+            ]);
+
+            $text =
+                "🔥 熱門音樂\n\n" .
+                "🎵 {$video['snippet']['title']}\n" .
+                "📺 {$video['snippet']['channelTitle']}\n" .
+                "🔗 https://www.youtube.com/watch?v={$videoId}";
+
+            // 👇 關鍵：下載按鈕
+            $keyboard = new InlineKeyboard(
+                [
+                    [
+                        'text' => '🎵 下載音樂',
+                        'callback_data' => "yt|audio|{$videoId}",
+                    ],
+                    [
+                        'text' => '🎬 下載影片',
+                        'callback_data' => "yt|video|{$videoId}",
+                    ],
+                ]
+            );
+
+            Request::sendMessage([
+                'chat_id'      => $this->chatId,
+                'text'         => $text,
+                'reply_markup' => $keyboard,
+            ]);
+
+            sleep(3);
+        }
+
+        return 0;
     }
 }
