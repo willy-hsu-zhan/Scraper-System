@@ -10,6 +10,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use App\Models\TelegramBotLog;
+use Longman\TelegramBot\Entities\InlineKeyboard;
 
 class TelegramService
 {
@@ -206,53 +207,98 @@ class TelegramService
                 }
             }
         }
+
+        if (isset($update['callback_query'])) {
+            $callback = $update['callback_query'];
+            $data     = $callback['data'];   // yt|audio|VIDEO_ID
+            $chatId   = $callback['message']['chat']['id'];
+
+            Log::info('Callback received', compact('data'));
+
+            [$type, $mode, $videoId] = explode('|', $data);
+
+            if ($type === 'yt') {
+
+                $url = "https://www.youtube.com/watch?v={$videoId}";
+
+                if ($mode === 'audio') {
+                    $this->sendMessage($chatId, '🎵 開始下載音樂...');
+                    Artisan::call('youtube:download', [
+                        'url' => $url,
+                        '--audio-only' => true,
+                    ]);
+                }
+
+                if ($mode === 'video') {
+                    $this->sendMessage($chatId, '🎬 開始下載影片...');
+                    Artisan::call('youtube:download', [
+                        'url' => $url,
+                    ]);
+                }
+            }
+
+            // 一定要回覆 callback，不然 Telegram 會一直 loading
+            Request::answerCallbackQuery([
+                'callback_query_id' => $callback['id'],
+                'text' => '已收到指令，開始處理',
+                'show_alert' => false,
+            ]);
+
+            return;
+        }
+
     }
 
     public function searchSong($keyword)
     {
         $apiKey = env('YOUTUBE_API_KEY');
-        $searchQuery = $keyword; // 設定你的搜尋關鍵字
         $url = 'https://www.googleapis.com/youtube/v3/search';
 
-        // 發送 GET 請求，加入搜尋關鍵字參數
         $response = Http::get($url, [
             'part'            => 'snippet',
-            'q'               => $searchQuery,  // 搜尋關鍵字
-            'type'            => 'video',       // 只搜尋影片
-            'videoCategoryId' => '10',          // 音樂類別
-            'maxResults'      => 4,             // 限制回傳只有4筆
+            'q'               => $keyword,
+            'type'            => 'video',
+            'videoCategoryId' => '10',
+            'maxResults'      => 4,
             'key'             => $apiKey,
         ]);
 
-        if ($response->successful())
-        {
-            $videos = $response->json()['items'];
-            $chatId = '-4661576369'; // 指定聊天室 ID
-
-            $message = "🔍 搜尋關鍵字: {$keyword}\n\n";
-            foreach ($videos as $video) {
-                $videoId     = $video['id']['videoId'];
-                $title       = $video['snippet']['title'];
-                $channelName = $video['snippet']['channelTitle'];
-                $videoUrl    = "https://www.youtube.com/watch?v={$videoId}";
-
-                $message .= "🎵 *{$title}*  \n📺 頻道: {$channelName}\n🔗 [觀看影片]({$videoUrl})\n\n";
-            }
-
-            // 透過 sendMessage 方法發送訊息到聊天室
-            $this->sendMessage($chatId, $message);
-            $this->sendMessage($chatId, "請輸入 下載'URL' 來下載影片或音樂");
+        if (!$response->successful()) {
+            Log::error('YouTube API 請求失敗', ['status' => $response->status()]);
+            return;
         }
-        else
-        {
-            Log::error('YouTube API 請求失敗，錯誤碼: ' . $response->status());
+
+        $videos = $response->json()['items'];
+        $chatId = '-4661576369';
+
+        foreach ($videos as $video) {
+            $videoId = $video['id']['videoId'];
+            $title   = $video['snippet']['title'];
+            $channel = $video['snippet']['channelTitle'];
+
+            $text =
+                "🎵 {$title}\n" .
+                "📺 {$channel}\n" .
+                "🔗 https://www.youtube.com/watch?v={$videoId}";
+
+            $keyboard = new InlineKeyboard(
+                [
+                    [
+                        'text' => '🎵 下載音樂',
+                        'callback_data' => "yt|audio|{$videoId}",
+                    ],
+                    [
+                        'text' => '🎬 下載影片',
+                        'callback_data' => "yt|video|{$videoId}",
+                    ],
+                ]
+            );
+
+            Request::sendMessage([
+                'chat_id'      => $chatId,
+                'text'         => $text,
+                'reply_markup' => $keyboard,
+            ]);
         }
     }
-
-    // public function doDownloadProcess($videoId)
-    // {
-    //     $baseUrl = 'https://www.youtube.com/watch?v=';
-    //     $url     = $baseUrl . $videoId;
-    //     Artisan::call('youtube:download', ['url' => $url]);
-    // }
 }
