@@ -127,30 +127,34 @@ class TelegramService
                 $url = $matches[0] ?? null;
 
                 // 驗證網址是否為有效的 YouTube 網址
-                if (!empty($url) && filter_var($url, FILTER_VALIDATE_URL) &&
-                    preg_match('/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\//', $url))
-                {
-                    $chatId = '-4661576369';
-                    $message = '';
-
-                    if (strpos($originalText, '音樂') !== false)
-                    {
-                        $message = '開始下載音樂 ...';
+                // 驗證是否為有效 YouTube URL
+                $chatId = '-4661576369';
+                if (
+                    !empty($url) &&
+                    filter_var($url, FILTER_VALIDATE_URL) &&
+                    preg_match('/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\//', $url)
+                ) {
+                    if (strpos($originalText, '音樂') !== false) {
                         Log::info("開始下載音樂: $url");
-                        $this->sendMessage($chatId, $message);
-                        Artisan::call('youtube:download', ['url' => $url, '--format' => 'mp3']);
+                        $this->sendMessage($chatId, '開始下載音樂 ...');
+
+                        Artisan::call('youtube:download', [
+                            'url' => $url,
+                            '--audio-only' => true,
+                        ]);
                     }
-                    else if (strpos($originalText, '影片') !== false)
-                    {
-                        $message = '開始下載影片 ...';
+                    else if (strpos($originalText, '影片') !== false) {
                         Log::info("開始下載影片: $url");
-                        $this->sendMessage($chatId, $message);
-                        Artisan::call('youtube:download', ['url' => $url, '--format' => 'mp4']);
+                        $this->sendMessage($chatId, '開始下載影片 ...');
+
+                        Artisan::call('youtube:download', [
+                            'url' => $url,
+                        ]);
                     }
                 }
-                else
-                {
+                else {
                     Log::warning("無效的 YouTube 影片網址: $url");
+                    $this->sendMessage($chatId, '請提供有效的 YouTube 影片網址');
                 }
             }
 
