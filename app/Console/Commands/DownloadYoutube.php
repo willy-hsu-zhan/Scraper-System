@@ -23,6 +23,7 @@ class DownloadYoutube extends Command
     {
         parent::__construct();
         $this->basePath = storage_path('app/youtube');
+        $this->telegramService = $telegramService;
     }
 
     public function handle()
