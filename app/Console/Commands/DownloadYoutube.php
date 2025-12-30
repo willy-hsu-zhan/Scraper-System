@@ -3,269 +3,136 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\File;
 use App\Services\TelegramService;
 use Illuminate\Support\Facades\Log;
 
 class DownloadYoutube extends Command
 {
-    protected $signature = 'youtube:download {url?} {--format=mp4} {--resolution=720} {--audio-only}';
-    protected $description = 'Download YouTube videos or get video info';
+    protected $signature = 'youtube:download
+        {url : YouTube video URL}
+        {--audio-only : Download audio only (mp3)}';
 
-    protected $fileName;
+    protected $description = 'Download YouTube video using static yt-dlp + ffmpeg';
+
+    protected string $basePath;
     protected $telegramService;
-    protected $chatId = '-4661576369'; // 暫時先用全域變數 // 日後聊天室擴充再更改 音樂群
-    protected $baseFilePath;
+    protected string $chatId = '-4661576369';
 
     public function __construct(TelegramService $telegramService)
     {
         parent::__construct();
-        $this->telegramService = $telegramService;
-        $this->baseFilePath = storage_path('app/youtube/');
+        $this->basePath = storage_path('app/youtube');
     }
 
     public function handle()
     {
-        // 先清所有檔案
-        $this->deleteAllTempFiles();
-
         $url = $this->argument('url');
-        $format = $this->option('format');
-        $resolution = $this->option('resolution');
         $audioOnly = $this->option('audio-only');
 
-        $this->info("Processing URL: $url");
-        Log::info("Processing URL: $url");
-
-        // 解析 YouTube URL
-        $videoId = $this->getVideoId($url);
-        if (!$videoId)
-        {
-            $this->error('Invalid YouTube URL.');
+        if (!$this->isValidYoutubeUrl($url)) {
+            $this->error('Invalid YouTube URL');
             return 1;
         }
 
-        $this->info("Extracted Video ID: $videoId");
+        File::ensureDirectoryExists($this->basePath);
 
-        // 處理下載或資訊
-        if ($format === 'mp3')
-        {
-            $this->downloadAudio($videoId);
+        return $audioOnly
+            ? $this->downloadAudio($url)
+            : $this->downloadVideo($url);
+    }
+
+
+    private function downloadVideo(string $url): int
+    {
+        $command = sprintf(
+            '%s --cookies %s --sleep-requests 3 --min-sleep-interval 2 --max-sleep-interval 6 --concurrent-fragments 1 -f "bv*+ba/b" --merge-output-format mp4 -o %s %s',
+            escapeshellcmd($this->ytDlpPath()),
+            escapeshellarg($this->cookiesPath()),
+            escapeshellarg($this->outputTemplate()),
+            escapeshellarg($url)
+        );
+
+        return $this->runAndSend($command, 'mp4');
+    }
+
+    private function downloadAudio(string $url): int
+    {
+        $command = sprintf(
+            '%s --cookies %s -x --audio-format mp3 -o %s %s',
+            escapeshellcmd($this->ytDlpPath()),
+            escapeshellarg($this->cookiesPath()),
+            escapeshellarg($this->outputTemplate()),
+            escapeshellarg($url)
+        );
+
+        return $this->runAndSend($command, 'mp3');
+    }
+
+    /* -------------------------------------------------
+     | Execute + Telegram
+     |--------------------------------------------------*/
+
+    private function runAndSend(string $command, string $ext): int
+    {
+        exec($command, $output, $code);
+
+        if ($code !== 0) {
+            Log::error('yt-dlp failed', compact('command', 'output'));
+            return 1;
         }
-        else
-        {
-            $this->downloadVideo($videoId, $format, $resolution, $audioOnly); // 下載視頻
+
+        $file = $this->latestFile($ext);
+        if (!$file) {
+            Log::error('Downloaded file not found');
+            return 1;
         }
+
+        $filename = $file->getFilename();
+        $filepath = $file->getPathname();
+
+        $this->telegramService->sendMessage(
+            $this->chatId,
+            '下載完成：' . pathinfo($filename, PATHINFO_FILENAME)
+        );
+
+        $this->telegramService->sendDocument(
+            $this->chatId,
+            $filepath,
+            $filename
+        );
+
+        // 刪除單一檔案（安全）
+        File::delete($filepath);
 
         return 0;
     }
 
-    private function getVideoId($url)
+    private function latestFile(string $ext)
     {
-        $patterns = [
-            '/youtu\.be\/([0-9A-Za-z-_]{10,})/',
-            '/[?&]v=([0-9A-Za-z-_]{10,})/',
-            '/\/(v|embed|shorts|live)\/([0-9A-Za-z-_]{10,})/',
-        ];
-
-        foreach ($patterns as $pattern)
-        {
-            if (preg_match($pattern, $url, $matches))
-            {
-                return $matches[count($matches) - 1];
-            }
-        }
-
-        return null;
+        return collect(File::files($this->basePath))
+            ->filter(fn($f) => $f->getExtension() === $ext)
+            ->sortByDesc(fn($f) => $f->getMTime())
+            ->first();
     }
 
-    private function getYtDlpPath() // 本地預設抓homestead路徑 正式環境另抓位置
+    private function outputTemplate(): string
     {
-        return app('env') == 'local' ? '/home/vagrant/.local/bin/yt-dlp' : '/usr/local/bin/yt-dlp';
+        return $this->basePath . '/%(title)s.%(ext)s';
     }
 
-    private function getOutputPath($format = 'mp4')
+    private function ytDlpPath(): string
     {
-        // 如果格式是 mp3，則將檔案擴展名改為 mp3
-        if ($format == 'mp3')
-        {
-            return $this->baseFilePath . '%(title)s.%(ext)s'; // 音訊格式不需要解析解析度，直接使用檔案名稱
-        }
-
-        // 預設影片格式，會加上 720p
-        return $this->baseFilePath . '%(title)s-720p.%(ext)s';
+        return '/usr/local/bin/yt-dlp';
     }
 
-    private function deleteAllTempFiles()
+    private function cookiesPath(): string
     {
-        $directory = $this->baseFilePath;
-
-        // 先檢查目錄是否存在，存在的話刪除
-        if (File::exists($directory))
-        {
-            File::deleteDirectory($directory); // 刪除整個資料夾
-        }
-
-        // 重新建立空資料夾，如果資料夾不存在的話
-        if (!File::exists($directory))
-        {
-            File::makeDirectory($directory, 0755, true); // 重新建立目錄，確保目錄結構
-        }
-
-        sleep(2); // 刪除檔案預留2秒處理
+        return $this->basePath . '/cookies.txt';
     }
 
-
-    private function deleteTempFiles()
+    private function isValidYoutubeUrl(string $url): bool
     {
-        // 確認檔案是否存在，並刪除指定的檔案
-        $filePath = $this->baseFilePath . $this->fileName;
-
-        if (File::exists($filePath)) {
-            File::delete($filePath); // 刪除單一檔案
-        }
-
-        sleep(2); // 刪除檔案預留10秒處理
-    }
-
-    private function downloadVideo($videoId, $format, $resolution, $audioOnly)
-    {
-        $ytDlpPath = $this->getYtDlpPath();
-        $url = 'https://www.youtube.com/watch?v=' . $videoId;
-        $outputPath = $this->getOutputPath();
-        $format = 'bestvideo[height<=720][ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]';  // 強制選擇 mp4 格式
-
-        // 使用 escapeshellarg 處理特殊符號
-        $command = sprintf(
-            '%s -f %s -o %s %s',
-            escapeshellarg($ytDlpPath),
-            escapeshellarg($format),
-            escapeshellarg($outputPath),
-            escapeshellarg($url)
-        );
-
-        // 執行下載命令
-        exec($command, $output, $returnVar);
-
-        // 檢查下載結果
-        if ($returnVar === 0)
-        {
-            // 等待檔案處理完成並設定檔案名稱
-            $timeout = 60; // 設定最大等待時間
-            $startTime = time();
-
-            while (time() - $startTime < $timeout) {
-                // 取得資料夾中的所有檔案
-                $files = File::files($this->baseFilePath);
-                if (count($files) === 1) {
-                    $this->fileName = basename($files[0]); // 取得唯一檔案名稱
-                    break;
-                }
-                sleep(2); // 每2秒檢查一次
-            }
-
-            // 檢查檔案名稱是否有效
-            if (!$this->fileName) {
-                Log::info('File name is null or empty!');
-                return 1;
-            }
-
-            Log::info("Download successful! Video saved to: " . $this->baseFilePath . $this->fileName);
-        }
-        else
-        {
-            Log::info("Download failed. Error:\n" . implode("\n", $output));
-            return 1;
-        }
-
-        // 檢查 $this->fileName 是否有效
-        if (!$this->fileName) {
-            $this->error('File name is null or empty!');
-            return 1;
-        }
-
-        // send msg file name
-        $cleanFileName = preg_replace('/720p\.mp4$/', '', $this->fileName); // 移除結尾的 "720p.mp4"
-        $text = '影片名稱：' . $cleanFileName;
-        $this->telegramService->sendMessage($this->chatId, $text);
-
-        // upload to telegram bot
-        $filePath = $this->baseFilePath . $this->fileName;
-        $this->telegramService->sendDocument($this->chatId, $filePath, $this->fileName);
-
-        sleep(60); // 等待1分鐘繼續上傳
-
-        // delete all temp files
-        $this->deleteTempFiles();
-    }
-
-    private function downloadAudio($videoId)
-    {
-        $ytDlpPath = $this->getYtDlpPath();
-        $url = 'https://www.youtube.com/watch?v=' . $videoId;
-        $outputPath = $this->getOutputPath('mp3'); // 下載 MP3 格式
-
-        // 使用 escapeshellarg 處理特殊符號
-        $command = sprintf(
-            '%s -f bestaudio[ext=m4a] -o %s %s',
-            escapeshellarg($ytDlpPath),
-            escapeshellarg($outputPath),
-            escapeshellarg($url)
-        );
-
-        // 執行下載命令
-        exec($command, $output, $returnVar);
-
-        // 檢查下載結果
-        if ($returnVar === 0)
-        {
-            // 等待檔案處理完成並設定檔案名稱
-            $timeout = 60; // 設定最大等待時間
-            $startTime = time();
-
-            while (time() - $startTime < $timeout) {
-                // 取得資料夾中的所有檔案
-                $files = File::files($this->baseFilePath);
-                if (count($files) === 1) {
-                    $this->fileName = basename($files[0]); // 取得唯一檔案名稱
-                    break;
-                }
-                sleep(2); // 每2秒檢查一次
-            }
-
-            // 檢查檔案名稱是否有效
-            if (!$this->fileName) {
-                Log::info('File name is null or empty!');
-                return 1;
-            }
-
-            Log::info("Download successful! Audio saved to: " . $this->baseFilePath . $this->fileName);
-        }
-        else
-        {
-            Log::info("Download failed. Error:\n" . implode("\n", $output));
-            return 1;
-        }
-
-        // 檢查 $this->fileName 是否有效
-        if (!$this->fileName) {
-            $this->error('File name is null or empty!');
-            return 1;
-        }
-
-        // send msg file name
-        $cleanFileName = preg_replace('/mp3$/', '', $this->fileName); // 移除結尾的 "mp3"
-        $text = '歌曲名稱：' . $cleanFileName;
-        $this->telegramService->sendMessage($this->chatId, $text);
-
-        // upload to telegram bot
-        $filePath = $this->baseFilePath . $this->fileName;
-        $this->telegramService->sendDocument($this->chatId, $filePath, $this->fileName);
-
-        sleep(60); // 等待1分鐘繼續上傳
-
-        // delete all temp files
-        $this->deleteTempFiles();
+        return preg_match('/(youtube\.com|youtu\.be)/', $url) === 1;
     }
 }
