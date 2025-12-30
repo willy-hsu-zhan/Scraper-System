@@ -16,13 +16,19 @@ class Kernel extends ConsoleKernel
             $schedule->command('app:scraper-ojt')
                 ->hourly()
                 ->timezone('Asia/Taipei'); // 每天 00:00、12:00
-
-            $schedule->command('app:search-youtube-music')->dailyAt('13:00')->timezone('Asia/Taipei'); // 每天6.05抓最新熱門歌單
         }
 
         if (!app()->environment('production')) {
             return;
         }
+
+        $schedule->command('app:search-youtube-music')
+            ->dailyAt('12:15')
+            ->withoutOverlapping()
+            ->onOneServer()
+            ->runInBackground()
+            ->appendOutputTo(storage_path('logs/search-youtube-music.log'))
+            ->timezone('Asia/Taipei');
 
         $schedule->command('app:scraper-delivery-coupon')
             ->daily()
@@ -39,9 +45,9 @@ class Kernel extends ConsoleKernel
                 $hour = now('Asia/Taipei')->hour;
                 return !($hour >= 1 && $hour < 7);
             });
-        //$schedule->command('app:scraper-ptt')->cron('15,45 * * * *'); // 改為每小時的15,45分執行使任務不衝突
-        $schedule->command('app:scraper-rent591')->everySixHours()->timezone('Asia/Taipei'); // 每6小時執行一次
-        $schedule->command('app:notify-open-govojt')->hourly()->timezone('Asia/Taipei'); // 通知三天前、一天前、一小時前的課程報名
+        //$schedule->command('app:scraper-ptt')->cron('15,45 * * * *');
+        $schedule->command('app:scraper-rent591')->everySixHours()->timezone('Asia/Taipei');
+        $schedule->command('app:notify-open-govojt')->hourly()->timezone('Asia/Taipei');
     }
 
     /**
