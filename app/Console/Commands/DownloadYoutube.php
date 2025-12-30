@@ -75,38 +75,74 @@ class DownloadYoutube extends Command
 
     private function runAndSend(string $command, string $ext): int
     {
-        exec($command, $output, $code);
+        try {
+            exec($command, $output, $code);
 
-        if ($code !== 0) {
-            Log::error('yt-dlp failed', compact('command', 'output'));
+            Log::info('yt-dlp executed', [
+                'command' => $command,
+                'exit_code' => $code,
+                'output' => $output,
+            ]);
+
+            if ($code !== 0) {
+                throw new \RuntimeException('yt-dlp exit code != 0');
+            }
+
+            $file = $this->latestFile($ext);
+            if (!$file) {
+                throw new \RuntimeException('Downloaded file not found');
+            }
+
+            $filename = $file->getFilename();
+            $filepath = $file->getPathname();
+
+            Log::info('File ready for telegram', [
+                'file' => $filename,
+                'size_mb' => round(filesize($filepath) / 1024 / 1024, 2),
+            ]);
+
+            // 嘗試傳送 Telegram
+            $this->telegramService->sendMessage(
+                $this->chatId,
+                '下載完成：' . pathinfo($filename, PATHINFO_FILENAME)
+            );
+
+            $this->telegramService->sendDocument(
+                $this->chatId,
+                $filepath,
+                $filename
+            );
+
+            Log::info('Telegram sendDocument called');
+
+            // 只在「確認沒丟例外」後才刪檔
+            File::delete($filepath);
+
+            return 0;
+
+        } catch (\Throwable $e) {
+
+            Log::error('DownloadYoutube failed', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            // 回報 Telegram（避免你以為沒發生）
+            try {
+                $this->telegramService->sendMessage(
+                    $this->chatId,
+                    "❌ 發生錯誤：\n" . $e->getMessage()
+                );
+            } catch (\Throwable $inner) {
+                Log::error('Telegram error notify failed', [
+                    'error' => $inner->getMessage(),
+                ]);
+            }
+
             return 1;
         }
-
-        $file = $this->latestFile($ext);
-        if (!$file) {
-            Log::error('Downloaded file not found');
-            return 1;
-        }
-
-        $filename = $file->getFilename();
-        $filepath = $file->getPathname();
-
-        $this->telegramService->sendMessage(
-            $this->chatId,
-            '下載完成：' . pathinfo($filename, PATHINFO_FILENAME)
-        );
-
-        $this->telegramService->sendDocument(
-            $this->chatId,
-            $filepath,
-            $filename
-        );
-
-        // 刪除單一檔案（安全）
-        File::delete($filepath);
-
-        return 0;
     }
+
 
     private function latestFile(string $ext)
     {
