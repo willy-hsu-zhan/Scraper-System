@@ -225,8 +225,8 @@ class ScraperOjt extends Command
                         . "【報名繳費方式】" . $course['paymentMethod'] . "\n"
                         . "【加入Google日曆提醒】 " . $this->generateGoogleCalendarLink($course);
 
-                //$this->telegramService->sendMessage($this->chatId, $message);
-                sleep(2);
+                $this->telegramService->sendMessage($this->chatId, $message);
+                sleep(7);
             }
 
         } catch (\Exception $e) {
