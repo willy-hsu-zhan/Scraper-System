@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use App\Services\TelegramService;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 
 class DownloadYoutube extends Command
 {
@@ -28,21 +29,35 @@ class DownloadYoutube extends Command
 
     public function handle()
     {
-        $url = $this->argument('url');
-        $audioOnly = $this->option('audio-only');
+        $lock = Cache::lock('youtube:downloading', 600); // 最多鎖 10 分鐘
 
-        if (!$this->isValidYoutubeUrl($url)) {
-            $this->error('Invalid YouTube URL');
-            return 1;
+        if (!$lock->get()) {
+            $this->telegramService->sendMessage(
+                $this->chatId,
+                '⏳ 目前已有下載任務進行中，請稍後再試'
+            );
+            return 0;
         }
 
-        File::ensureDirectoryExists($this->basePath);
+        try {
+            $url = $this->argument('url');
+            $audioOnly = $this->option('audio-only');
 
-        return $audioOnly
-            ? $this->downloadAudio($url)
-            : $this->downloadVideo($url);
+            if (!$this->isValidYoutubeUrl($url)) {
+                $this->error('Invalid YouTube URL');
+                return 1;
+            }
+
+            File::ensureDirectoryExists($this->basePath);
+
+            return $audioOnly
+                ? $this->downloadAudio($url)
+                : $this->downloadVideo($url);
+
+        } finally {
+            optional($lock)->release();
+        }
     }
-
 
     private function downloadVideo(string $url): int
     {
