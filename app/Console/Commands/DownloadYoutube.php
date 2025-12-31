@@ -29,7 +29,7 @@ class DownloadYoutube extends Command
 
     public function handle()
     {
-        $lock = Cache::lock('youtube:downloading', 600); // 最多鎖 10 分鐘
+        $lock = Cache::lock('youtube:downloading', 60); // 最多鎖 1 分鐘
 
         if (!$lock->get()) {
             $this->telegramService->sendMessage(
