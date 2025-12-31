@@ -108,15 +108,19 @@ class DownloadYoutube extends Command
             $filename = $file->getFilename();
             $filepath = $file->getPathname();
 
+            $sizeMB = round(filesize($filepath) / 1024 / 1024, 2);
+
             Log::info('File ready for telegram', [
                 'file' => $filename,
-                'size_mb' => round(filesize($filepath) / 1024 / 1024, 2),
+                'size_mb' => $sizeMB,
             ]);
 
             // 嘗試傳送 Telegram
             $this->telegramService->sendMessage(
                 $this->chatId,
-                '下載完成：' . pathinfo($filename, PATHINFO_FILENAME) . ' 準備上傳'
+                '下載完成：' . pathinfo($filename, PATHINFO_FILENAME) .
+                "\n檔案大小：{$sizeMB} MB" .
+                "\n準備上傳..."
             );
 
             try {
