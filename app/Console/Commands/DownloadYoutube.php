@@ -29,7 +29,7 @@ class DownloadYoutube extends Command
 
     public function handle()
     {
-        $lock = Cache::lock('youtube:downloading', 60); // 最多鎖 1 分鐘
+        $lock = Cache::lock('youtube:downloading', 120); // 最多鎖 2 分鐘
 
         if (!$lock->get()) {
             $this->telegramService->sendMessage(
@@ -290,8 +290,8 @@ class DownloadYoutube extends Command
             return false;
         }
 
-        // 尺寸 OK → 直接走原本上傳流程
-        return $this->runAndSend('true', 'mp4');
+        // 尺寸 OK → 直接上傳這個已下載好的檔案
+        return $this->uploadToTelegram($file->getPathname(), $file->getFilename(), $sizeMB) === 0;
     }
 
     private function clearDirectory(): void
@@ -303,6 +303,46 @@ class DownloadYoutube extends Command
 
         foreach (File::files($this->basePath) as $file) {
             File::delete($file->getPathname());
+        }
+    }
+
+    private function uploadToTelegram(string $filepath, string $filename, float $sizeMB): int
+    {
+        $this->telegramService->sendMessage(
+            $this->chatId,
+            '下載完成：' . pathinfo($filename, PATHINFO_FILENAME) .
+            "\n檔案大小：{$sizeMB} MB" .
+            "\n準備上傳..."
+        );
+
+        try {
+            $this->telegramService->sendDocument($this->chatId, $filepath, $filename);
+
+            $this->telegramService->sendMessage($this->chatId, "✅ 檔案上傳完成");
+
+            Log::info('Telegram sendDocument success', [
+                'file' => $filename,
+                'size_mb' => $sizeMB,
+            ]);
+
+            File::delete($filepath);
+            return 0;
+
+        } catch (\Throwable $e) {
+            Log::error('Telegram sendDocument failed', [
+                'file'  => $filename,
+                'error' => $e->getMessage(),
+            ]);
+
+            $this->telegramService->sendMessage(
+                $this->chatId,
+                "⚠️ 檔案已下載完成，但 Telegram 傳送失敗\n".
+                "原因：{$e->getMessage()}\n".
+                "檔名：{$filename}"
+            );
+
+            // 不刪檔
+            return 1;
         }
     }
 
