@@ -29,15 +29,15 @@ class DownloadYoutube extends Command
 
     public function handle()
     {
-        //$lock = Cache::lock('youtube:downloading', 600); // 最多鎖 10 分鐘
+        $lock = Cache::lock('youtube:downloading', 600); // 最多鎖 10 分鐘
 
-        // if (!$lock->get()) {
-        //     $this->telegramService->sendMessage(
-        //         $this->chatId,
-        //         '⏳ 目前已有下載任務進行中，請稍後再試'
-        //     );
-        //     return 0;
-        // }
+        if (!$lock->get()) {
+            $this->telegramService->sendMessage(
+                $this->chatId,
+                '⏳ 目前已有下載任務進行中，請稍後再試'
+            );
+            return 0;
+        }
 
         try {
             $url = $this->argument('url');
