@@ -209,14 +209,21 @@ class TelegramService
 
             Log::info('Callback received', compact('data'));
 
-            [$type, $mode, $videoId] = explode('|', $data);
+            [$type, $mode, $videoId, $encodedTitle] = array_pad(explode('|', $data), 4, null);
+
+            $title = $encodedTitle
+                ? base64_decode($encodedTitle)
+                : '未知標題';
 
             if ($type === 'yt') {
-
                 $url = "https://www.youtube.com/watch?v={$videoId}";
 
                 if ($mode === 'audio') {
-                    $this->sendMessage($chatId, '🎵 開始下載音樂...');
+                    $this->sendMessage(
+                        $chatId,
+                        "🎵 開始下載音樂：\n{$title}"
+                    );
+
                     Artisan::call('youtube:download', [
                         'url' => $url,
                         '--audio-only' => true,
@@ -224,7 +231,11 @@ class TelegramService
                 }
 
                 if ($mode === 'video') {
-                    $this->sendMessage($chatId, '🎬 開始下載影片...');
+                    $this->sendMessage(
+                        $chatId,
+                        "🎬 開始下載影片：\n{$title}"
+                    );
+
                     Artisan::call('youtube:download', [
                         'url' => $url,
                     ]);
@@ -269,7 +280,7 @@ class TelegramService
             $videoId = $video['id']['videoId'];
             $title   = $video['snippet']['title'];
             $channel = $video['snippet']['channelTitle'];
-
+            $encodedTitle = base64_encode(mb_substr($title, 0, 30)); // 防止過長
             $text =
                 "🎵 {$title}\n" .
                 "📺 {$channel}\n" .
@@ -279,11 +290,11 @@ class TelegramService
                 [
                     [
                         'text' => '🎵 下載音樂',
-                        'callback_data' => "yt|audio|{$videoId}",
+                        'callback_data' => "yt|audio|{$videoId}|{$encodedTitle}",
                     ],
                     [
                         'text' => '🎬 下載影片',
-                        'callback_data' => "yt|video|{$videoId}",
+                        'callback_data' => "yt|video|{$videoId}|{$encodedTitle}",
                     ],
                 ]
             );
