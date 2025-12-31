@@ -136,18 +136,12 @@ class TelegramService
                     preg_match('/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\//', $url)
                 ) {
                     if (strpos($originalText, '音樂') !== false) {
-                        Log::info("開始下載音樂: $url");
-                        $this->sendMessage($chatId, '開始下載音樂 ...');
-
                         Artisan::call('youtube:download', [
                             'url' => $url,
                             '--audio-only' => true,
                         ]);
                     }
                     else if (strpos($originalText, '影片') !== false) {
-                        Log::info("開始下載影片: $url");
-                        $this->sendMessage($chatId, '開始下載影片 ...');
-
                         Artisan::call('youtube:download', [
                             'url' => $url,
                         ]);
