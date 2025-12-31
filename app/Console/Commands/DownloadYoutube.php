@@ -96,7 +96,8 @@ class DownloadYoutube extends Command
     private function downloadAudio(string $url): int
     {
         $command = sprintf(
-            '%s --cookies %s -x --audio-format mp3 -o %s %s',
+            '%s --extractor-args "youtube:player_client=android" ' .
+            '--cookies %s -x --audio-format mp3 -o %s %s',
             escapeshellcmd($this->ytDlpPath()),
             escapeshellarg($this->cookiesPath()),
             escapeshellarg($this->outputTemplate()),
