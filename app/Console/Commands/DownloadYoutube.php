@@ -61,15 +61,36 @@ class DownloadYoutube extends Command
 
     private function downloadVideo(string $url): int
     {
-        $command = sprintf(
-            '%s --cookies %s --sleep-requests 3 --min-sleep-interval 2 --max-sleep-interval 6 --concurrent-fragments 1 -f "bv*+ba/b" --merge-output-format mp4 -o %s %s',
-            escapeshellcmd($this->ytDlpPath()),
-            escapeshellarg($this->cookiesPath()),
-            escapeshellarg($this->outputTemplate()),
-            escapeshellarg($url)
+        // 1️⃣ 原畫質
+        if ($this->tryDownloadVideo($url, '原畫質', 'bv*+ba/b')) {
+            return 0;
+        }
+
+        // 2️⃣ 480p
+        if ($this->tryDownloadVideo(
+            $url,
+            '480p',
+            'bv*[height<=480]+ba/b'
+        )) {
+            return 0;
+        }
+
+        // 3️⃣ 360p
+        if ($this->tryDownloadVideo(
+            $url,
+            '360p',
+            'bv*[height<=360]+ba/b'
+        )) {
+            return 0;
+        }
+
+        // 4️⃣ 全部失敗 → 自動改成音樂
+        $this->telegramService->sendMessage(
+            $this->chatId,
+            "🎧 影片即使降到 360p 仍過大\n已自動改為下載音樂（mp3）"
         );
 
-        return $this->runAndSend($command, 'mp4');
+        return $this->downloadAudio($url);
     }
 
     private function downloadAudio(string $url): int
@@ -219,4 +240,70 @@ class DownloadYoutube extends Command
     {
         return preg_match('/(youtube\.com|youtu\.be)/', $url) === 1;
     }
+
+    private function tryDownloadVideo(string $url, string $formatLabel, string $formatExpr): bool
+    {
+        $this->clearDirectory();
+
+        $this->telegramService->sendMessage(
+            $this->chatId,
+            "🎬 嘗試下載影片（{$formatLabel}）..."
+        );
+
+        $command = sprintf(
+            '%s --cookies %s --sleep-requests 3 --min-sleep-interval 2 --max-sleep-interval 6 --concurrent-fragments 1 ' .
+            '-f %s --merge-output-format mp4 -o %s %s',
+            escapeshellcmd($this->ytDlpPath()),
+            escapeshellarg($this->cookiesPath()),
+            escapeshellarg($formatExpr),
+            escapeshellarg($this->outputTemplate()),
+            escapeshellarg($url)
+        );
+
+        exec($command, $output, $code);
+
+        if ($code !== 0) {
+            Log::warning("Download failed at {$formatLabel}", compact('output'));
+            return false;
+        }
+
+        $file = $this->latestFile('mp4');
+        if (!$file) {
+            return false;
+        }
+
+        $sizeMB = round(filesize($file->getPathname()) / 1024 / 1024, 2);
+
+        $this->telegramService->sendMessage(
+            $this->chatId,
+            "📦 {$formatLabel} 下載完成\n檔案大小：{$sizeMB} MB"
+        );
+
+        // Telegram 安全上限（保守抓 48MB）
+        if ($sizeMB > 48) {
+            $this->telegramService->sendMessage(
+                $this->chatId,
+                "⚠️ 超過 Telegram 限制，嘗試降低畫質..."
+            );
+
+            File::delete($file->getPathname());
+            return false;
+        }
+
+        // 尺寸 OK → 直接走原本上傳流程
+        return $this->runAndSend('true', 'mp4');
+    }
+
+    private function clearDirectory(): void
+    {
+        if (!File::exists($this->basePath)) {
+            File::makeDirectory($this->basePath, 0755, true);
+            return;
+        }
+
+        foreach (File::files($this->basePath) as $file) {
+            File::delete($file->getPathname());
+        }
+    }
+
 }
