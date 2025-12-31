@@ -85,10 +85,6 @@ class DownloadYoutube extends Command
         return $this->runAndSend($command, 'mp3');
     }
 
-    /* -------------------------------------------------
-     | Execute + Telegram
-     |--------------------------------------------------*/
-
     private function runAndSend(string $command, string $ext): int
     {
         try {
@@ -120,14 +116,20 @@ class DownloadYoutube extends Command
             // 嘗試傳送 Telegram
             $this->telegramService->sendMessage(
                 $this->chatId,
-                '下載完成：' . pathinfo($filename, PATHINFO_FILENAME)
+                '下載完成：' . pathinfo($filename, PATHINFO_FILENAME) . ' 準備上傳'
             );
 
             try {
+
                 $this->telegramService->sendDocument(
                     $this->chatId,
                     $filepath,
                     $filename
+                );
+
+                $this->telegramService->sendMessage(
+                    $this->chatId,
+                    "✅ 檔案上傳完成"
                 );
 
                 Log::info('Telegram sendDocument success', [
