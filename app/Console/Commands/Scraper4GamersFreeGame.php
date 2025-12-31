@@ -150,7 +150,7 @@ class Scraper4GamersFreeGame extends Command
                 'is_push' => true,
             ]);
 
-            sleep(7);
+            sleep(2);
         }
     }
 }

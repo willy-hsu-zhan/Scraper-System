@@ -30,6 +30,10 @@ class Kernel extends ConsoleKernel
             ->appendOutputTo(storage_path('logs/search-youtube-music.log'))
             ->timezone('Asia/Taipei');
 
+        $schedule->command('app:scraper-4gamers-free')
+            ->twiceDaily(9, 21)
+            ->timezone('Asia/Taipei');
+
         $schedule->command('app:scraper-delivery-coupon')
             ->daily()
             ->timezone('Asia/Taipei');
