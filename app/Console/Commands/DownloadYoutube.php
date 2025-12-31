@@ -109,16 +109,40 @@ class DownloadYoutube extends Command
     private function runAndSend(string $command, string $ext): int
     {
         try {
-            exec($command, $output, $code);
+            $process = proc_open(
+                $command,
+                [
+                    1 => ['pipe', 'w'], // stdout
+                    2 => ['pipe', 'w'], // stderr
+                ],
+                $pipes
+            );
+
+            if (!is_resource($process)) {
+                throw new \RuntimeException('Failed to start yt-dlp process');
+            }
+
+            $stdout = stream_get_contents($pipes[1]);
+            $stderr = stream_get_contents($pipes[2]);
+
+            fclose($pipes[1]);
+            fclose($pipes[2]);
+
+            $exitCode = proc_close($process);
 
             Log::info('yt-dlp executed', [
-                'command' => $command,
-                'exit_code' => $code,
-                'output' => $output,
+                'command'   => $command,
+                'exit_code'=> $exitCode,
+                'stdout'   => $stdout,
+                'stderr'   => $stderr,
             ]);
 
-            if ($code !== 0) {
-                throw new \RuntimeException('yt-dlp exit code != 0');
+            if ($exitCode !== 0) {
+                throw new \RuntimeException(
+                    "yt-dlp failed\n" .
+                    "ExitCode: {$exitCode}\n" .
+                    "Error:\n{$stderr}"
+                );
             }
 
             $file = $this->latestFile($ext);
@@ -131,21 +155,13 @@ class DownloadYoutube extends Command
 
             $sizeMB = round(filesize($filepath) / 1024 / 1024, 2);
 
-            Log::info('File ready for telegram', [
-                'file' => $filename,
-                'size_mb' => $sizeMB,
-            ]);
-
-            // 嘗試傳送 Telegram
             $this->telegramService->sendMessage(
                 $this->chatId,
-                '下載完成：' . pathinfo($filename, PATHINFO_FILENAME) .
-                "\n檔案大小：{$sizeMB} MB" .
-                "\n準備上傳..."
+                "下載完成：".pathinfo($filename, PATHINFO_FILENAME).
+                "\n檔案大小：{$sizeMB} MB\n準備上傳..."
             );
 
             try {
-
                 $this->telegramService->sendDocument(
                     $this->chatId,
                     $filepath,
@@ -157,10 +173,8 @@ class DownloadYoutube extends Command
                     "✅ 檔案上傳完成"
                 );
 
-                Log::info('Telegram sendDocument success', [
-                    'file' => $filename,
-                    'size_mb' => round(filesize($filepath) / 1024 / 1024, 2),
-                ]);
+                File::delete($filepath);
+                return 0;
 
             } catch (\Throwable $e) {
 
@@ -181,26 +195,16 @@ class DownloadYoutube extends Command
                 return 1;
             }
 
-
-            Log::info('Telegram sendDocument called');
-
-            // 只在「確認沒丟例外」後才刪檔
-            File::delete($filepath);
-
-            return 0;
-
         } catch (\Throwable $e) {
 
             Log::error('DownloadYoutube failed', [
                 'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
             ]);
 
-            // 回報 Telegram（避免你以為沒發生）
             try {
                 $this->telegramService->sendMessage(
                     $this->chatId,
-                    "❌ 發生錯誤：\n" . $e->getMessage()
+                    "❌ yt-dlp 下載失敗\n\n".$e->getMessage()
                 );
             } catch (\Throwable $inner) {
                 Log::error('Telegram error notify failed', [
