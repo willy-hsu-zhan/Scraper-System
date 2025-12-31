@@ -123,11 +123,37 @@ class DownloadYoutube extends Command
                 '下載完成：' . pathinfo($filename, PATHINFO_FILENAME)
             );
 
-            $this->telegramService->sendDocument(
-                $this->chatId,
-                $filepath,
-                $filename
-            );
+            try {
+                $this->telegramService->sendDocument(
+                    $this->chatId,
+                    $filepath,
+                    $filename
+                );
+
+                Log::info('Telegram sendDocument success', [
+                    'file' => $filename,
+                    'size_mb' => round(filesize($filepath) / 1024 / 1024, 2),
+                ]);
+
+            } catch (\Throwable $e) {
+
+                Log::error('Telegram sendDocument failed', [
+                    'file'  => $filename,
+                    'error' => $e->getMessage(),
+                ]);
+
+                // 使用者一定要知道發生什麼事
+                $this->telegramService->sendMessage(
+                    $this->chatId,
+                    "⚠️ 檔案已下載完成，但 Telegram 傳送失敗\n".
+                    "原因：{$e->getMessage()}\n".
+                    "檔名：{$filename}"
+                );
+
+                // 不刪檔，避免使用者要重試卻找不到
+                return 1;
+            }
+
 
             Log::info('Telegram sendDocument called');
 
