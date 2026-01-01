@@ -69,12 +69,11 @@ class ScraperRent591 extends Command
              ['name' => '高雄市', 'region' => 17],
          ];
 
-         $price_info = '5000元以內';
          $baseUrl = 'https://rent.591.com.tw/list?kind=2&sort=money_asc&price=0_5000';
 
          $webDriver = $this->seleniumService->openWebDriver();
 
-         $newRents = []; // 👈 用來收集新增的資料
+         $newRents = [];
 
          foreach ($regions as $regionData) {
              $regionName = $regionData['name'];
@@ -101,26 +100,29 @@ class ScraperRent591 extends Command
                  try {
                      $title = $rentNode->findElement(WebDriverBy::cssSelector('.item-info-title a'))->getAttribute('title');
                      $link  = $rentNode->findElement(WebDriverBy::cssSelector('.item-info-title a'))->getAttribute('href');
+                     $priceText = $rentNode
+                         ->findElement(
+                             WebDriverBy::cssSelector('.item-info-price .inline-flex-row')
+                         )
+                         ->getText();
+                     $price = (int) str_replace(',', '', $priceText);
+
 
                      $exists = Rent591::where('link', $link)->exists();
 
                      if (!$exists) {
-                         // 新增資料到資料庫
                          Rent591::create([
                              'title'      => $title,
                              'region'     => $regionName,
-                             'price_info' => $price_info,
+                             'price_info' => $price,
                              'link'       => $link,
                          ]);
 
-                         // 收集新資料給 Telegram
                          $newRents[] = [
                              'title'     => $title,
                              'region'    => $regionName,
-                             'price'     => $price_info,
+                             'price'     => $price,
                              'link'      => $link,
-                             //'tagTexts'  => [],        // 預設空陣列，可加上額外資訊
-                             //'ownerInfo' => 'N/A',     // 預設文字，視未來要不要抓聯絡資訊
                          ];
 
                          Log::info( "✅ 新增一筆租屋資訊\n");
@@ -132,7 +134,7 @@ class ScraperRent591 extends Command
                      Log::info( "城市：$regionName\n");
                      Log::info( "標題：$title\n");
                      Log::info( "連結：$link\n");
-                     Log::info( "價格：$price_info /月\n");
+                     Log::info( "價格：$price /月\n");
 
                  } catch (\Exception $e) {
                      Log::info( "跳過一筆($regionName):{$e->getMessage()}\n");
