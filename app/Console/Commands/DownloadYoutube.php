@@ -18,7 +18,8 @@ class DownloadYoutube extends Command
 
     protected string $basePath;
     protected $telegramService;
-    protected string $chatId = '-4661576369';
+    protected string $chatId = '-4661576369'; // 影片輸出群
+    protected string $chatId2 = '-4661576369'; // 音樂分享群
 
     public function __construct(TelegramService $telegramService)
     {
@@ -29,6 +30,11 @@ class DownloadYoutube extends Command
 
     public function handle()
     {
+        $this->telegramService->sendMessage(
+            $this->chatId2,
+            '✅ 已收到下載指令，請至輸出群查看'
+        );
+
         $lock = Cache::lock('youtube:downloading', 120); // 最多鎖 2 分鐘
 
         if (!$lock->get()) {
