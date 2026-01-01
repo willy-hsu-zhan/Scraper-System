@@ -31,10 +31,10 @@ class DownloadYoutube extends Command
 
     public function handle()
     {
-        $this->telegramService->sendMessage(
-            $this->chatId2,
-            '✅ 已收到下載指令，請至輸出群查看'
-        );
+        // $this->telegramService->sendMessage(
+        //     $this->chatId2,
+        //     '✅ 已收到下載指令，請至輸出群查看'
+        // );
 
         $lock = Cache::lock('youtube:downloading', 120); // 最多鎖 2 分鐘
 

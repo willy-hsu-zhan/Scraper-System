@@ -221,7 +221,7 @@ class TelegramService
                 if ($mode === 'audio') {
                     $this->sendMessage(
                         $chatId,
-                        "🎵 開始下載音樂：\n{$title}"
+                        "🎵 開始下載音樂：\n{$title}\n請至輸出群查看檔案"
                     );
 
                     Artisan::call('youtube:download', [
@@ -233,7 +233,7 @@ class TelegramService
                 if ($mode === 'video') {
                     $this->sendMessage(
                         $chatId,
-                        "🎬 開始下載影片：\n{$title}"
+                        "🎬 開始下載影片：\n{$title}\n請至輸出群查看檔案"
                     );
 
                     Artisan::call('youtube:download', [
