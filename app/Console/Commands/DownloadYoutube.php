@@ -18,8 +18,9 @@ class DownloadYoutube extends Command
 
     protected string $basePath;
     protected $telegramService;
-    protected string $chatId2 = '-4661576369'; // 影片輸出群
-    protected string $chatId = '-5115401485'; // 音樂分享群
+    protected string $chatId3 = '-5115401485'; // 影片輸出群
+    protected string $chatId2 = '-4661576369'; // 音樂分享群
+    protected string $chatId = '-5229387465'; // 影片輸出記錄群
 
     public function __construct(TelegramService $telegramService)
     {
@@ -170,7 +171,7 @@ class DownloadYoutube extends Command
 
             try {
                 $this->telegramService->sendDocument(
-                    $this->chatId,
+                    $this->chatId3,
                     $filepath,
                     $filename
                 );
