@@ -328,7 +328,7 @@ class DownloadYoutube extends Command
         );
 
         try {
-            $this->telegramService->sendDocument($this->chatId, $filepath, $filename);
+            $this->telegramService->sendDocument($this->chatId3, $filepath, $filename);
 
             $this->telegramService->sendMessage($this->chatId, "✅ 檔案上傳完成");
 
