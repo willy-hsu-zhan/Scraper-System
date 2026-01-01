@@ -76,17 +76,17 @@ class ScraperOjt extends Command
 
                 // 等待結果表格及分頁選項出現
                 //$this->waitForElement($driver, '#PagingInfo_PageSize', 10);
-                $this->waitForElement($driver, 'table tbody tr', 25);
+                $this->waitForTableHasRows($driver, 30);
                 // 按 ESC 鍵關閉可能的彈窗
                 try {
                     $body = $driver->findElement(WebDriverBy::tagName('body'));
                     $actions = new WebDriverActions($driver);
                     $actions->sendKeys($body, WebDriverKeys::ESCAPE)->perform();
                 } catch (\Facebook\WebDriver\Exception\StaleElementReferenceException $e) {
-                    sleep(5);
-                    $body = $driver->findElement(WebDriverBy::tagName('body'));
-                    $actions = new WebDriverActions($driver);
-                    $actions->sendKeys($body, WebDriverKeys::ESCAPE)->perform();
+                    // sleep(5);
+                    // $body = $driver->findElement(WebDriverBy::tagName('body'));
+                    // $actions = new WebDriverActions($driver);
+                    // $actions->sendKeys($body, WebDriverKeys::ESCAPE)->perform();
                 }
 
                 // 設定每頁顯示100筆
@@ -96,10 +96,12 @@ class ScraperOjt extends Command
                 $this->clickElement($driver, '#btnGoRecCount');
 
                 // 等待表格出現且有資料
-                $driver->wait(15)->until(function($driver) {
-                    $rows = $driver->findElements(WebDriverBy::cssSelector('table tbody tr'));
-                    return count($rows) > 15;
-                });
+                // $driver->wait(15)->until(function($driver) {
+                //     $rows = $driver->findElements(WebDriverBy::cssSelector('table tbody tr'));
+                //     return count($rows) > 15;
+                // });
+
+                $this->waitForTableHasRows($driver, 20);
 
                 // 抓取資料，重新取得每一列元素，避免 stale element
                 $rows = $driver->findElements(WebDriverBy::xpath('//table//tr[@valign="middle"]'));
@@ -277,6 +279,16 @@ class ScraperOjt extends Command
         $this->waitForElement($driver, $cssSelector);
         $element = $driver->findElement(WebDriverBy::cssSelector($cssSelector));
         $element->click();
+    }
+
+    protected function waitForTableHasRows(RemoteWebDriver $driver, int $timeout = 30)
+    {
+        $driver->wait($timeout)->until(function ($driver) {
+            $rows = $driver->findElements(
+                WebDriverBy::cssSelector('table tbody tr')
+            );
+            return count($rows) > 0;
+        });
     }
 
     protected function waitForElement(RemoteWebDriver $driver, string $cssSelector, int $timeout = 10)
