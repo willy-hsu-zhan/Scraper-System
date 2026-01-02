@@ -22,12 +22,42 @@ class Kernel extends ConsoleKernel
             return;
         }
 
-        $schedule->command('app:search-youtube-music')
-            ->dailyAt('12:15')
+        $logPath = storage_path('logs/search-youtube.log');
+
+        // ✈️ 旅遊
+        $schedule->command('app:search-youtube all 19')
+            ->dailyAt('12:10')
             ->withoutOverlapping()
             ->onOneServer()
             ->runInBackground()
-            ->appendOutputTo(storage_path('logs/search-youtube-music.log'))
+            ->appendOutputTo($logPath)
+            ->timezone('Asia/Taipei');
+
+        // 🎵 音樂
+        $schedule->command('app:search-youtube all 10')
+            ->dailyAt('12:20')
+            ->withoutOverlapping()
+            ->onOneServer()
+            ->runInBackground()
+            ->appendOutputTo($logPath)
+            ->timezone('Asia/Taipei');
+
+        // 🎮 遊戲
+        $schedule->command('app:search-youtube all 20')
+            ->dailyAt('12:25')
+            ->withoutOverlapping()
+            ->onOneServer()
+            ->runInBackground()
+            ->appendOutputTo($logPath)
+            ->timezone('Asia/Taipei');
+
+        // 🎬 電影
+        $schedule->command('app:search-youtube all 24')
+            ->dailyAt('12:35')
+            ->withoutOverlapping()
+            ->onOneServer()
+            ->runInBackground()
+            ->appendOutputTo($logPath)
             ->timezone('Asia/Taipei');
 
         $schedule->command('app:scraper-4gamers-free')
