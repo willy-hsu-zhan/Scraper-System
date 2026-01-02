@@ -49,10 +49,10 @@ class SearchYoutube extends Command
         ];
 
 
-        $regionInput   = strtoupper($this->argument('region') ?? 'all');
-        $categoryInput = $this->argument('category') ?? 'all';
+        $regionInput   = strtoupper($this->argument('region') ?? 'ALL');
+        $categoryInput = $this->argument('category') ?? 'ALL';
 
-        $useCategories = ($categoryInput === 'all')
+        $useCategories = ($categoryInput === 'ALL')
             ? $categories
             : array_intersect_key($categories, [$categoryInput => true]);
 
@@ -68,7 +68,7 @@ class SearchYoutube extends Command
             'KR' => '🇰🇷 韓文熱門',
         ];
 
-        $useRegions = ($regionInput === 'all')
+        $useRegions = ($regionInput === 'ALL')
             ? $allRegions
             : array_intersect_key($allRegions, [$regionInput => true]);
 
