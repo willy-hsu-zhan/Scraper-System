@@ -25,13 +25,13 @@ class Kernel extends ConsoleKernel
         $logPath = storage_path('logs/search-youtube.log');
 
         // ✈️ 旅遊
-        $schedule->command('app:search-youtube TW 19')
-            ->dailyAt('12:10')
-            ->withoutOverlapping()
-            ->onOneServer()
-            ->runInBackground()
-            ->appendOutputTo($logPath)
-            ->timezone('Asia/Taipei');
+        // $schedule->command('app:search-youtube TW 19')
+        //     ->dailyAt('12:10')
+        //     ->withoutOverlapping()
+        //     ->onOneServer()
+        //     ->runInBackground()
+        //     ->appendOutputTo($logPath)
+        //     ->timezone('Asia/Taipei');
 
         // 🎵 音樂
         $schedule->command('app:search-youtube all 10')
@@ -52,13 +52,13 @@ class Kernel extends ConsoleKernel
             ->timezone('Asia/Taipei');
 
         // 🎬 電影
-        $schedule->command('app:search-youtube TW 24')
-            ->dailyAt('12:35')
-            ->withoutOverlapping()
-            ->onOneServer()
-            ->runInBackground()
-            ->appendOutputTo($logPath)
-            ->timezone('Asia/Taipei');
+        // $schedule->command('app:search-youtube TW 24')
+        //     ->dailyAt('12:35')
+        //     ->withoutOverlapping()
+        //     ->onOneServer()
+        //     ->runInBackground()
+        //     ->appendOutputTo($logPath)
+        //     ->timezone('Asia/Taipei');
 
         $schedule->command('app:scraper-4gamers-free')
             ->twiceDaily(9, 21)
