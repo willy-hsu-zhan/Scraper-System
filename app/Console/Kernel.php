@@ -25,7 +25,7 @@ class Kernel extends ConsoleKernel
         $logPath = storage_path('logs/search-youtube.log');
 
         // ✈️ 旅遊
-        $schedule->command('app:search-youtube all 19')
+        $schedule->command('app:search-youtube TW 19')
             ->dailyAt('12:10')
             ->withoutOverlapping()
             ->onOneServer()
@@ -43,7 +43,7 @@ class Kernel extends ConsoleKernel
             ->timezone('Asia/Taipei');
 
         // 🎮 遊戲
-        $schedule->command('app:search-youtube all 20')
+        $schedule->command('app:search-youtube TW 20')
             ->dailyAt('12:25')
             ->withoutOverlapping()
             ->onOneServer()
@@ -52,7 +52,7 @@ class Kernel extends ConsoleKernel
             ->timezone('Asia/Taipei');
 
         // 🎬 電影
-        $schedule->command('app:search-youtube all 24')
+        $schedule->command('app:search-youtube TW 24')
             ->dailyAt('12:35')
             ->withoutOverlapping()
             ->onOneServer()
