@@ -90,7 +90,7 @@ class SearchYoutube extends Command
                     'chart'           => 'mostPopular',
                     'regionCode'      => $regionCode,
                     'videoCategoryId' => $categoryId,
-                    'maxResults'      => 4,
+                    'maxResults'      => 5,
                     'key'             => $apiKey,
                 ]);
 
