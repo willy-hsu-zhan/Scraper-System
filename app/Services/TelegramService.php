@@ -264,7 +264,7 @@ class TelegramService
             'q'               => $keyword,
             'type'            => 'video',
             'videoCategoryId' => '10',
-            'maxResults'      => 4,
+            'maxResults'      => 3,
             'key'             => $apiKey,
         ]);
 
@@ -275,6 +275,14 @@ class TelegramService
 
         $videos = $response->json()['items'];
         $chatId = '-4661576369';
+
+        if (empty($videos)) {
+            Request::sendMessage([
+                'chat_id' => $chatId,
+                'text'    => "🔍 找不到相關音樂\n\n關鍵字：{$keyword}\n請嘗試其他歌名或歌手 🙏",
+            ]);
+            return;
+        }
 
         foreach ($videos as $video) {
             $videoId = $video['id']['videoId'];
