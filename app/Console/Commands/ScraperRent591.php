@@ -159,7 +159,7 @@ class ScraperRent591 extends Command
             $sendNotifyText .= '城市：' . $rent['region'] . "\n";
             $sendNotifyText .= '標題：' . $rent['title'] . "\n";
             $sendNotifyText .= '租屋連結：' . $rent['link'] . "\n";
-            $sendNotifyText .= '價格：' . $rent['price'] . "\n";
+            $sendNotifyText .= '價格：' . $rent['price'] . " 元/月" . "\n";
             //$sendNotifyText .= '條件標籤：' . implode('、', $rent['tagTexts']) . "\n";
             //$sendNotifyText .= '聯絡資訊：' . $rent['ownerInfo'] . "\n\n";
 
