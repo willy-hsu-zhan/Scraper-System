@@ -271,7 +271,7 @@ class TelegramService
             'part'            => 'snippet',
             'q'               => $keyword,
             'type'            => 'video',
-            'videoCategoryId' => '10',
+            //'videoCategoryId' => '10',
             'maxResults'      => 3,
             'key'             => $apiKey,
         ]);
@@ -296,7 +296,7 @@ class TelegramService
             $videoId = $video['id']['videoId'];
             $title   = $video['snippet']['title'];
             $channel = $video['snippet']['channelTitle'];
-            $encodedTitle = base64_encode(mb_substr($title, 0, 30)); // 防止過長
+            $encodedTitle = base64_encode(mb_substr($title, 0, 10, 'UTF-8'));  // 防止過長
             $text =
                 "🎵 {$title}\n" .
                 "📺 {$channel}\n" .
