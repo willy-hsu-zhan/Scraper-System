@@ -283,7 +283,7 @@ class TelegramService
 
         $videos = $response->json()['items'];
         $chatId = '-4661576369';
-
+        Log::info(print_r($videos,true));
         if (empty($videos)) {
             Request::sendMessage([
                 'chat_id' => $chatId,
