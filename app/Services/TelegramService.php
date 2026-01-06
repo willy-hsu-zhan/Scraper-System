@@ -129,19 +129,27 @@ class TelegramService
 
                 // 驗證網址是否為有效的 YouTube 網址
                 // 驗證是否為有效 YouTube URL
-                $chatId = '-4661576369';
+                $chatId = '-4661576369'; // 熱門音樂分享群
                 if (
                     !empty($url) &&
                     filter_var($url, FILTER_VALIDATE_URL) &&
                     preg_match('/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\//', $url)
                 ) {
                     if (strpos($originalText, '音樂') !== false) {
+                        $this->sendMessage(
+                            $chatId,
+                            "🎬 開始下載音樂\n請至輸出群查看檔案"
+                        );
                         Artisan::call('youtube:download', [
                             'url' => $url,
                             '--audio-only' => true,
                         ]);
                     }
                     else if (strpos($originalText, '影片') !== false) {
+                        $this->sendMessage(
+                            $chatId,
+                            "🎬 開始下載影片\n請至輸出群查看檔案"
+                        );
                         Artisan::call('youtube:download', [
                             'url' => $url,
                         ]);
