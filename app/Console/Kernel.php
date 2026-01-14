@@ -80,7 +80,7 @@ class Kernel extends ConsoleKernel
                 return !($hour >= 1 && $hour < 7);
             });
         //$schedule->command('app:scraper-ptt')->cron('15,45 * * * *');
-        $schedule->command('app:scraper-rent591')->hourly()->timezone('Asia/Taipei');
+        $schedule->command('app:scraper-rent591')->everyThirtyMinutes()->timezone('Asia/Taipei');
         $schedule->command('app:notify-open-govojt')->hourly()->timezone('Asia/Taipei');
     }
 
