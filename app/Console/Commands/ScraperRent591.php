@@ -41,7 +41,8 @@ class ScraperRent591 extends Command
     protected $telegramService;
     protected $seleniumService;
     protected $rentTexts;
-    protected $chatId = '-4675025353'; // 暫時先用全域變數 // 日後聊天室擴充再更改
+    protected $chatId = '-4675025353'; // 暫時先用全域變數 // 日後聊天室擴充再更改 Hsu & Issac
+    protected $chatId2 = '-5141434603'; // 暫時先用全域變數 // 日後聊天室擴充再更改 Hsu & Hsu
 
     public function __construct(LineNotify $lineNotify, TelegramService $telegramService, SeleniumService $seleniumService)
     {
@@ -60,11 +61,11 @@ class ScraperRent591 extends Command
          $regions = [
             //  ['name' => '台北市', 'region' => 1],
             //  ['name' => '基隆市', 'region' => 2],
-             ['name' => '新北市', 'region' => 3],
+            ['name' => '新北市', 'region' => 3],
             //  ['name' => '新竹市', 'region' => 4],
             //  ['name' => '新竹縣', 'region' => 5],
             //  ['name' => '桃園市', 'region' => 6],
-            //  ['name' => '台中市', 'region' => 8],
+            ['name' => '台中市', 'region' => 8],
             //  ['name' => '台南市', 'region' => 15],
             //  ['name' => '高雄市', 'region' => 17],
          ];
@@ -148,12 +149,13 @@ class ScraperRent591 extends Command
          if (count($newRents) > 0) {
              $this->sendRentNotifications($newRents);
          } else {
-             $this->sendPeriodNoRentMsg();
+             //$this->sendPeriodNoRentMsg();
          }
      }
 
     public function sendRentNotifications($rents)
     {
+        $chatId2 = '-5141434603';
         foreach ($rents as $rent) {
             $sendNotifyText  = "**** 591 租屋新資訊 ****\n\n";
             $sendNotifyText .= '城市：' . $rent['region'] . "\n";
@@ -164,6 +166,8 @@ class ScraperRent591 extends Command
             //$sendNotifyText .= '聯絡資訊：' . $rent['ownerInfo'] . "\n\n";
 
             $this->telegramService->sendMessage($this->chatId, $sendNotifyText);
+            sleep(1);
+            $this->telegramService->sendMessage($this->chatId2, $sendNotifyText);
             sleep(3); // 避免過快推送被 Telegram 封鎖
         }
 
@@ -183,6 +187,8 @@ class ScraperRent591 extends Command
         $errorMessage .= "目前沒有新的租屋資訊喔！🥲";
 
         $this->telegramService->sendMessage($this->chatId, $errorMessage);
+        sleep(1);
+        $this->telegramService->sendMessage($this->chatId2, $errorMessage);
     }
 
 }
