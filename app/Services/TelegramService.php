@@ -184,31 +184,37 @@ class TelegramService
             return;
         }
 
-        $cityData = $this->detectCity($text);
+        // 🔧 清洗地址（移除開頭郵遞區號）
+        $cleanText = $this->normalizeAddressText($text);
+
+        $cityData = $this->detectCity($cleanText);
 
         if (!$cityData) {
             $this->sendMessage($chatId, "⚠️ 無法判斷縣市，請確認地址是否包含「縣市名稱」");
             return;
         }
 
-        $template = $this->buildReportTemplate($cityData['city'], $text);
+        $template = $this->buildReportTemplate($cityData['city'], $cleanText);
 
-        // 檢舉文範本
-        $this->sendMessage(
-            $chatId,
-            $template
-        );
+        // ① 檢舉文範本
+        $this->sendMessage($chatId, $template);
 
-        sleep(1);
+        usleep(300000);
 
+        // ② 檢舉網站
         $this->sendMessage(
             $chatId,
             "📍 判斷地點：{$cityData['city']}\n\n" .
             "🔗 線上檢舉：\n{$cityData['url']}\n\n" .
-            "📞 檢舉電話：\n{$cityData['phone']}"
+            "📞 檢舉電話："
         );
 
+        usleep(300000);
+
+        // ③ 檢舉電話
+        $this->sendMessage($chatId, $cityData['phone']);
     }
+
 
     private function handleMusicGroup(int $chatId, string $text): void
     {
@@ -423,6 +429,12 @@ class TelegramService
             "已嚴重影響行人通行及出入動線，\n" .
             "造成用路人不便與安全疑慮。\n\n" .
             "請派員前往查處並依法取締，謝謝。";
+    }
+
+    private function normalizeAddressText(string $text): string
+    {
+        // 移除開頭的郵遞區號，例如：22158新北市、 221 新北市
+        return preg_replace('/^\s*\d{3,5}\s*/u', '', $text);
     }
 
 }
