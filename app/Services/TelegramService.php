@@ -206,12 +206,12 @@ class TelegramService
             $chatId,
             "📍 判斷地點：{$cityData['city']}\n\n" .
             "🔗 線上檢舉：\n{$cityData['url']}\n\n" .
-            "📞 檢舉電話："
+            "📞 簡訊報案電話："
         );
 
         usleep(300000);
 
-        // ③ 檢舉電話
+        // ③ 簡訊報案電話
         $this->sendMessage($chatId, $cityData['phone']);
     }
 
