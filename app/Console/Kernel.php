@@ -80,6 +80,8 @@ class Kernel extends ConsoleKernel
                 return !($hour >= 1 && $hour < 7);
             });
         //$schedule->command('app:scraper-ptt')->cron('15,45 * * * *');
+        // 每天凌晨 2 點清理 1 天前的檔案
+        $schedule->command('youtube:clean')->dailyAt('02:00');
         $schedule->command('app:scraper-rent591')->everyThirtyMinutes()->timezone('Asia/Taipei');
         $schedule->command('app:notify-open-govojt')->hourly()->timezone('Asia/Taipei');
     }

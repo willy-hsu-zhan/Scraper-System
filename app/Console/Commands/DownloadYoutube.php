@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\File;
 use App\Services\TelegramService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\URL;
 
 class DownloadYoutube extends Command
 {
@@ -22,12 +23,52 @@ class DownloadYoutube extends Command
     protected string $chatId2 = '-4661576369'; // 音樂分享群
     protected string $chatId = '-5229387465'; // 影片輸出記錄群
 
+    protected string $videoPath;
+    protected string $audioPath;
+    protected string $cookiePath;
+
     public function __construct(TelegramService $telegramService)
     {
         parent::__construct();
-        $this->basePath = storage_path('app/youtube');
+
+        $this->basePath  = storage_path('app/youtube');
+        $this->videoPath = $this->basePath . '/video';
+        $this->audioPath = $this->basePath . '/audio';
+        $this->cookiePath = $this->basePath;
+
         $this->telegramService = $telegramService;
     }
+
+
+    private function videoOutputTemplate(): string
+    {
+        return $this->videoPath . '/%(title)s.%(ext)s';
+    }
+
+    private function audioOutputTemplate(): string
+    {
+        return $this->audioPath . '/%(title)s.%(ext)s';
+    }
+
+    private function clearVideoDirectory(): void
+    {
+        File::ensureDirectoryExists($this->videoPath);
+
+        foreach (File::files($this->videoPath) as $file) {
+            File::delete($file->getPathname());
+        }
+    }
+
+    private function clearAudioDirectory(): void
+    {
+        File::ensureDirectoryExists($this->audioPath);
+
+        foreach (File::files($this->audioPath) as $file) {
+            File::delete($file->getPathname());
+        }
+    }
+
+
 
     public function handle()
     {
@@ -102,12 +143,14 @@ class DownloadYoutube extends Command
 
     private function downloadAudio(string $url): int
     {
+        $this->clearAudioDirectory();
+
         $command = sprintf(
             '%s --extractor-args "youtube:player_client=android" ' .
             '--cookies %s -x --audio-format mp3 -o %s %s',
             escapeshellcmd($this->ytDlpPath()),
             escapeshellarg($this->cookiesPath()),
-            escapeshellarg($this->outputTemplate()),
+            escapeshellarg($this->audioOutputTemplate()),
             escapeshellarg($url)
         );
 
@@ -153,7 +196,12 @@ class DownloadYoutube extends Command
                 );
             }
 
-            $file = $this->latestFile($ext);
+            $path = $ext === 'mp3'
+                ? $this->audioPath
+                : $this->videoPath;
+
+            $file = $this->latestFile($path, $ext);
+
             if (!$file) {
                 throw new \RuntimeException('Downloaded file not found');
             }
@@ -191,16 +239,10 @@ class DownloadYoutube extends Command
                     'error' => $e->getMessage(),
                 ]);
 
-                // 使用者一定要知道發生什麼事
-                $this->telegramService->sendMessage(
-                    $this->chatId,
-                    "⚠️ 檔案已下載完成，但 Telegram 傳送失敗\n".
-                    "原因：{$e->getMessage()}\n".
-                    "檔名：{$filename}"
-                );
+                $this->generateDownloadLinkAndNotify($file->getFilename());
 
                 // 不刪檔，避免使用者要重試卻找不到
-                return 1;
+                return 0;
             }
 
         } catch (\Throwable $e) {
@@ -225,17 +267,12 @@ class DownloadYoutube extends Command
     }
 
 
-    private function latestFile(string $ext)
+    private function latestFile(string $path, string $ext)
     {
-        return collect(File::files($this->basePath))
+        return collect(File::files($path))
             ->filter(fn($f) => $f->getExtension() === $ext)
             ->sortByDesc(fn($f) => $f->getMTime())
             ->first();
-    }
-
-    private function outputTemplate(): string
-    {
-        return $this->basePath . '/%(title)s.%(ext)s';
     }
 
     private function ytDlpPath(): string
@@ -255,7 +292,7 @@ class DownloadYoutube extends Command
 
     private function tryDownloadVideo(string $url, string $formatLabel, string $formatExpr): bool
     {
-        $this->clearDirectory();
+        $this->clearVideoDirectory();
 
         $this->telegramService->sendMessage(
             $this->chatId,
@@ -268,7 +305,7 @@ class DownloadYoutube extends Command
             escapeshellcmd($this->ytDlpPath()),
             escapeshellarg($this->cookiesPath()),
             escapeshellarg($formatExpr),
-            escapeshellarg($this->outputTemplate()),
+            escapeshellarg($this->videoOutputTemplate()),
             escapeshellarg($url)
         );
 
@@ -279,7 +316,7 @@ class DownloadYoutube extends Command
             return false;
         }
 
-        $file = $this->latestFile('mp4');
+        $file = $this->latestFile($this->videoPath, 'mp4');
         if (!$file) {
             return false;
         }
@@ -295,27 +332,17 @@ class DownloadYoutube extends Command
         if ($sizeMB > 48) {
             $this->telegramService->sendMessage(
                 $this->chatId,
-                "⚠️ 超過 Telegram 限制，嘗試降低畫質..."
+                "⚠️ 影片過大，無法透過 Telegram 傳送\n將改用下載連結"
             );
 
-            File::delete($file->getPathname());
-            return false;
+            $this->generateDownloadLinkAndNotify($file->getFilename());
+
+            // ❗不刪檔、不再嘗試降畫質
+            return true;
         }
 
         // 尺寸 OK → 直接上傳這個已下載好的檔案
         return $this->uploadToTelegram($file->getPathname(), $file->getFilename(), $sizeMB) === 0;
-    }
-
-    private function clearDirectory(): void
-    {
-        if (!File::exists($this->basePath)) {
-            File::makeDirectory($this->basePath, 0755, true);
-            return;
-        }
-
-        foreach (File::files($this->basePath) as $file) {
-            File::delete($file->getPathname());
-        }
     }
 
     private function uploadToTelegram(string $filepath, string $filename, float $sizeMB): int
@@ -337,7 +364,7 @@ class DownloadYoutube extends Command
                 'size_mb' => $sizeMB,
             ]);
 
-            File::delete($filepath);
+            //File::delete($filepath);
             return 0;
 
         } catch (\Throwable $e) {
@@ -356,6 +383,36 @@ class DownloadYoutube extends Command
             // 不刪檔
             return 1;
         }
+    }
+
+    /**
+     * 產生臨時下載連結，並發送到 Telegram
+     */
+    private function generateDownloadLinkAndNotify(string $filename): string
+    {
+        // 1️⃣ 生成 signed URL
+        $url = URL::temporarySignedRoute(
+            'youtube.download',
+            now()->addMinutes(60),
+            ['filename' => $filename]
+        );
+
+        // 2️⃣ 發送給 Telegram
+        try {
+            $this->telegramService->sendMessage(
+                $this->chatId,
+                "⚠️ 檔案已下載完成，但無法透過 Telegram 傳送\n" .
+                "📦 檔名：{$filename}\n" .
+                "🔗 點擊下載（60 分鐘內有效）：\n{$url}"
+            );
+        } catch (\Throwable $e) {
+            Log::error('Telegram sendMessage for download link failed', [
+                'file'  => $filename,
+                'error' => $e->getMessage(),
+            ]);
+        }
+
+        return $url;
     }
 
 }
