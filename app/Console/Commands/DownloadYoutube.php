@@ -335,15 +335,19 @@ class DownloadYoutube extends Command
                 "⚠️ 影片過大，無法透過 Telegram 傳送\n將改用下載連結"
             );
 
+            // 產生下載連結給使用者
             $this->generateDownloadLinkAndNotify($file->getFilename());
 
-            // ❗不刪檔、不再嘗試降畫質
-            return true;
+            // ❗可以選擇刪掉本地檔案釋放空間
+            File::delete($file->getPathname());
+
+            return true; // 表示已處理，不再繼續降畫質
         }
 
-        // 尺寸 OK → 直接上傳這個已下載好的檔案
+        // 尺寸 OK → 上傳到 Telegram
         return $this->uploadToTelegram($file->getPathname(), $file->getFilename(), $sizeMB) === 0;
     }
+
 
     private function uploadToTelegram(string $filepath, string $filename, float $sizeMB): int
     {
@@ -354,9 +358,19 @@ class DownloadYoutube extends Command
             "\n準備上傳..."
         );
 
+        // Telegram 安全上限（保守抓 48MB）
+        if ($sizeMB > 48) {
+            $this->telegramService->sendMessage(
+                $this->chatId,
+                "⚠️ 影片過大，無法透過 Telegram 傳送\n檔案已刪除"
+            );
+
+            File::delete($filepath); // 刪掉影片
+            return 1;
+        }
+
         try {
             $this->telegramService->sendDocument($this->chatId3, $filepath, $filename);
-
             $this->telegramService->sendMessage($this->chatId, "✅ 檔案上傳完成");
 
             Log::info('Telegram sendDocument success', [
@@ -364,7 +378,10 @@ class DownloadYoutube extends Command
                 'size_mb' => $sizeMB,
             ]);
 
-            //File::delete($filepath);
+            // 上傳成功且檔案不大 → 產生下載連結
+            $this->generateDownloadLinkAndNotify($filename);
+
+            // 保留影片
             return 0;
 
         } catch (\Throwable $e) {
@@ -375,12 +392,12 @@ class DownloadYoutube extends Command
 
             $this->telegramService->sendMessage(
                 $this->chatId,
-                "⚠️ 檔案已下載完成，但 Telegram 傳送失敗\n".
-                "原因：{$e->getMessage()}\n".
-                "檔名：{$filename}"
+                "⚠️ 上傳 Telegram 失敗，檔案已刪除\n檔名：{$filename}"
             );
 
-            // 不刪檔
+            // 上傳失敗 → 刪掉影片，不產生下載連結
+            File::delete($filepath);
+
             return 1;
         }
     }
