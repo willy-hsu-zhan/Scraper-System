@@ -167,8 +167,8 @@ class ScraperRent591 extends Command
 
             $this->telegramService->sendMessage($this->chatId, $sendNotifyText);
             sleep(1);
-            $this->telegramService->sendMessage($this->chatId2, $sendNotifyText);
-            sleep(3); // 避免過快推送被 Telegram 封鎖
+            //$this->telegramService->sendMessage($this->chatId2, $sendNotifyText);
+            //sleep(3); // 避免過快推送被 Telegram 封鎖
         }
 
         //$this->sendFachaiGIF(); // 額外推送圖片
@@ -187,8 +187,8 @@ class ScraperRent591 extends Command
         $errorMessage .= "目前沒有新的租屋資訊喔！🥲";
 
         $this->telegramService->sendMessage($this->chatId, $errorMessage);
-        sleep(1);
-        $this->telegramService->sendMessage($this->chatId2, $errorMessage);
+        //sleep(1);
+        //$this->telegramService->sendMessage($this->chatId2, $errorMessage);
     }
 
 }
