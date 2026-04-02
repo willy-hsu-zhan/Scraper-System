@@ -177,7 +177,7 @@ class ScraperDeliveryCoupon extends Command {
                 );
 
                 $this->telegramService->sendMessage($this->chatId, $message);
-                sleep(7);
+                sleep(2);
             }
 
             $this->info('Telegram pushed. Coupons: ' . count($newCoupons));
