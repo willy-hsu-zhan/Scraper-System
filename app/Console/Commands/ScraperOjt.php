@@ -167,8 +167,15 @@ class ScraperOjt extends Command
                             'paymentMethod' => $paymentMethod,
                         ];
                     } catch (\Facebook\WebDriver\Exception\StaleElementReferenceException $e) {
-                        $this->warn("⚠️ 發生 stale element，該列資料跳過");
-                        continue;
+                        // 重抓 row
+                        try {
+                            $row = $driver->findElements(WebDriverBy::xpath('//table//tr[@valign="middle"]'))[$index];
+                            $cols = $row->findElements(WebDriverBy::tagName('td'));
+                            // 重試原本的操作
+                        } catch (\Facebook\WebDriver\Exception\StaleElementReferenceException $e2) {
+                            $this->warn("⚠️ 再次 stale element，該列資料跳過");
+                            continue;
+                        }
                     }
                 }
 
