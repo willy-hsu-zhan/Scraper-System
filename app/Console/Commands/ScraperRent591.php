@@ -59,15 +59,15 @@ class ScraperRent591 extends Command
      public function handle()
      {
          $regions = [
-            //  ['name' => '台北市', 'region' => 1],
-            //  ['name' => '基隆市', 'region' => 2],
+            ['name' => '台北市', 'region' => 1],
+            ['name' => '基隆市', 'region' => 2],
             ['name' => '新北市', 'region' => 3],
-            //  ['name' => '新竹市', 'region' => 4],
-            //  ['name' => '新竹縣', 'region' => 5],
-            //  ['name' => '桃園市', 'region' => 6],
+            ['name' => '新竹市', 'region' => 4],
+            ['name' => '新竹縣', 'region' => 5],
+            ['name' => '桃園市', 'region' => 6],
             ['name' => '台中市', 'region' => 8],
-            //  ['name' => '台南市', 'region' => 15],
-            //  ['name' => '高雄市', 'region' => 17],
+            ['name' => '台南市', 'region' => 15],
+            ['name' => '高雄市', 'region' => 17],
          ];
 
          $baseUrl = 'https://rent.591.com.tw/list?kind=2&sort=money_asc&price=0_5000';
