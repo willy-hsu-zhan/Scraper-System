@@ -14,3 +14,8 @@ Route::get('/youtube/download/{filename}', function ($filename) {
 
     return response()->download($path);
 })->name('youtube.download')->middleware('signed');
+
+// 即時資訊
+Route::get('/feed', function () {
+    return view('feed');
+});
