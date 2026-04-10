@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 use Goutte\Client;
 use Exception;
 use Illuminate\Support\Facades\Log;
-use App\Services\LineNotify;
+use App\Services\LineNotifyService;
 use App\Services\TelegramService;
 use App\Services\SeleniumService;
 use App\Models\JobChickpt;
@@ -34,16 +34,16 @@ class ScraperChickpt extends Command {
     protected $description = 'Command description';
 
     public $jobs = [];
-    protected $lineNotify;
+    protected $lineNotifyService;
     protected $telegramService;
     protected $seleniumService;
     protected $jobTexts;
     protected $chatId = '-4664862172'; // 暫時先用全域變數 // 日後聊天室擴充再更改
 
-    public function __construct(LineNotify $lineNotify, TelegramService $telegramService, SeleniumService $seleniumService)
+    public function __construct(LineNotifyService $lineNotifyService, TelegramService $telegramService, SeleniumService $seleniumService)
     {
         parent::__construct();
-        $this->lineNotify      = $lineNotify;
+        $this->lineNotifyService      = $lineNotifyService;
         $this->telegramService = $telegramService;
         $this->seleniumService = $seleniumService;
     }

@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use App\Services\LineNotify;
+use App\Services\LineNotifyService;
 
 class LineNotifyServiceProvider extends ServiceProvider
 {
@@ -12,8 +12,8 @@ class LineNotifyServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(LineNotify::class, function ($app) {
-            return new LineNotify(config('services.line_notify.token'));
+        $this->app->bind(LineNotifyService::class, function ($app) {
+            return new LineNotifyService(config('services.line_notify.token'));
         });
     }
 

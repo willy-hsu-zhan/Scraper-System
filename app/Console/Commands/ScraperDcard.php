@@ -6,12 +6,12 @@ use Goutte\Client;
 use Illuminate\Console\Command;
 use App\Services\TelegramService;
 use App\Services\ProxyService;
-use App\Services\LineNotify;
+use App\Services\LineNotifyService;
 use Illuminate\Support\Facades\Http;
 
 class ScraperDcard extends Command {
     public $jobs = [];
-    protected $lineNotify;
+    protected $lineNotifyService;
     protected $telegramService;
     protected $proxyService;
     protected $jobTexts;
@@ -31,10 +31,10 @@ class ScraperDcard extends Command {
      */
     protected $description = 'Command description';
 
-    public function __construct(LineNotify $lineNotify, TelegramService $telegramService, ProxyService $proxyService)
+    public function __construct(LineNotifyService $lineNotifyService, TelegramService $telegramService, ProxyService $proxyService)
     {
         parent::__construct();
-        $this->lineNotify      = $lineNotify;
+        $this->lineNotifyService      = $lineNotifyService;
         $this->telegramService = $telegramService;
         $this->proxyService    = $proxyService;
     }

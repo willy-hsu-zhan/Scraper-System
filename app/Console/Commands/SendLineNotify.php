@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Services\LineNotify;
+use App\Services\LineNotifyService;
 
 class SendLineNotify extends Command
 {
@@ -14,12 +14,12 @@ class SendLineNotify extends Command
      */
     protected $signature = 'app:send-line-notify';
 
-    protected $lineNotify;
+    protected $lineNotifyService;
 
-    public function __construct(LineNotify $lineNotify)
+    public function __construct(LineNotifyService $lineNotifyService)
     {
         parent::__construct();
-        $this->lineNotify = $lineNotify;
+        $this->lineNotifyService = $lineNotifyService;
     }
 
     /**
@@ -35,7 +35,7 @@ class SendLineNotify extends Command
     public function handle()
     {
         $message = "\n" . 'Hello, this is a Line Notify message from Laravel!';
-        $response = $this->lineNotify->sendMessage($message);
+        $response = $this->lineNotifyService->sendMessage($message);
         //return response()->json(['response' => $response]);
     }
 }

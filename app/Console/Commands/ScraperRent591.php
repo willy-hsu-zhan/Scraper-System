@@ -10,7 +10,7 @@ use Carbon\Carbon;
 use App\Models\Rent591;
 use App\Services\TelegramService;
 use App\Services\SeleniumService;
-use App\Services\LineNotify;
+use App\Services\LineNotifyService;
 use Illuminate\Support\Facades\File;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\Firefox\FirefoxOptions;
@@ -37,17 +37,17 @@ class ScraperRent591 extends Command
     protected $description = 'Command description';
 
     public $rents = [];
-    protected $lineNotify;
+    protected $lineNotifyService;
     protected $telegramService;
     protected $seleniumService;
     protected $rentTexts;
     protected $chatId = '-4675025353'; // 暫時先用全域變數 // 日後聊天室擴充再更改 Hsu & Issac
     protected $chatId2 = '-5141434603'; // 暫時先用全域變數 // 日後聊天室擴充再更改 Hsu & Hsu
 
-    public function __construct(LineNotify $lineNotify, TelegramService $telegramService, SeleniumService $seleniumService)
+    public function __construct(LineNotifyService $lineNotifyService, TelegramService $telegramService, SeleniumService $seleniumService)
     {
         parent::__construct();
-        $this->lineNotify      = $lineNotify;
+        $this->lineNotifyService      = $lineNotifyService;
         $this->telegramService = $telegramService;
         $this->seleniumService = $seleniumService;
     }

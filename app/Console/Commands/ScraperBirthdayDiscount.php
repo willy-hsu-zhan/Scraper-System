@@ -28,7 +28,7 @@ class ScraperBirthdayDiscount extends Command {
     protected $description = 'Command description';
 
     public $jobs = [];
-    protected $lineNotify;
+    protected $lineNotifyService;
     protected $telegramService;
     protected $seleniumService;
     protected $jobTexts;

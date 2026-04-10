@@ -21,7 +21,7 @@ class ScraperOjt extends Command
     protected $signature = 'app:scraper-ojt';
     protected $description = '抓取台灣就業通產業人才投資方案課程資訊，並發送 Telegram 通知';
 
-    protected $lineNotify;
+    protected $lineNotifyService;
     protected $telegramService;
     protected $seleniumService;
     protected $chatId = '-4968260856'; // Telegram 群組 ID

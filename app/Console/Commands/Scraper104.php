@@ -7,7 +7,7 @@ use Goutte\Client;
 use Exception;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
-use App\Services\LineNotify;
+use App\Services\LineNotifyService;
 use Illuminate\Support\Facades\Artisan;
 
 class Scraper104 extends Command
@@ -26,12 +26,12 @@ class Scraper104 extends Command
      */
     protected $description = 'Command description';
 
-    protected $lineNotify;
+    protected $lineNotifyService;
 
-    public function __construct(LineNotify $lineNotify)
+    public function __construct(LineNotifyService $lineNotifyService)
     {
         parent::__construct();
-        $this->lineNotify = $lineNotify;
+        $this->lineNotifyService = $lineNotifyService;
     }
 
     /**

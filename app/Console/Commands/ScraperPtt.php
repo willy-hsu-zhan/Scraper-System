@@ -8,7 +8,7 @@ use Exception;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use App\Models\JobPtt;
-use App\Services\LineNotify;
+use App\Services\LineNotifyService;
 use App\Services\TelegramService;
 use App\Services\SeleniumService;
 use Illuminate\Support\Facades\File;
@@ -38,16 +38,16 @@ class ScraperPtt extends Command {
      */
     public $locations = ['遠端', '多區', '台北', '新北', '桃園', '台中', '台南', '高雄', '基隆', '新竹', '新竹', '苗栗', '彰化', '南投', '雲林', '嘉義', '嘉義', '屏東', '宜蘭', '花蓮', '台東', '澎湖', '金門', '連江'];
 
-    protected $lineNotify;
+    protected $lineNotifyService;
     protected $chatId = '-4664862172'; // 暫時先用全域變數 // 日後聊天室擴充再更改
     protected $telegramService;
     protected $seleniumService;
     protected $jobTexts;
 
-    public function __construct(LineNotify $lineNotify, TelegramService $telegramService, SeleniumService $seleniumService)
+    public function __construct(LineNotifyService $lineNotifyService, TelegramService $telegramService, SeleniumService $seleniumService)
     {
         parent::__construct();
-        $this->lineNotify      = $lineNotify;
+        $this->lineNotifyService      = $lineNotifyService;
         $this->telegramService = $telegramService;
         $this->seleniumService = $seleniumService;
     }
@@ -401,7 +401,7 @@ class ScraperPtt extends Command {
         // {
         //     $this->info('save data success');
 
-        //     $response = $this->lineNotify->sendMessage($sendNotifyText);
+        //     $response = $this->lineNotifyService->sendMessage($sendNotifyText);
 
         //     $data = json_decode($response);
 

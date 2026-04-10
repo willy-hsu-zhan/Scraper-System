@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\GovOjt;
 use Illuminate\Support\Facades\Log;
-use App\Services\LineNotify;
+use App\Services\LineNotifyService;
 use App\Services\TelegramService;
 use App\Services\SeleniumService;
 use Carbon\Carbon;
@@ -16,15 +16,15 @@ class NotifyOpenGovCourses extends Command
 
     protected $description = '通知今天開放報名的政府訓練課程';
 
-    protected $lineNotify;
+    protected $lineNotifyService;
     protected $telegramService;
     protected $seleniumService;
     protected $chatId = '-4937576377';
 
-    public function __construct(LineNotify $lineNotify, TelegramService $telegramService, SeleniumService $seleniumService)
+    public function __construct(LineNotifyService $lineNotifyService, TelegramService $telegramService, SeleniumService $seleniumService)
     {
         parent::__construct();
-        $this->lineNotify = $lineNotify;
+        $this->lineNotifyService = $lineNotifyService;
         $this->telegramService = $telegramService;
         $this->seleniumService = $seleniumService;
     }

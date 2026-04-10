@@ -9,7 +9,7 @@ use Goutte\Client;
 use Illuminate\Support\Carbon;
 use Symfony\Component\DomCrawler\Crawler;
 use App\Models\JobFacebook;
-use App\Services\LineNotify;
+use App\Services\LineNotifyService;
 use Exception;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
@@ -121,9 +121,9 @@ class SearchJob104Test extends DuskTestCase
 
             if(!empty($sendNotifyText))
             {
-                $lineNotify = app(LineNotify::class);
+                $lineNotifyService = app(LineNotifyService::class);
 
-                $response = $lineNotify->sendMessage($sendNotifyText);
+                $response = $lineNotifyService->sendMessage($sendNotifyText);
 
                 $data = json_decode($response);
 
