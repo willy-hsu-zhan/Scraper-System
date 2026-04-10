@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom/client';
 import axios from 'axios';
 import '../../css/app.css';
 import Card from '../components/Card';
+import CardList from '../components/CardList';
 
 function FeedApp() {
     const [feed, setFeed] = useState([]);
@@ -17,9 +18,7 @@ function FeedApp() {
     return (
         <div className="max-w-xl mx-auto py-6 px-4">
             <h1 className="text-2xl font-bold mb-6 text-center">🔥 最新資訊</h1>
-            <div className="space-y-4">
-                {feed.map((item, index) => <Card key={index} item={item} />)}
-            </div>
+            <CardList items={feed} />
         </div>
     );
 }
