@@ -38,7 +38,7 @@ class ScraperChickpt extends Command {
     protected $telegramService;
     protected $seleniumService;
     protected $jobTexts;
-    protected $chatId = '-4664862172'; // 暫時先用全域變數 // 日後聊天室擴充再更改
+    protected $chatId = '-1004460159382'; // 暫時先用全域變數 // 日後聊天室擴充再更改
 
     public function __construct(LineNotifyService $lineNotifyService, TelegramService $telegramService, SeleniumService $seleniumService)
     {
