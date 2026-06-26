@@ -24,7 +24,7 @@ class ScraperOjt extends Command
     protected $lineNotifyService;
     protected $telegramService;
     protected $seleniumService;
-    protected $chatId = '-4968260856'; // Telegram 群組 ID
+    protected $chatId = '-5185362500'; // Telegram 群組 ID
 
     public function __construct(TelegramService $telegramService, SeleniumService $seleniumService)
     {
@@ -83,10 +83,10 @@ class ScraperOjt extends Command
                     $actions = new WebDriverActions($driver);
                     $actions->sendKeys($body, WebDriverKeys::ESCAPE)->perform();
                 } catch (\Facebook\WebDriver\Exception\StaleElementReferenceException $e) {
-                    // sleep(5);
-                    // $body = $driver->findElement(WebDriverBy::tagName('body'));
-                    // $actions = new WebDriverActions($driver);
-                    // $actions->sendKeys($body, WebDriverKeys::ESCAPE)->perform();
+                    sleep(5);
+                    $body = $driver->findElement(WebDriverBy::tagName('body'));
+                    $actions = new WebDriverActions($driver);
+                    $actions->sendKeys($body, WebDriverKeys::ESCAPE)->perform();
                 }
 
                 // 設定每頁顯示100筆
@@ -96,10 +96,10 @@ class ScraperOjt extends Command
                 $this->clickElement($driver, '#btnGoRecCount');
 
                 // 等待表格出現且有資料
-                // $driver->wait(15)->until(function($driver) {
-                //     $rows = $driver->findElements(WebDriverBy::cssSelector('table tbody tr'));
-                //     return count($rows) > 15;
-                // });
+                $driver->wait(15)->until(function($driver) {
+                    $rows = $driver->findElements(WebDriverBy::cssSelector('table tbody tr'));
+                    return count($rows) > 15;
+                });
 
                 $this->waitForTableHasRows($driver, 20);
 
@@ -254,7 +254,7 @@ class ScraperOjt extends Command
             sleep(5);
         }
         // 同步localDB to prod
-        $this->runSyncShell();
+        //$this->runSyncShell();
     }
 
     protected function runSyncShell()
