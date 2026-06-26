@@ -12,15 +12,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        if (app()->environment('local')) {
-            $schedule->command('app:scraper-ojt')
+        $schedule->command('app:scraper-ojt')
                 ->hourly()
                 ->timezone('Asia/Taipei'); // 每天 00:00、12:00
-        }
-
-        if (!app()->environment('production')) {
-            return;
-        }
 
         $logPath = storage_path('logs/search-youtube.log');
 
