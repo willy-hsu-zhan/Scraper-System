@@ -19,7 +19,7 @@ class NotifyOpenGovCourses extends Command
     protected $lineNotifyService;
     protected $telegramService;
     protected $seleniumService;
-    protected $chatId = '-4937576377';
+    protected $chatId = '-5185362500';
 
     public function __construct(LineNotifyService $lineNotifyService, TelegramService $telegramService, SeleniumService $seleniumService)
     {
