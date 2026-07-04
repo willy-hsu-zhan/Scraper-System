@@ -25,7 +25,7 @@ class Scraper4GamersFreeGame extends Command
     protected $telegramService;
     protected $seleniumService;
     protected $jobTexts;
-    protected $chatId = '-1003484274541'; // 暫時先用全域變數 // 日後聊天室擴充再更改
+    protected $chatId = '-5107922211'; // 暫時先用全域變數 // 日後聊天室擴充再更改
 
     public function __construct(TelegramService $telegramService, SeleniumService $seleniumService)
     {
