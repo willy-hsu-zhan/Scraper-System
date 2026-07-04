@@ -21,8 +21,5 @@ Route::get('/feed', function () {
 });
 
 Route::get('/', function () {
-    return response()->json([
-        'status' => 'ok',
-        'time' => now(),
-    ]);
+    return '<h1>Scraper System</h1><p>Server is running 🚀</p>';
 });
