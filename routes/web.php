@@ -1,9 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DonationController;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Response;
 
 // Route::get('/donation', [DonationController::class, 'index'])->name('donate');
 
@@ -20,6 +17,6 @@ Route::get('/feed', function () {
     return view('feed');
 });
 
-Route::get('/', function () {
+Route::get('/test', function () {
     return '<h1>Scraper System</h1><p>Server is running 🚀</p>';
 });
