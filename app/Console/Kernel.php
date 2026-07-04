@@ -13,8 +13,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->command('app:scraper-ojt')
-                ->hourly()
-                ->timezone('Asia/Taipei'); // 每天 00:00、12:00
+            ->hourly()
+            ->timezone('Asia/Taipei'); // 每天 00:00、12:00
 
         $logPath = storage_path('logs/search-youtube.log');
 
@@ -73,6 +73,13 @@ class Kernel extends ConsoleKernel
                 $hour = now('Asia/Taipei')->hour;
                 return !($hour >= 1 && $hour < 7);
             });
+
+        $schedule->command('app:scraper-judicial-auction')
+            ->dailyAt('00:30')
+            ->timezone('Asia/Taipei')
+            ->withoutOverlapping()
+            ->onOneServer()
+            ->runInBackground();
         //$schedule->command('app:scraper-ptt')->cron('15,45 * * * *');
         // 每天凌晨 2 點清理 1 天前的檔案
         $schedule->command('youtube:clean')->dailyAt('02:00');
@@ -85,7 +92,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands(): void
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }
