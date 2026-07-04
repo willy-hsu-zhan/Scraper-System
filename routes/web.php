@@ -19,3 +19,10 @@ Route::get('/youtube/download/{filename}', function ($filename) {
 Route::get('/feed', function () {
     return view('feed');
 });
+
+Route::get('/', function () {
+    return response()->json([
+        'status' => 'ok',
+        'time' => now(),
+    ]);
+});
