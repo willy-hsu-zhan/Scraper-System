@@ -67,12 +67,9 @@ class Kernel extends ConsoleKernel
             ->timezone('Asia/Taipei');
 
         $schedule->command('app:scraper-chickpt')
-            ->cron('15,45 * * * *')
+            ->everyFiveMinutes()
             ->timezone('Asia/Taipei')
-            ->when(function () {
-                $hour = now('Asia/Taipei')->hour;
-                return !($hour >= 1 && $hour < 7);
-            });
+            ->withoutOverlapping();
 
         $schedule->command('app:scraper-judicial-auction')
             ->dailyAt('00:30')
