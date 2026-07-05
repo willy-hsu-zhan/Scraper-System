@@ -30,7 +30,7 @@ return new class extends Migration
             $table->string('address')->comment('地址');
 
             // 價格
-            $table->string('price')->comment('底價');
+            $table->integer('price')->comment('底價');
 
             // PDF
             $table->text('pdf_url')->nullable()->comment('PDF網址');
