@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use App\Models\JudicialAuction;
 use App\Services\TelegramService;
 use App\Services\SeleniumService;
+use App\Services\GeminiService;
 use Facebook\WebDriver\WebDriverBy;
 
 class ScraperJudicialAuction extends Command
@@ -15,15 +16,18 @@ class ScraperJudicialAuction extends Command
 
     protected $telegramService;
     protected $seleniumService;
+    protected $geminiService;
     protected $chatId = '-5434110194';
 
     public function __construct(
         TelegramService $telegramService,
-        SeleniumService $seleniumService
+        SeleniumService $seleniumService,
+        GeminiService $geminiService
     ) {
         parent::__construct();
         $this->telegramService = $telegramService;
         $this->seleniumService = $seleniumService;
+        $this->geminiService = $geminiService;
     }
 
     public function handle()
@@ -117,12 +121,14 @@ class ScraperJudicialAuction extends Command
                  */
                 $address = trim($cols[5]->getText());
                 $pdfUrl = null;
+                $pdfSummary = null;
 
                 $links = $cols[5]->findElements(WebDriverBy::cssSelector('a'));
 
                 if (!empty($links)) {
 
                     $link = $links[0];
+
                     $text = trim($link->getText());
 
                     if (!empty($text)) {
@@ -144,7 +150,7 @@ class ScraperJudicialAuction extends Command
                 $priceText = $this->formatPriceToChinese($priceNumber);
 
                 /**
-                 * 點交（安全抓最後欄）
+                 * 點交（最後欄）
                  */
                 $isHandover = null;
 
@@ -160,6 +166,9 @@ class ScraperJudicialAuction extends Command
                     }
                 }
 
+                /**
+                 * DB
+                 */
                 $item = [
                     'court'        => $courtName,
                     'case_no'      => $caseNo,
@@ -179,8 +188,25 @@ class ScraperJudicialAuction extends Command
                     $item
                 );
 
+                /**
+                 * 🚀 新資料才做 AI + 推播
+                 */
                 if ($record->wasRecentlyCreated) {
 
+                    /**
+                     * 🧠 PDF AI 摘要（安全版）
+                     */
+                    if (!empty($pdfUrl)) {
+                        try {
+                            $pdfSummary = $this->geminiService->summarizePdfByUrl($pdfUrl);
+                        } catch (\Throwable $e) {
+                            $pdfSummary = null;
+                        }
+                    }
+
+                    /**
+                     * 🧾 Telegram message
+                     */
                     $message =
                         "🏠 新法拍案件\n\n" .
                         "🏛 法院：{$record->court}\n" .
@@ -191,6 +217,20 @@ class ScraperJudicialAuction extends Command
                         "💰 價格：{$priceText}（{$priceNumber}元）\n\n" .
                         "📦 點交：" . ($isHandover ?? '未標示') . "\n\n" .
                         "📄 PDF：{$record->pdf_url}";
+
+                    /**
+                     * 🧠 AI summary append
+                     */
+                    if (!empty($pdfSummary)) {
+                        $message .= "\n\n🧠 AI摘要：\n{$pdfSummary}";
+                    }
+
+                    /**
+                     * ⚠️ 防止 Telegram 超長
+                     */
+                    if (strlen($message) > 3800) {
+                        $message = mb_substr($message, 0, 3800) . "\n\n...(略)";
+                    }
 
                     $this->telegramService->sendMessage(
                         $this->chatId,
