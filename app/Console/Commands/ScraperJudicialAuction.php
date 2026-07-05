@@ -62,10 +62,16 @@ class ScraperJudicialAuction extends Command
 
         sleep(2);
 
+        /**
+         * 進 iframe v1（查詢條件）
+         */
         $driver->switchTo()->frame(
             $driver->findElement(WebDriverBy::id('v1'))
         );
 
+        /**
+         * 選法院
+         */
         $courtOptions = $driver->findElements(
             WebDriverBy::cssSelector("#court option")
         );
@@ -77,15 +83,25 @@ class ScraperJudicialAuction extends Command
             }
         }
 
+        /**
+         * 查詢條件
+         */
         $driver->findElement(WebDriverBy::id('proptype_c51c52'))->click();
         $driver->findElement(WebDriverBy::id('rrange_ALL'))->click();
         $driver->findElement(WebDriverBy::cssSelector('label[for="column_date"]'))->click();
 
+        /**
+         * 查詢
+         */
         $driver->findElement(WebDriverBy::id('query_btn'))->click();
 
         sleep(5);
 
+        /**
+         * 切 iframe v2（結果）
+         */
         $driver->switchTo()->defaultContent();
+
         $driver->switchTo()->frame(
             $driver->findElement(WebDriverBy::id('v2'))
         );
@@ -112,7 +128,9 @@ class ScraperJudicialAuction extends Command
                 $auctionDate = trim($cols[3]->getText());
                 $area = trim($cols[4]->getText());
 
-                // 🔥 address / link safe fix
+                /**
+                 * 地址 + PDF 安全解析
+                 */
                 $address = trim($cols[5]->getText());
                 $pdfUrl = null;
 
@@ -131,7 +149,8 @@ class ScraperJudicialAuction extends Command
                     $pdfFile = $link->getAttribute('data-filenm');
 
                     if (!empty($pdfFile)) {
-                        $pdfUrl = "https://aomp109.judicial.gov.tw/judbp/wkw/WHD1A02/DO_VIEWPDF.htm?filenm={$pdfFile}";
+                        $pdfUrl =
+                            "https://aomp109.judicial.gov.tw/judbp/wkw/WHD1A02/DO_VIEWPDF.htm?filenm={$pdfFile}";
                     }
                 }
 
@@ -155,32 +174,36 @@ class ScraperJudicialAuction extends Command
                     $item
                 );
 
+                /**
+                 * 只通知新資料
+                 */
                 if ($record->wasRecentlyCreated) {
 
                     $message =
-                        "🏠 <b>新法拍案件</b>\n\n" .
+                        "🏠 新法拍案件\n\n" .
 
-                        "🏛 <b>法院</b>\n{$record->court}\n\n" .
-                        "📌 <b>案號</b>\n{$record->case_no}\n\n" .
-                        "📅 <b>日期</b>\n{$record->auction_date}\n\n" .
-                        "📍 <b>地區</b>\n{$record->area}\n\n" .
-                        "🏡 <b>地址</b>\n{$record->address}\n\n" .
-                        "💰 <b>價格</b>\n{$record->price}\n\n" .
+                        "🏛 法院\n{$record->court}\n\n" .
+                        "📌 案號\n{$record->case_no}\n" .
+                        "{$record->auction_date}\n\n" .
 
-                        "📄 <a href='{$record->pdf_url}'>查看PDF</a>";
+                        "📍 地區\n{$record->area}\n\n" .
+
+                        "🏡 地址\n{$record->address}\n\n" .
+
+                        "💰 價格\n{$record->price}\n\n" .
+
+                        "📄 PDF\n{$record->pdf_url}";
 
                     $this->telegramService->sendMessage(
                         $this->chatId,
-                        $message,
-                        [
-                            'parse_mode' => 'HTML'
-                        ]
+                        $message
                     );
 
                     sleep(2);
                 }
 
             } catch (\Throwable $e) {
+                // 單筆錯誤不影響整批
                 continue;
             }
         }
