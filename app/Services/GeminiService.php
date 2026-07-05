@@ -38,7 +38,17 @@ class GeminiService
                 [
                     "parts" => [
                         [
-                            "text" => "請幫我摘要以下法拍 PDF，整理成條列重點（包含風險與投資價值）："
+                            "text" => "你是專業法拍套利投資顧問（台灣市場），請用保守投資角度分析以下法拍 PDF：
+輸出必須包含：
+
+- 投資評分（0~100分）
+- 是否建議出價（YES / NO / WAIT）
+- 風險等級（低 / 中 / 高）
+- 3個最關鍵風險點
+- 1個最重要機會點
+- 建議最高出價區間（如果可判斷）
+
+請避免空泛描述，要偏實戰決策。"
                         ],
                         [
                             "inline_data" => [
@@ -84,7 +94,7 @@ class GeminiService
                 "maxOutputTokens" => config('gemini.max_output_tokens', 1024),
             ]
         ]);
-        dd($response->json());
+
         if (!$response->successful()) {
             return null;
         }
