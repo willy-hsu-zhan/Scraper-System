@@ -153,11 +153,10 @@ class ScraperJudicialAuction extends Command
                     }
                 }
 
-                $priceText = trim($cols[6]->getText());
+                $priceRaw = trim($cols[6]->getText());
+                $priceNumber = (int) preg_replace('/[^\d]/', '', $priceRaw);
 
-                // 只保留數字
-                $price = (int) preg_replace('/[^\d]/', '', $priceText);
-
+                $priceTextFormatted = $this->formatPriceToChinese($priceNumber);
                 // 是否點交（新增）
                 $isHandover = null;
 
@@ -206,7 +205,7 @@ class ScraperJudicialAuction extends Command
 
                         "🏡 地址\n{$record->address}\n\n" .
 
-                        "💰 價格\n{$record->price}\n\n" .
+                        "💰 價格\n{$priceTextFormatted}（{$priceNumber}）\n\n".
 
                         "📄 PDF\n{$record->pdf_url}";
 
@@ -222,5 +221,20 @@ class ScraperJudicialAuction extends Command
                 continue;
             }
         }
+    }
+
+    private function formatPriceToChinese(int $number): string
+    {
+        if ($number >= 10000) {
+
+            $wan = intval($number / 10000);
+            $rest = $number % 10000;
+
+            return $rest > 0
+                ? "{$wan}萬{$rest}元"
+                : "{$wan}萬元";
+        }
+
+        return "{$number}元";
     }
 }
