@@ -157,7 +157,6 @@ class ScraperJudicialAuction extends Command
                 $priceNumber = (int) preg_replace('/[^\d]/', '', $priceRaw);
 
                 $priceTextFormatted = $this->formatPriceToChinese($priceNumber);
-                // 是否點交（新增）
                 $isHandover = null;
 
                 if (isset($cols[7])) {
@@ -165,8 +164,10 @@ class ScraperJudicialAuction extends Command
 
                     if (str_contains($handoverText, '點交')) {
                         $isHandover = '點交';
+                    } elseif (str_contains($handoverText, '不點交')) {
+                        $isHandover = '不點交';
                     } else {
-                        $isHandover = $handoverText; // 防止未來有「不點交」
+                        $isHandover = $handoverText;
                     }
                 }
 
@@ -176,7 +177,7 @@ class ScraperJudicialAuction extends Command
                     'auction_date' => $auctionDate,
                     'area'         => $area,
                     'address'      => $address,
-                    'price'        => $price,
+                    'price'        => $priceNumber,
                     'is_handover'  => $isHandover,
                     'pdf_url'      => $pdfUrl,
                 ];
@@ -205,7 +206,7 @@ class ScraperJudicialAuction extends Command
 
                         "🏡 地址\n{$record->address}\n\n" .
 
-                        "💰 價格\n{$priceTextFormatted}（{$priceNumber}）\n\n".
+                        "💰 價格\n{$priceTextFormatted}（{$priceNumber}）\n\n" .
 
                         "📄 PDF\n{$record->pdf_url}";
 
