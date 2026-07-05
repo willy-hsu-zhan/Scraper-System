@@ -13,6 +13,7 @@ class JudicialAuction extends Model
         'area',
         'address',
         'price',
+        'is_handover',
         'pdf_url',
     ];
 }

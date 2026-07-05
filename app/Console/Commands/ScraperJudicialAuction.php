@@ -48,7 +48,6 @@ class ScraperJudicialAuction extends Command
 
                 sleep(2);
             }
-
         } catch (\Throwable $e) {
             $this->error($e->getMessage());
         } finally {
@@ -158,7 +157,20 @@ class ScraperJudicialAuction extends Command
 
                 // 只保留數字
                 $price = (int) preg_replace('/[^\d]/', '', $priceText);
-                
+
+                // 是否點交（新增）
+                $isHandover = null;
+
+                if (isset($cols[7])) {
+                    $handoverText = trim($cols[7]->getText());
+
+                    if (str_contains($handoverText, '點交')) {
+                        $isHandover = '點交';
+                    } else {
+                        $isHandover = $handoverText; // 防止未來有「不點交」
+                    }
+                }
+
                 $item = [
                     'court'        => $courtName,
                     'case_no'      => $caseNo,
@@ -166,6 +178,7 @@ class ScraperJudicialAuction extends Command
                     'area'         => $area,
                     'address'      => $address,
                     'price'        => $price,
+                    'is_handover'  => $isHandover,
                     'pdf_url'      => $pdfUrl,
                 ];
 
@@ -204,7 +217,6 @@ class ScraperJudicialAuction extends Command
 
                     sleep(2);
                 }
-
             } catch (\Throwable $e) {
                 // 單筆錯誤不影響整批
                 continue;

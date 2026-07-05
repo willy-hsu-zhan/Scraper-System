@@ -32,6 +32,9 @@ return new class extends Migration
             // 價格
             $table->integer('price')->comment('底價');
 
+            // 是否點交
+            $table->string('is_handover')->nullable()->comment('是否點交');
+
             // PDF
             $table->text('pdf_url')->nullable()->comment('PDF網址');
 
