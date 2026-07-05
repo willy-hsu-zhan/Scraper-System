@@ -147,10 +147,9 @@ class ScraperJudicialAuction extends Command
                  * 點交（安全抓最後欄）
                  */
                 $isHandover = null;
-                $lastCol = $cols[count($cols) - 1] ?? null;
 
-                if ($lastCol) {
-                    $handoverText = trim($lastCol->getText());
+                if (isset($cols[7])) {
+                    $handoverText = trim($cols[7]->getText());
 
                     if (str_contains($handoverText, '點交')) {
                         $isHandover = '點交';
