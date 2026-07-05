@@ -154,8 +154,11 @@ class ScraperJudicialAuction extends Command
                     }
                 }
 
-                $price = trim($cols[6]->getText());
+                $priceText = trim($cols[6]->getText());
 
+                // 只保留數字
+                $price = (int) preg_replace('/[^\d]/', '', $priceText);
+                
                 $item = [
                     'court'        => $courtName,
                     'case_no'      => $caseNo,
