@@ -32,9 +32,6 @@ class ScraperJudicialAuction extends Command
 
         try {
 
-            /**
-             * 🔥 分法院（避免全部 timeout）
-             */
             $courts = [
                 'KSD' => '臺灣高雄地方法院',
                 'TCD' => '臺灣臺中地方法院',
@@ -54,33 +51,21 @@ class ScraperJudicialAuction extends Command
 
         } catch (\Throwable $e) {
             $this->error($e->getMessage());
-
         } finally {
             $driver->quit();
         }
     }
 
-    /**
-     * =========================
-     * 單一法院抓取核心
-     * =========================
-     */
     private function scrapeCourt($driver, string $courtCode, string $courtName)
     {
         $driver->get('https://aomp109.judicial.gov.tw/judbp/wkw/WHD1A02.htm');
 
         sleep(2);
 
-        /**
-         * iframe v1（查詢條件）
-         */
         $driver->switchTo()->frame(
             $driver->findElement(WebDriverBy::id('v1'))
         );
 
-        /**
-         * 選法院（safe）
-         */
         $courtOptions = $driver->findElements(
             WebDriverBy::cssSelector("#court option")
         );
@@ -92,34 +77,21 @@ class ScraperJudicialAuction extends Command
             }
         }
 
-        /**
-         * 查詢條件
-         */
         $driver->findElement(WebDriverBy::id('proptype_c51c52'))->click();
         $driver->findElement(WebDriverBy::id('rrange_ALL'))->click();
         $driver->findElement(WebDriverBy::cssSelector('label[for="column_date"]'))->click();
 
-        /**
-         * 查詢
-         */
         $driver->findElement(WebDriverBy::id('query_btn'))->click();
 
         sleep(5);
 
-        /**
-         * 切結果 iframe
-         */
         $driver->switchTo()->defaultContent();
-
         $driver->switchTo()->frame(
             $driver->findElement(WebDriverBy::id('v2'))
         );
 
         sleep(2);
 
-        /**
-         * 抓資料列
-         */
         $rows = $driver->findElements(
             WebDriverBy::cssSelector('tr[id="trdata"]')
         );
@@ -140,22 +112,21 @@ class ScraperJudicialAuction extends Command
                 $auctionDate = trim($cols[3]->getText());
                 $area = trim($cols[4]->getText());
 
-                /**
-                 * =========================
-                 * ⚠️ 安全解析 address + pdf
-                 * =========================
-                 */
+                // 🔥 address / link safe fix
                 $address = trim($cols[5]->getText());
-
                 $pdfUrl = null;
 
                 $links = $cols[5]->findElements(WebDriverBy::cssSelector('a'));
 
-                if (count($links) > 0) {
+                if (!empty($links)) {
 
                     $link = $links[0];
 
-                    $address = trim($link->getText()) ?: $address;
+                    $text = trim($link->getText());
+
+                    if (!empty($text)) {
+                        $address = $text;
+                    }
 
                     $pdfFile = $link->getAttribute('data-filenm');
 
@@ -166,9 +137,6 @@ class ScraperJudicialAuction extends Command
 
                 $price = trim($cols[6]->getText());
 
-                /**
-                 * DB item
-                 */
                 $item = [
                     'court'        => $courtName,
                     'case_no'      => $caseNo,
@@ -179,11 +147,6 @@ class ScraperJudicialAuction extends Command
                     'pdf_url'      => $pdfUrl,
                 ];
 
-                /**
-                 * =========================
-                 * DB + notify only new
-                 * =========================
-                 */
                 $record = JudicialAuction::firstOrCreate(
                     [
                         'court'   => $courtName,
@@ -194,23 +157,30 @@ class ScraperJudicialAuction extends Command
 
                 if ($record->wasRecentlyCreated) {
 
+                    $message =
+                        "🏠 <b>新法拍案件</b>\n\n" .
+
+                        "🏛 <b>法院</b>\n{$record->court}\n\n" .
+                        "📌 <b>案號</b>\n{$record->case_no}\n\n" .
+                        "📅 <b>日期</b>\n{$record->auction_date}\n\n" .
+                        "📍 <b>地區</b>\n{$record->area}\n\n" .
+                        "🏡 <b>地址</b>\n{$record->address}\n\n" .
+                        "💰 <b>價格</b>\n{$record->price}\n\n" .
+
+                        "📄 <a href='{$record->pdf_url}'>查看PDF</a>";
+
                     $this->telegramService->sendMessage(
                         $this->chatId,
-                        "🏠 新法拍案件\n\n" .
-                        "法院：{$record->court}\n" .
-                        "案號：{$record->case_no}\n" .
-                        "日期：{$record->auction_date}\n" .
-                        "地區：{$record->area}\n" .
-                        "地址：{$record->address}\n" .
-                        "價格：{$record->price}\n" .
-                        ($record->pdf_url ?? '')
+                        $message,
+                        [
+                            'parse_mode' => 'HTML'
+                        ]
                     );
 
                     sleep(2);
                 }
 
             } catch (\Throwable $e) {
-                // 🔥 單 row fail 不影響整批
                 continue;
             }
         }
