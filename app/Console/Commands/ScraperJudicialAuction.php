@@ -157,10 +157,10 @@ class ScraperJudicialAuction extends Command
                 if (isset($cols[7])) {
                     $handoverText = trim($cols[7]->getText());
 
-                    if (str_contains($handoverText, '點交')) {
-                        $isHandover = '點交';
-                    } elseif (str_contains($handoverText, '不點交')) {
+                    if (str_contains($handoverText, '不點交')) {
                         $isHandover = '不點交';
+                    } elseif (str_contains($handoverText, '點交')) {
+                        $isHandover = '點交';
                     } else {
                         $isHandover = $handoverText ?: null;
                     }
