@@ -243,19 +243,23 @@ class ScraperChickpt extends Command {
     public function sendJobNotifications($jobs)
     {
         $sendNotifyText = '';
-        foreach( $jobs as $job )
-        {
-            $sendNotifyText = "**** 小雞上工 **** \n\n";
-            $sendNotifyText .= '標題：' . $job['title'] . "\n";
-            $sendNotifyText .= '任務連結：' . $job['link'] . "\n";
-            $sendNotifyText .= '雇主：' . $job['company'] . "\n";
-            $sendNotifyText .= '工作地方：' . $job['place'] . "\n";
-            $sendNotifyText .= '薪水：' . $job['salary'] . "\n\n";
+        foreach ($jobs as $job) {
+                $sendNotifyText = <<<TEXT
+            🐥 小雞上工
 
-            $this->telegramService->sendMessage($this->chatId, $sendNotifyText);
-            sleep(3);
+            📌 {$job['title']}
+            🏢 {$job['company']}
+            📍 {$job['place']}
+            💰 {$job['salary']}
+            🔗 {$job['link']}
+
+            ────────────────
+            TEXT;
+
+                $this->telegramService->sendMessage($this->chatId, $sendNotifyText);
+                sleep(3);
             $sendNotifyText = '';
-        }
+            }
 
         $totalPrice = $this->sumTotalPrice($jobs);
 
