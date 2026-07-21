@@ -34,12 +34,12 @@ class NotifyOpenGovCourses extends Command
         $now = Carbon::now('Asia/Taipei');
 
         // 通知：三天後的一整天（00:00 ~ 23:59）
-        $this->notifyCourses(
-            $now->copy()->addDays(3)->startOfDay(),
-            $now->copy()->addDays(3)->endOfDay(),
-            'notified_3days_before',
-            '📢 課程將在三天後開放報名！'
-        );
+        // $this->notifyCourses(
+        //     $now->copy()->addDays(3)->startOfDay(),
+        //     $now->copy()->addDays(3)->endOfDay(),
+        //     'notified_3days_before',
+        //     '📢 課程將在三天後開放報名！'
+        // );
 
         // 通知：明天的一整天
         $this->notifyCourses(
@@ -82,8 +82,8 @@ class NotifyOpenGovCourses extends Command
                     "🕒 *報名時間：* {$course->registration_start_at}\n" .
                     "📍 *地點：* {$course->training_location}\n" .
                     "💰 *學員自付：* {$course->student_cost} 元\n" .
-                    "🔗 *報名網址：* {$course->training_unit_url}\n".
-                    "📅 *加入 Google 日曆提醒：* {$calendarLink}";
+                    "🔗 *報名網址：* {$course->training_unit_url}";
+                    //"📅 *加入 Google 日曆提醒：* {$calendarLink}";
 
             sleep(5);
 
@@ -114,8 +114,8 @@ class NotifyOpenGovCourses extends Command
                     "🕒 *報名時間：* {$course->registration_start_at}\n" .
                     "📍 *地點：* {$course->training_location}\n" .
                     "💰 *學員自付：* {$course->student_cost} 元\n" .
-                    "🔗 *報名網址：* {$course->training_unit_url}\n".
-                    "📅 *加入 Google 日曆提醒：* {$calendarLink}";
+                    "🔗 *報名網址：* {$course->training_unit_url}";
+                    //"📅 *加入 Google 日曆提醒：* {$calendarLink}";
 
             sleep(2);
 

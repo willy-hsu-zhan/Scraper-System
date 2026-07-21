@@ -231,8 +231,8 @@ class ScraperOjt extends Command
                         . "【報名日期】" . $course['registrationDate'] . "\n"
                         . "【招生狀態】" . $course['enrollmentStatus'] . "\n"
                         . "【預訂訓練期間】" . $course['scheduledPeriod'] . "\n"
-                        . "【報名繳費方式】" . $course['paymentMethod'] . "\n"
-                        . "【加入Google日曆提醒】 " . $this->generateGoogleCalendarLink($course);
+                        . "【報名繳費方式】" . $course['paymentMethod'] . "";
+                        //. "【加入Google日曆提醒】 " . $this->generateGoogleCalendarLink($course);
 
                 $this->telegramService->sendMessage($this->chatId, $message);
                 sleep(7);
