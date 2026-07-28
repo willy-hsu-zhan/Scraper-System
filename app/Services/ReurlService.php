@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Log;
 
 class ReurlService
 {
-    protected string $apiKey;
+    protected ?string $apiKey;
 
     public function __construct()
     {
@@ -19,6 +19,12 @@ class ReurlService
      */
     public function shorten(string $url, array $utm = []): ?string
     {
+        if (!$this->apiKey) {
+            Log::warning('Reurl API key missing');
+
+            return null;
+        }
+
         try {
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
@@ -36,6 +42,7 @@ class ReurlService
             }
 
             Log::warning('Reurl shorten failed', [
+                'status' => $response->status(),
                 'response' => $response->json(),
             ]);
 
@@ -47,6 +54,4 @@ class ReurlService
 
         return null;
     }
-
-    
 }
