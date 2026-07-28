@@ -13,8 +13,8 @@ use Facebook\WebDriver\Interactions\WebDriverActions;
 use Facebook\WebDriver\WebDriverKeys;
 use App\Models\GovOjt;
 use Symfony\Component\Process\Process;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 use Carbon\Carbon;
+use App\Services\ReurlService;
 
 class ScraperOjt extends Command
 {
@@ -24,13 +24,15 @@ class ScraperOjt extends Command
     protected $lineNotifyService;
     protected $telegramService;
     protected $seleniumService;
+    protected $reurlService;
     protected $chatId = '-5185362500'; // Telegram 群組 ID
 
-    public function __construct(TelegramService $telegramService, SeleniumService $seleniumService)
+    public function __construct(TelegramService $telegramService, SeleniumService $seleniumService, ReurlService $reurlService)
     {
         parent::__construct();
         $this->telegramService = $telegramService;
         $this->seleniumService = $seleniumService;
+        $this->reurlService = $reurlService;
     }
 
     public function handle()
@@ -361,16 +363,20 @@ class ScraperOjt extends Command
     /**
      * 產生 Google 日曆事件新增連結
      */
-    protected function generateGoogleCalendarLink(array $course): string
+    protected function generateGoogleCalendarLink(GovOjt $course): string
     {
-        $title = urlencode($course['courseName']);
-        $details = urlencode("報名網址：" . $course['trainingUnitUrl']);
-        $location = urlencode($course['trainingLocation']);
+        $title = urlencode($course->course_name);
+        $details = urlencode("報名網址：" . $course->training_unit_url);
+        $location = urlencode($course->training_location ?? '');
 
-        // 將報名開始與結束時間轉成 Google Calendar 格式
-        [$start, $end] = $this->convertTaiwanDatetimeRange($course['registrationDate']);
-        $startUTC = $this->toGoogleCalendarDateTime($start);
-        $endUTC = $this->toGoogleCalendarDateTime($end);
+        // 報名開始時間（台灣）
+        $start = Carbon::parse($course->registration_start_at, 'Asia/Taipei');
+
+        // Google Calendar 必須有結束時間
+        $end = $start->copy()->addMinutes(5);
+
+        $startUTC = $start->copy()->setTimezone('UTC')->format('Ymd\THis\Z');
+        $endUTC = $end->copy()->setTimezone('UTC')->format('Ymd\THis\Z');
 
         $dates = "{$startUTC}/{$endUTC}";
 
@@ -379,8 +385,18 @@ class ScraperOjt extends Command
         $url .= "&dates={$dates}";
         $url .= "&details={$details}";
         $url .= "&location={$location}";
+        $url .= "&reminder=popup:60";
         $url .= "&sf=true&output=xml";
 
-        return $url;
+
+        // 轉短網址
+        return $this->reurlService->shorten(
+            $url,
+            [
+                'utm_source' => 'LINE',
+                'utm_medium' => 'notification',
+                'utm_campaign' => 'gov_course_calendar',
+            ]
+        ) ?? $url;
     }
 }

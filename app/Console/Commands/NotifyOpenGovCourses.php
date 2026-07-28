@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 use App\Services\LineNotifyService;
 use App\Services\TelegramService;
 use App\Services\SeleniumService;
+use App\Services\ReurlService;
 use Carbon\Carbon;
 
 class NotifyOpenGovCourses extends Command
@@ -19,14 +20,16 @@ class NotifyOpenGovCourses extends Command
     protected $lineNotifyService;
     protected $telegramService;
     protected $seleniumService;
+    protected $reurlService;
     protected $chatId = '-5185362500';
 
-    public function __construct(LineNotifyService $lineNotifyService, TelegramService $telegramService, SeleniumService $seleniumService)
+    public function __construct(LineNotifyService $lineNotifyService, TelegramService $telegramService, SeleniumService $seleniumService, ReurlService $reurlService)
     {
         parent::__construct();
         $this->lineNotifyService = $lineNotifyService;
         $this->telegramService = $telegramService;
         $this->seleniumService = $seleniumService;
+        $this->reurlService = $reurlService;
     }
 
     public function handle()
@@ -134,6 +137,9 @@ class NotifyOpenGovCourses extends Command
     /**
      * 產生 Google 日曆事件新增連結
      */
+    /**
+     * 產生 Google 日曆事件新增連結
+     */
     protected function generateGoogleCalendarLink(GovOjt $course): string
     {
         $title = urlencode($course->course_name);
@@ -142,7 +148,9 @@ class NotifyOpenGovCourses extends Command
 
         // 報名開始時間（台灣）
         $start = Carbon::parse($course->registration_start_at, 'Asia/Taipei');
-        $end = $start->copy()->addHour(); // 事件給 1 小時
+
+        // Google Calendar 必須有結束時間
+        $end = $start->copy()->addMinutes(5);
 
         $startUTC = $start->copy()->setTimezone('UTC')->format('Ymd\THis\Z');
         $endUTC = $end->copy()->setTimezone('UTC')->format('Ymd\THis\Z');
@@ -154,9 +162,19 @@ class NotifyOpenGovCourses extends Command
         $url .= "&dates={$dates}";
         $url .= "&details={$details}";
         $url .= "&location={$location}";
+        $url .= "&reminder=popup:60";
         $url .= "&sf=true&output=xml";
 
-        return $url;
+
+        // 轉短網址
+        return $this->reurlService->shorten(
+            $url,
+            [
+                'utm_source' => 'LINE',
+                'utm_medium' => 'notification',
+                'utm_campaign' => 'gov_course_calendar',
+            ]
+        ) ?? $url;
     }
 
     protected function convertTaiwanDatetimeRange($range) {
