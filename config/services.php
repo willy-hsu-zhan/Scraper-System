@@ -34,4 +34,8 @@ return [
     'line_notify' => [
         'token' => env('LINE_NOTIFY_TOKEN'),
     ],
+
+    'reurl' => [
+        'api_key' => env('REURL_API_KEY'),
+    ],
 ];
