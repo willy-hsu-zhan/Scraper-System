@@ -18,7 +18,8 @@ use Facebook\WebDriver\WebDriverExpectedCondition;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\WebDriverBy;
 
-class ScraperPtt extends Command {
+class ScraperPtt extends Command
+{
     /**
      * The name and signature of the console command.
      *
@@ -39,7 +40,7 @@ class ScraperPtt extends Command {
     public $locations = ['遠端', '多區', '台北', '新北', '桃園', '台中', '台南', '高雄', '基隆', '新竹', '新竹', '苗栗', '彰化', '南投', '雲林', '嘉義', '嘉義', '屏東', '宜蘭', '花蓮', '台東', '澎湖', '金門', '連江'];
 
     protected $lineNotifyService;
-    protected $chatId = '-4664862172'; // 暫時先用全域變數 // 日後聊天室擴充再更改
+    protected $chatId = '-5541710352'; // 暫時先用全域變數 // 日後聊天室擴充再更改
     protected $telegramService;
     protected $seleniumService;
     protected $jobTexts;
@@ -56,16 +57,13 @@ class ScraperPtt extends Command {
     {
         $filterPlace = '';
 
-        foreach( $this->locations as $location )
-        {
-            if( mb_strpos($notFilterPlace, $location) !== false )
-            {
+        foreach ($this->locations as $location) {
+            if (mb_strpos($notFilterPlace, $location) !== false) {
                 $filterPlace = $location;
                 break;
             }
         }
-        if( empty($filterPlace) )
-        {
+        if (empty($filterPlace)) {
             $filterPlace = mb_substr($notFilterPlace, 1, 2);
         }
 
@@ -78,48 +76,61 @@ class ScraperPtt extends Command {
         $baseUrl   = 'https://www.pttweb.cc/bbs/part-time/index.html';
         $webDriver = $this->seleniumService->openWebDriver();
 
-        try
-        {
+        try {
             $webDriver->get($baseUrl);
-
+            file_put_contents(
+                storage_path('ptt.html'),
+                $webDriver->getPageSource()
+            );
             $jobs    = [];
             $maxPage = 2;
 
-            for( $currentPage = 1; $currentPage <= $maxPage; $currentPage++ )
-            {
-                $jobElements = $webDriver->findElements(WebDriverBy::cssSelector('.r-ent'));
+            for ($currentPage = 1; $currentPage <= $maxPage; $currentPage++) {
+                $jobElements = $webDriver->findElements(
+                    WebDriverBy::cssSelector('.e7-container')
+                );
 
-                foreach( $jobElements as $element )
-                {
-                    $linkElement = $element->findElement(WebDriverBy::cssSelector('.title a'));
-                    $link        = $linkElement->getAttribute('href');
-                    $title       = $linkElement->getText();
-                    $author      = $element->findElement(WebDriverBy::cssSelector('.author'))->getText();
-                    //$date        = $element->findElement(WebDriverBy::cssSelector('.date'))->getText();
-                    $date = Carbon::now()->toDateString();
+                foreach ($jobElements as $element) {
+                    try {
+                        $linkElement = $element->findElement(
+                            WebDriverBy::cssSelector('.e7-title')
+                        );
 
-                    $jobs[] = [
-                        'title'   => trim($title),
-                        'link'    => $originUrl . trim($link),
-                        'company' => trim($author),
-                        'date'    => trim($date),
-                    ];
+                        $link = $element->findElement(
+                            WebDriverBy::cssSelector('a.e7-article-default')
+                        )->getAttribute('href');
+
+                        $title = $linkElement->getText();
+
+                        $author = $element->findElement(
+                            WebDriverBy::cssSelector('.e7-meta-container a')
+                        )->getText();
+
+                        $date = $element->findElement(
+                            WebDriverBy::cssSelector('.e7-grey-text')
+                        )->getText();
+
+
+                        $jobs[] = [
+                            'title'   => trim($title),
+                            'link'    => $originUrl . trim($link),
+                            'company' => trim($author),
+                            'date'    => trim($date),
+                        ];
+                    } catch (Exception $e) {
+                        continue;
+                    }
                 }
-
-                try
-                {
+                try {
                     $nextPageLink = $webDriver->findElement(WebDriverBy::linkText('‹ 上頁'));
                     $nextPageLink->click();
-                }
-                catch (Exception $e)
-                {
+                } catch (Exception $e) {
                     Log::info('No more pages to scrape.');
                     break;
                 }
             }
 
-            foreach( $jobs as $job )
-            {
+            foreach ($jobs as $job) {
                 if (!JobPtt::where('link', $job['link'])->exists()) {
                     JobPtt::create($job);
                     $this->jobTexts[] = $this->formatJobMessage($job);
@@ -127,13 +138,9 @@ class ScraperPtt extends Command {
             }
 
             $this->sendNotifications();
-        }
-        catch (Exception $e)
-        {
+        } catch (Exception $e) {
             Log::error('Error during scraping: ' . $e->getMessage());
-        }
-        finally
-        {
+        } finally {
             $webDriver->quit();
         }
     }
@@ -149,21 +156,17 @@ class ScraperPtt extends Command {
 
     public function sendNotifications()
     {
-        if(!empty($this->jobTexts))
-        {
-            foreach( $this->jobTexts as $message )
-            {
+        if (!empty($this->jobTexts)) {
+            foreach ($this->jobTexts as $message) {
                 $this->telegramService->sendMessage($this->chatId, $message);
                 sleep(3);
             }
 
             // 送發財圖
-            $this->sendFachaiGIF();
+            //$this->sendFachaiGIF();
             // 辨別已看過的訊息分隔用
             $this->telegramService->sendMessage($this->chatId, '最後更新時間：' . Carbon::now()->setTimezone('Asia/Taipei')->format('Y-m-d H:i:s'));
-        }
-        else
-        {
+        } else {
             //$this->sendPeriodNoJobMsg();
         }
     }
@@ -184,12 +187,10 @@ class ScraperPtt extends Command {
         $files    = File::files($path);
         $fileName = [];
 
-        foreach( $files as $file )
-        {
+        foreach ($files as $file) {
             $fileName[] = $file->getFilename();
         }
-        if( !empty($fileName) )
-        {
+        if (!empty($fileName)) {
             $randomFile     = $fileName[array_rand($fileName)];
             $randomFilePath = $path . $randomFile;
             $this->telegramService->sendDocument($this->chatId, $randomFilePath, $randomFile);
@@ -211,14 +212,10 @@ class ScraperPtt extends Command {
 
         $crawler = $client->request('GET', $url);
 
-        while( $currentPage <= $maxPage )
-        {
-            try
-            {
+        while ($currentPage <= $maxPage) {
+            try {
                 $link = $crawler->selectLink('上頁')->link(); // 網頁只有上頁or下頁
-            }
-            catch (Exception $e)
-            {
+            } catch (Exception $e) {
                 Log::error($e->getMessage());
                 Log::error('No more pages to load.');
                 break;
@@ -226,13 +223,10 @@ class ScraperPtt extends Command {
 
             $crawler = $client->click($link);
 
-            try
-            {
+            try {
                 $jobList = $crawler->filter('.r-ent'); // 抓取job-list獨有的css設定
 
-            }
-            catch (Exception $e)
-            {
+            } catch (Exception $e) {
                 Log::error($e->getMessage());
                 Log::error('CSS style or div struct seem has been changed!.');
             }
@@ -342,14 +336,11 @@ class ScraperPtt extends Command {
         }
         */
 
-        foreach( $jobs as $key => $job )
-        {
-            if( isset($job['place']) && $job['place'] == '公告' )
-            {
+        foreach ($jobs as $key => $job) {
+            if (isset($job['place']) && $job['place'] == '公告') {
                 unset($jobs[$key]);
             }
-            if( mb_strpos($job['title'], '已徵到') !== false )
-            {
+            if (mb_strpos($job['title'], '已徵到') !== false) {
                 unset($jobs[$key]);
             }
         }
@@ -358,13 +349,11 @@ class ScraperPtt extends Command {
 
         $sendNotifyText = "";
 
-        foreach( $jobs as $job )
-        {
+        foreach ($jobs as $job) {
             $date = Carbon::now()->toDateString();
 
-            if( !JobPtt::where('link', $job['link'])->first() )
-            {
-                if( empty($sendNotifyText) )
+            if (!JobPtt::where('link', $job['link'])->first()) {
+                if (empty($sendNotifyText))
                     $sendNotifyText .= "\n" . "PTT任務列表" . "\n" . "\n";
 
                 JobPtt::create([
@@ -384,15 +373,15 @@ class ScraperPtt extends Command {
 
                 $this->jobTexts[] = [
                     '**** PTT ****' . "\n\n" .
-                    '標題：' . (isset($job['title']) ? $job['title'] : '') . "\n" .
-                    '任務連結：' . $job['link'] . "\n" .
-                    '雇主：' . (isset($job['company']) ? $job['company'] : '') . "\n"
+                        '標題：' . (isset($job['title']) ? $job['title'] : '') . "\n" .
+                        '任務連結：' . $job['link'] . "\n" .
+                        '雇主：' . (isset($job['company']) ? $job['company'] : '') . "\n"
                     //'工作地方：' . (isset($job['place']) ? $job['place'] : '') . "\n".
                     //'薪水：' . (isset($job['salary']) ? $job['salary'] : 0) . "\n"
                 ];
             }
 
-            if( !empty($sendNotifyText) )
+            if (!empty($sendNotifyText))
                 $sendNotifyText .= "\n" . "\n";
         }
 
@@ -419,10 +408,9 @@ class ScraperPtt extends Command {
         //     $this->info('no recent job period!');
         // }
 
-        if( !empty($this->jobTexts) ) // send telegram notify
+        if (!empty($this->jobTexts)) // send telegram notify
         {
-            foreach( $this->jobTexts as $index => $jobText )
-            {
+            foreach ($this->jobTexts as $index => $jobText) {
                 $message = implode("\n", $jobText);
                 $this->telegramService->sendMessage($this->chatId, $message);
                 sleep(3);

@@ -16,7 +16,7 @@ class Kernel extends ConsoleKernel
             ->hourly()
             ->timezone('Asia/Taipei'); // 每天 00:00、12:00
 
-        $logPath = storage_path('logs/search-youtube.log');
+        //$logPath = storage_path('logs/search-youtube.log');
 
         // ✈️ 旅遊
         // $schedule->command('app:search-youtube TW 19')
@@ -28,22 +28,22 @@ class Kernel extends ConsoleKernel
         //     ->timezone('Asia/Taipei');
 
         // 🎵 音樂
-        $schedule->command('app:search-youtube all 10')
-            ->dailyAt('12:20')
-            ->withoutOverlapping()
-            ->onOneServer()
-            ->runInBackground()
-            ->appendOutputTo($logPath)
-            ->timezone('Asia/Taipei');
+        // $schedule->command('app:search-youtube all 10')
+        //     ->dailyAt('12:20')
+        //     ->withoutOverlapping()
+        //     ->onOneServer()
+        //     ->runInBackground()
+        //     ->appendOutputTo($logPath)
+        //     ->timezone('Asia/Taipei');
 
         // 🎮 遊戲
-        $schedule->command('app:search-youtube TW 20')
-            ->dailyAt('12:25')
-            ->withoutOverlapping()
-            ->onOneServer()
-            ->runInBackground()
-            ->appendOutputTo($logPath)
-            ->timezone('Asia/Taipei');
+        // $schedule->command('app:search-youtube TW 20')
+        //     ->dailyAt('12:25')
+        //     ->withoutOverlapping()
+        //     ->onOneServer()
+        //     ->runInBackground()
+        //     ->appendOutputTo($logPath)
+        //     ->timezone('Asia/Taipei');
 
         // 🎬 電影
         // $schedule->command('app:search-youtube TW 24')
@@ -77,7 +77,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('app:scraper-judicial-auction')
             ->dailyAt('00:30')
             ->timezone('Asia/Taipei');
-        //$schedule->command('app:scraper-ptt')->cron('15,45 * * * *');
+        $schedule->command('app:scraper-ptt')->cron('10,30 * * * *');
         // 每天凌晨 2 點清理 1 天前的檔案
         $schedule->command('youtube:clean')->dailyAt('02:00');
         $schedule->command('app:scraper-rent591')->everyThirtyMinutes()->timezone('Asia/Taipei');
