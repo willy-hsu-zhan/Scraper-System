@@ -265,7 +265,7 @@ class ScraperChickpt extends Command {
 
         if($totalPrice >= 1000) // 本次掃描工作職缺若有超過1000就送發財圖
         {
-            $this->sendFachaiGIF(); // 送發財圖
+            //$this->sendFachaiGIF(); // 送發財圖
         }
 
         $infoText = '本回任務含金量總共為：' . $totalPrice . '元整';
