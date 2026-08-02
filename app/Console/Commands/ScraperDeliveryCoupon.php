@@ -3,19 +3,10 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Goutte\Client;
-use Exception;
-use Illuminate\Support\Facades\Log;
 use App\Services\LineNotifyService;
 use App\Services\TelegramService;
 use App\Services\SeleniumService;
-use App\Models\JobChickpt;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\File;
-use Facebook\WebDriver\Remote\RemoteWebDriver;
-use Facebook\WebDriver\Firefox\FirefoxOptions;
-use Facebook\WebDriver\WebDriverExpectedCondition;
-use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\WebDriverBy;
 use App\Models\DeliveryCoupon;
 
@@ -206,11 +197,6 @@ class ScraperDeliveryCoupon extends Command {
         if (!empty($coupon['code'])) {
             $text .= '🎟 優惠碼：' . $coupon['code'] . "\n";
         }
-
-        // 若未來要開 link 再打開即可
-        // if (!empty($coupon['link'])) {
-        //     $text .= '🔗 ' . $coupon['link'] . "\n";
-        // }
 
         return $text;
     }

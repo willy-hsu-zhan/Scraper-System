@@ -48,14 +48,14 @@ class ScraperKktix extends Command
             $api = "https://kktix.com/g/events/{$event}/base_info";
 
             $result = $driver->executeScript(<<<JS
-return (async () => {
-    const res = await fetch("$api", {
-        credentials: "include"
-    });
+        return (async () => {
+            const res = await fetch("$api", {
+                credentials: "include"
+            });
 
-    return await res.text();
-})();
-JS);
+            return await res.text();
+        })();
+        JS);
 
             if ($this->isBlocked($result)) {
                 throw new \Exception("Still blocked");
@@ -68,10 +68,7 @@ JS);
 
             $this->info("Success");
         } finally {
-
-            // ★ attach 模式不要 quit
-            // $driver->quit();
-
+            $driver->quit();
         }
     }
 

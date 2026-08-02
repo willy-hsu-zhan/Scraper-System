@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Goutte\Client;
-use App\Models\Proxy;
 
 class ScraperFreeProxy extends Command {
     /**
@@ -44,7 +43,6 @@ class ScraperFreeProxy extends Command {
                 unset($proxies[$index]);
                 continue;
             }
-        
             if (is_numeric($proxy[6])) {
                 unset($proxies[$index]);
             }
@@ -52,9 +50,6 @@ class ScraperFreeProxy extends Command {
         $proxies = array_values($proxies);
 
         $ramdomProxy = $proxies[array_rand($proxies)];
-        
         $url = 'http://' . $ramdomProxy[0] . ':' . $ramdomProxy[1];
-        
-        dd($url) ;
     }
 }

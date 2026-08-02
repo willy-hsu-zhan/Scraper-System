@@ -3,8 +3,6 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Exception;
-use Illuminate\Support\Facades\Log;
 use App\Services\TelegramService;
 use App\Services\SeleniumService;
 use App\Models\BirthdayDiscount;

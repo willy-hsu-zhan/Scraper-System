@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Log;
 use Facebook\WebDriver\Interactions\WebDriverActions;
 use Facebook\WebDriver\WebDriverKeys;
 use App\Models\GovOjt;
-use Symfony\Component\Process\Process;
 use Carbon\Carbon;
 use App\Services\ReurlService;
 
@@ -257,30 +256,6 @@ class ScraperOjt extends Command
         }
         // 同步localDB to prod
         //$this->runSyncShell();
-    }
-
-    protected function runSyncShell()
-    {
-        $scriptPath = '/var/www/Scraper-System/bin/sync_gov_ojts.sh';
-
-        $process = new Process(['/bin/bash', $scriptPath]);
-        $process->setTimeout(3600); // 最多跑 1 小時
-        $process->run();
-
-        if (! $process->isSuccessful()) {
-            Log::error('[ScraperOjt] Sync shell failed', [
-                'error' => $process->getErrorOutput(),
-            ]);
-
-            $this->error('❌ 同步 prod 失敗，請查看 log');
-            return;
-        }
-
-        Log::info('[ScraperOjt] Sync shell success', [
-            'output' => $process->getOutput(),
-        ]);
-
-        $this->info('✅ 已成功執行同步 shell');
     }
 
     protected function clickElement(RemoteWebDriver $driver, string $cssSelector)

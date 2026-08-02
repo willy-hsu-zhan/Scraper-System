@@ -162,17 +162,10 @@ class ScraperRent591 extends Command
             $sendNotifyText .= '標題：' . $rent['title'] . "\n";
             $sendNotifyText .= '租屋連結：' . $rent['link'] . "\n";
             $sendNotifyText .= '價格：' . $rent['price'] . " 元/月" . "\n";
-            //$sendNotifyText .= '條件標籤：' . implode('、', $rent['tagTexts']) . "\n";
-            //$sendNotifyText .= '聯絡資訊：' . $rent['ownerInfo'] . "\n\n";
 
             $this->telegramService->sendMessage($this->chatId, $sendNotifyText);
             sleep(1);
-            //$this->telegramService->sendMessage($this->chatId2, $sendNotifyText);
-            //sleep(3); // 避免過快推送被 Telegram 封鎖
         }
-
-        //$this->sendFachaiGIF(); // 額外推送圖片
-
         $infoText = '最後更新時間：' . Carbon::now()->setTimezone('Asia/Taipei')->format('Y-m-d H:i:s');
         $this->telegramService->sendMessage($this->chatId, $infoText);
     }
@@ -187,8 +180,6 @@ class ScraperRent591 extends Command
         $errorMessage .= "目前沒有新的租屋資訊喔！🥲";
 
         $this->telegramService->sendMessage($this->chatId, $errorMessage);
-        //sleep(1);
-        //$this->telegramService->sendMessage($this->chatId2, $errorMessage);
     }
 
 }
