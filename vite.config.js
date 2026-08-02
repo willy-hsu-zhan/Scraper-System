@@ -5,7 +5,13 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
     plugins: [
         laravel({
-            input: ['resources/css/app.css', 'resources/js/app.js'],
+            input: [
+                'resources/js/app.js',
+                'resources/js/pages/Feed.jsx',
+                'resources/js/components/Card.jsx',
+                'resources/js/components/CardList.jsx',
+                'resources/css/app.css',
+            ],
             refresh: true,
         }),
         react(),
@@ -19,4 +25,8 @@ export default defineConfig({
         strictPort: true,
         cors: true,
     },
+    // build: {
+    //     manifest: true,
+    //     outDir: 'public/build',
+    // },
 });
