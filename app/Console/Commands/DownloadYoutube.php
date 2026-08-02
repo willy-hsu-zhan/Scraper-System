@@ -18,8 +18,8 @@ class DownloadYoutube extends Command
 
     protected string $basePath;
     protected $telegramService;
-    protected string $chatId3 = '-5115401485'; // 影片輸出群
-    protected string $chatId2 = '-4661576369'; // 音樂分享群
+    protected string $chatId3 = '-5437101799'; // 影片輸出群
+    protected string $chatId2 = '-5401712481'; // 音樂分享群
     protected string $chatId = '-5229387465'; // 影片輸出記錄群
 
     public function __construct(TelegramService $telegramService)

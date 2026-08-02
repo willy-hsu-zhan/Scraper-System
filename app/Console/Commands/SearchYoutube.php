@@ -17,7 +17,7 @@ class SearchYoutube extends Command
     protected $description = 'Fetch popular YouTube music and push to Telegram with download buttons';
 
     protected TelegramService $telegramService;
-    protected string $chatId = '-4661576369';
+    protected string $chatId = '-5401712481';
 
     public function __construct(TelegramService $telegramService)
     {
