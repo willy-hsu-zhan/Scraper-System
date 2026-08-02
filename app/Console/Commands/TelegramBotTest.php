@@ -28,8 +28,8 @@ class TelegramBotTest extends Command
     public function handle()
     {
         // 設定 Telegram Bot 的 API Key 和 Bot Username
-        $botApiKey = '8030468571:AAFhSaw8zoiwxBZhf14BsL2QI9iQ8N_HKUE';
-        $botUsername = 'Hsu_Notify_Bot'; // 不包含 @
+        $botApiKey = env('TELEGRAM_BOT_API_KEY');
+        $botUsername = env('TELEGRAM_BOT_USERNAME'); // 不包含 @
 
         try {
             // 初始化 Telegram 並設置到 Request
