@@ -9,6 +9,12 @@ class JobPtt extends Model
     protected $table = 'job_ptt';
 
     protected $fillable = [
-        'id','link','company','salary','place','date'
+        'id',
+        'title',
+        'link',
+        'company',
+        'salary',
+        'place',
+        'date'
     ];
 }
