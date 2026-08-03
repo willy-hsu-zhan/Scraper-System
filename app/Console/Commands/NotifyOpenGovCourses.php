@@ -63,7 +63,7 @@ class NotifyOpenGovCourses extends Command
         );
 
         // 補通知漏掉的
-        $this->notifyMissedCourses($now->copy(), '📣 課程已開放報名（補通知）');
+        // $this->notifyMissedCourses($now->copy(), '📣 課程已開放報名（補通知）');
 
         $this->info("✅ 所有時間點的課程通知完成。");
         return Command::SUCCESS;
