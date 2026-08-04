@@ -164,13 +164,13 @@ class TelegramService
                 $this->handleReportGroup($chatId, $text);
                 break;
 
-            case -4661576369: // 熱門音樂分享群
+            case -5401712481: // 熱門音樂分享群
                 $this->handleMusicGroup($chatId, $text);
                 break;
 
-            case -4664862172: // 爬蟲管理群
-                $this->handleCrawlerGroup($chatId, $text);
-                break;
+            // case -4664862172: // 爬蟲管理群
+            //     $this->handleCrawlerGroup($chatId, $text);
+            //     break;
 
             default:
                 Log::info("未定義聊天室訊息", compact('chatId', 'text'));
