@@ -6,9 +6,7 @@ use Longman\TelegramBot\Telegram;
 use Longman\TelegramBot\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Cache;
 use App\Models\TelegramBotLog;
 use Longman\TelegramBot\Entities\InlineKeyboard;
 
@@ -64,12 +62,16 @@ class TelegramService
         $this->telegram = new Telegram($apiKey, $botUsername);
     }
 
-    public function sendMessage(string $chatId, string $message)
+    public function sendMessage(string $chatId, string $message, ?array $keyboard = null)
     {
         $data = [
             'chat_id' => $chatId,
             'text' => $message,
         ];
+
+        if ($keyboard) {
+            $data['reply_markup'] = json_encode($keyboard);
+        }
 
         try
         {
