@@ -14,6 +14,7 @@ use Facebook\WebDriver\WebDriverKeys;
 use App\Models\GovOjt;
 use Carbon\Carbon;
 use App\Services\ReurlService;
+use App\Services\GeminiService;
 
 class ScraperOjt extends Command
 {
@@ -23,14 +24,16 @@ class ScraperOjt extends Command
     protected $lineNotifyService;
     protected $telegramService;
     protected $seleniumService;
+    protected $geminiService;
     protected $reurlService;
     protected $chatId = '-5185362500'; // Telegram 群組 ID
 
-    public function __construct(TelegramService $telegramService, SeleniumService $seleniumService, ReurlService $reurlService)
+    public function __construct(TelegramService $telegramService, SeleniumService $seleniumService, GeminiService $geminiService, ReurlService $reurlService)
     {
         parent::__construct();
         $this->telegramService = $telegramService;
         $this->seleniumService = $seleniumService;
+        $this->geminiService = $geminiService;
         $this->reurlService = $reurlService;
     }
 
@@ -203,7 +206,7 @@ class ScraperOjt extends Command
                 [$registrationStartAt, $registrationEndAt] = $this->convertTaiwanDatetimeRange($course['registrationDate']);
                 [$scheduledStartDate, $scheduledEndDate] = $this->convertTaiwanDateRange($course['scheduledPeriod']);
 
-                GovOjt::create([
+                $govOjt = GovOjt::create([
                     'training_unit_url' => $course['trainingUnitUrl'],
                     'course_code' => $course['courseCode'],
                     'course_name' => $course['courseName'],
@@ -220,6 +223,34 @@ class ScraperOjt extends Command
                     'payment_method' => $course['paymentMethod'],
                 ]);
 
+                // AI 摘要
+                try {
+                    $this->info("🤖 正在分析：{$govOjt->course_name}");
+
+                    $summary = $this->geminiService->summarizeCourseByUrl(
+                        $govOjt->training_unit_url
+                    );
+
+                    if (!empty($summary)) {
+                        $govOjt->update([
+                            'ai_summary' => $summary,
+                        ]);
+
+                        $this->info("✅ AI 摘要完成");
+                    } else {
+                        $this->warn("⚠️ AI 沒有回傳摘要");
+                    }
+
+                } catch (\Throwable $e) {
+                    Log::error('AI 摘要失敗', [
+                        'course' => $govOjt->course_name,
+                        'url' => $govOjt->training_unit_url,
+                        'error' => $e->getMessage(),
+                    ]);
+
+                    $this->warn("❌ AI 分析失敗：" . $e->getMessage());
+                }
+
                 // 發送 Telegram 通知
                 $message = "【課程名稱】" . $course['courseName'] . "\n"
                         . "【課程代碼】" . $course['courseCode'] . "\n"
@@ -235,8 +266,17 @@ class ScraperOjt extends Command
                         . "【報名繳費方式】" . $course['paymentMethod'] . "";
                         //. "【加入Google日曆提醒】 " . $this->generateGoogleCalendarLink($course);
 
-                $this->telegramService->sendMessage($this->chatId, $message);
-                sleep(7);
+                // BTN 產生
+                $keyboard = [
+                    [
+                        [
+                            'text' => '🧠 AI 課程分析',
+                            'callback_data' => "ojt_summary:{$govOjt->id}"
+                        ]
+                    ]
+                ];
+                $this->telegramService->sendMessage($this->chatId, $message, $keyboard);
+                sleep(3);
             }
 
         } catch (\Exception $e) {

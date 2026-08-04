@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Artisan;
 use App\Models\TelegramBotLog;
 use Longman\TelegramBot\Entities\InlineKeyboard;
 use App\Models\JudicialAuction;
+use App\Models\GovOjt;
 
 class TelegramService
 {
@@ -174,6 +175,11 @@ class TelegramService
             case -5434110194: // 法拍通知群
                 $this->handleAuctionGroup($chatId, $text);
                 break;
+
+            case -5185362500: // 課程通知群
+                $this->handleOjtGroup($chatId, $text);
+                break;
+
             // case -4664862172: // 爬蟲管理群
             //     $this->handleCrawlerGroup($chatId, $text);
             //     break;
@@ -181,6 +187,36 @@ class TelegramService
             default:
                 Log::info("未定義聊天室訊息", compact('chatId', 'text'));
                 break;
+        }
+    }
+
+    private function handleOjtGroup(int $chatId, string $text): void
+    {
+        if (str_starts_with($text, 'ojt_summary:')) {
+
+            $id = (int) str_replace(
+                'ojt_summary:',
+                '',
+                $text
+            );
+
+            $course = GovOjt::find($id);
+
+            if (!$course) {
+                $this->sendMessage(
+                    $chatId,
+                    "❌ 找不到課程"
+                );
+                return;
+            }
+
+            $this->sendMessage(
+                $chatId,
+                "🧠 AI 課程分析\n\n"
+                . ($course->ai_summary ?? '尚未產生 AI 摘要')
+            );
+
+            return;
         }
     }
 

@@ -24,12 +24,6 @@ class GeminiTest extends Command
 
         if (!$text) {
             $text = "
-        法拍屋案件：
-        案號 113年度拍字第123號
-        位於高雄市前鎮區
-        拍賣標的為住宅大樓
-        第一拍價格 1200 萬
-        可能存在租賃關係
         ";
         }
 
@@ -38,9 +32,10 @@ class GeminiTest extends Command
 
         $this->info("🤖 呼叫 Gemini...");
 
+        $url = 'https://ojt.wda.gov.tw/ClassSearch/Detail?PlanType=1&OCID=173299';
         try {
-            $summary = $this->geminiService->summarizeText($text);
-
+            //$summary = $this->geminiService->summarizeText($text);
+            $summary = $this->geminiService->summarizeCourseByUrl($url);
             if (!$summary) {
                 $this->error("❌ Gemini 回傳為空（null）");
                 return 1;

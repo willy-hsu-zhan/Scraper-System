@@ -10,6 +10,7 @@ class GovOjt extends Model
     use HasFactory;
 
     protected $fillable = [
+        'id',
         'training_unit_url',
         'course_code',
         'course_name',
@@ -27,6 +28,7 @@ class GovOjt extends Model
         'notified_3days_before',
         'notified_1day_before',
         'notified_1hour_before',
+        'ai_summary',
     ];
 
     protected $casts = [
