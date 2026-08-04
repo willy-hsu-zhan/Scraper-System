@@ -38,6 +38,9 @@ return new class extends Migration
             // PDF
             $table->text('pdf_url')->nullable()->comment('PDF網址');
 
+            // AI摘要
+            $table->text('ai_summary')->nullable()->comment('AI摘要');
+
             $table->timestamps();
 
             // 同一法院同一案號通常唯一

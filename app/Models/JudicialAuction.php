@@ -15,5 +15,6 @@ class JudicialAuction extends Model
         'price',
         'is_handover',
         'pdf_url',
+        'ai_summary'
     ];
 }

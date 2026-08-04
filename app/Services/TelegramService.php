@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Artisan;
 use App\Models\TelegramBotLog;
 use Longman\TelegramBot\Entities\InlineKeyboard;
+use App\Models\JudicialAuction;
 
 class TelegramService
 {
@@ -170,6 +171,9 @@ class TelegramService
                 $this->handleMusicGroup($chatId, $text);
                 break;
 
+            case -5434110194: // 法拍通知群
+                $this->handleAuctionGroup($chatId, $text);
+                break;
             // case -4664862172: // 爬蟲管理群
             //     $this->handleCrawlerGroup($chatId, $text);
             //     break;
@@ -178,6 +182,54 @@ class TelegramService
                 Log::info("未定義聊天室訊息", compact('chatId', 'text'));
                 break;
         }
+    }
+
+    private function handleAuctionGroup(int $chatId, string $text): void
+    {
+        // 輸入案件 ID
+        $auctionId = intval($text);
+
+        if (!$auctionId) {
+            $this->sendMessage(
+                $chatId,
+                "請輸入法拍案件 ID，例如：\n\n184"
+            );
+
+            return;
+        }
+
+        $auction = JudicialAuction::find($auctionId);
+
+        if (!$auction) {
+
+            $this->sendMessage(
+                $chatId,
+                "❌ 找不到案件 ID：{$auctionId}"
+            );
+
+            return;
+        }
+
+        if (empty($auction->ai_summary)) {
+
+            $this->sendMessage(
+                $chatId,
+                "⏳ 此案件尚未產生 AI 摘要，請先點擊案件通知中的按鈕。"
+            );
+
+            return;
+        }
+
+        $message =
+            "🧠 AI摘要\n\n" .
+            "🏛 法院：{$auction->court}\n" .
+            "📌 案號：{$auction->case_no}\n\n" .
+            $auction->ai_summary;
+
+        $this->sendMessage(
+            $chatId,
+            $message
+        );
     }
 
     private function handleReportGroup(int|string $chatId, string $text): void

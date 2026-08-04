@@ -202,21 +202,7 @@ class ScraperJudicialAuction extends Command
                     $item
                 );
 
-                /**
-                 * 🚀 新資料才做 AI + 推播
-                 */
                 if ($record->wasRecentlyCreated) {
-
-                    /**
-                     * 🧠 PDF AI 摘要（安全版）
-                     */
-                    if (!empty($pdfUrl)) {
-                        try {
-                            $pdfSummary = $this->geminiService->summarizePdfByUrl($pdfUrl);
-                        } catch (\Throwable $e) {
-                            $pdfSummary = null;
-                        }
-                    }
 
                     /**
                      * 🧾 Telegram message
@@ -232,12 +218,6 @@ class ScraperJudicialAuction extends Command
                         "📦 點交：" . ($isHandover ?? '未標示') . "\n\n" .
                         "📄 PDF：{$record->pdf_url}";
 
-                    /**
-                     * 🧠 AI summary append
-                     */
-                    if (!empty($pdfSummary)) {
-                        $message .= "\n\n🧠 AI摘要：\n{$pdfSummary}";
-                    }
 
                     /**
                      * ⚠️ 防止 Telegram 超長
