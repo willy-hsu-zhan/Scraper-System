@@ -377,36 +377,108 @@ class TelegramService
         $this->sendMessage($chatId, "🚀 Selenium Server 已啟動");
     }
 
-    private function handleCallback(array $callback): void
+    private function handleOjtCallback(array $callback): void
     {
-        $data   = $callback['data'];
+        $data = $callback['data'];
         $chatId = $callback['message']['chat']['id'];
 
-        [$type, $mode, $videoId, $encodedTitle] = array_pad(explode('|', $data), 4, null);
-        $title = $encodedTitle ? base64_decode($encodedTitle) : '未知標題';
+        $id = (int) str_replace(
+            'ojt_summary:',
+            '',
+            $data
+        );
+
+        $course = GovOjt::find($id);
+
+        if (!$course) {
+            $this->sendMessage(
+                $chatId,
+                "❌ 找不到課程"
+            );
+        } else {
+            $this->sendMessage(
+                $chatId,
+                "🧠 AI 課程分析\n\n" .
+                ($course->ai_summary ?? '尚未產生 AI 摘要')
+            );
+        }
+
+        Request::answerCallbackQuery([
+            'callback_query_id' => $callback['id'],
+            'text' => '課程分析完成',
+            'show_alert' => false,
+        ]);
+    }
+
+    private function handleYoutubeCallback(array $callback): void
+    {
+        $data = $callback['data'];
+        $chatId = $callback['message']['chat']['id'];
+
+        [$type, $mode, $videoId, $encodedTitle] =
+            array_pad(explode('|', $data), 4, null);
+
+        $title = $encodedTitle
+            ? base64_decode($encodedTitle)
+            : '未知標題';
+
 
         if ($type === 'yt') {
+
             $url = "https://www.youtube.com/watch?v={$videoId}";
 
             if ($mode === 'audio') {
-                $this->sendMessage($chatId, "🎵 開始下載音樂：\n{$title}");
+                $this->sendMessage(
+                    $chatId,
+                    "🎵 開始下載音樂：\n{$title}"
+                );
+
                 Artisan::call('youtube:download', [
                     'url' => $url,
                     '--audio-only' => true,
                 ]);
             }
 
+
             if ($mode === 'video') {
-                $this->sendMessage($chatId, "🎬 開始下載影片：\n{$title}");
+                $this->sendMessage(
+                    $chatId,
+                    "🎬 開始下載影片：\n{$title}"
+                );
+
                 Artisan::call('youtube:download', [
                     'url' => $url,
                 ]);
             }
         }
 
+
         Request::answerCallbackQuery([
             'callback_query_id' => $callback['id'],
             'text' => '已收到指令，開始處理',
+            'show_alert' => false,
+        ]);
+    }
+
+    private function handleCallback(array $callback): void
+    {
+        $data = $callback['data'];
+
+        if (str_starts_with($data, 'ojt_summary:')) {
+            $this->handleOjtCallback($callback);
+            return;
+        }
+
+
+        if (str_starts_with($data, 'yt|')) {
+            $this->handleYoutubeCallback($callback);
+            return;
+        }
+
+
+        Request::answerCallbackQuery([
+            'callback_query_id' => $callback['id'],
+            'text' => '未知指令',
             'show_alert' => false,
         ]);
     }
