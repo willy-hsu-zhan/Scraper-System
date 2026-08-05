@@ -377,6 +377,26 @@ class TelegramService
         $this->sendMessage($chatId, "🚀 Selenium Server 已啟動");
     }
 
+    private function formatTelegramText(string $text): string
+    {
+        // 移除 Markdown 標題符號 ###
+        $text = preg_replace('/^#+\s*/m', '', $text);
+
+        // **文字** → 文字
+        $text = preg_replace('/\*\*(.*?)\*\*/', '$1', $text);
+
+        // 單獨 bullet * → •
+        $text = preg_replace('/^\s*\*\s+/m', '• ', $text);
+
+        // 避免多餘 ---
+        $text = preg_replace('/^-{3,}$/m', '', $text);
+
+        // 清除多餘空行
+        $text = preg_replace("/\n{3,}/", "\n\n", $text);
+
+        return trim($text);
+    }
+
     private function handleOjtCallback(array $callback): void
     {
         $data = $callback['data'];
@@ -396,10 +416,13 @@ class TelegramService
                 "❌ 找不到課程"
             );
         } else {
+            $summary = $this->formatTelegramText(
+                $course->ai_summary ?? '尚未產生 AI 摘要'
+            );
+
             $this->sendMessage(
                 $chatId,
-                "🧠 AI 課程分析\n\n" .
-                ($course->ai_summary ?? '尚未產生 AI 摘要')
+                "🧠 AI 課程分析\n\n" . $summary
             );
         }
 
