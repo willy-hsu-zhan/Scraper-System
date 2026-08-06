@@ -53,21 +53,79 @@ class ScraperPtt extends Command
         $this->seleniumService = $seleniumService;
     }
 
-    private function fliterPlace(string $notFilterPlace): string
+    private function filterPlace(string $title): string
     {
-        $filterPlace = '';
+        $locations = [
+            '遠端',
+            '全國',
+            '多區',
+            '台北',
+            '新北',
+            '桃園',
+            '台中',
+            '台南',
+            '高雄',
+            '基隆',
+            '新竹',
+            '苗栗',
+            '彰化',
+            '南投',
+            '雲林',
+            '嘉義',
+            '屏東',
+            '宜蘭',
+            '花蓮',
+            '台東',
+            '澎湖',
+            '金門',
+        ];
 
-        foreach ($this->locations as $location) {
-            if (mb_strpos($notFilterPlace, $location) !== false) {
-                $filterPlace = $location;
-                break;
+
+        foreach ($locations as $location) {
+
+
+            if (mb_strpos($title, $location) !== false) {
+
+                return $location;
             }
         }
-        if (empty($filterPlace)) {
-            $filterPlace = mb_substr($notFilterPlace, 1, 2);
+
+
+        return '未分類';
+    }
+
+    private function parseSalary(string $title): ?string
+    {
+        // 時薪
+        if (preg_match('/時薪\s?(\d+)/u', $title, $match)) {
+            return '時薪 ' . $match[1];
         }
 
-        return $filterPlace;
+
+        // 月薪
+        if (preg_match('/月薪\s?(\d+)/u', $title, $match)) {
+            return '月薪 ' . $match[1];
+        }
+
+
+        // 日薪
+        if (preg_match('/日薪\s?(\d+)/u', $title, $match)) {
+            return '日薪 ' . $match[1];
+        }
+
+
+        // 薪資數字，例如 200/hr、500元
+        if (preg_match('/(\d+)\s?(元|\/hr|\/小時|\/時)/u', $title, $match)) {
+            return $match[1] . '元';
+        }
+
+
+        if (mb_strpos($title, '面議') !== false) {
+            return '面議';
+        }
+
+
+        return null;
     }
 
     public function handle()
@@ -83,8 +141,9 @@ class ScraperPtt extends Command
             $maxPage = 2;
 
 
-            // 先開啟網頁
+            // 初始化
             $webDriver->get($baseUrl);
+
 
             // 等待 Vue render
             $webDriver->wait(15)->until(
@@ -102,7 +161,7 @@ class ScraperPtt extends Command
 
 
                 $this->info(
-                    '目前網址: '.$webDriver->getCurrentURL()
+                    '目前網址: ' . $webDriver->getCurrentURL()
                 );
 
 
@@ -112,11 +171,12 @@ class ScraperPtt extends Command
 
 
                 $this->info(
-                    '找到文章數: '.count($articleElements)
+                    '找到文章數: ' . count($articleElements)
                 );
 
 
                 foreach ($articleElements as $element) {
+
 
                     try {
 
@@ -131,7 +191,7 @@ class ScraperPtt extends Command
                         $link = $element->getAttribute('href');
 
 
-                        // 找作者
+                        // 作者
                         $author = '';
 
                         try {
@@ -143,15 +203,14 @@ class ScraperPtt extends Command
                                     )
                                 )->getText()
                             );
-
-                        } catch(Exception $e) {
-
+                        } catch (Exception $e) {
                         }
 
 
 
-                        // 找日期
-                        $date = null;
+                        // 日期
+                        $date = now()->format('Y-m-d');
+
 
                         try {
 
@@ -164,36 +223,51 @@ class ScraperPtt extends Command
 
                             if (preg_match('/\d{4}\/\d{2}\/\d{2}/', $dateText)) {
 
+
                                 $date = Carbon::createFromFormat(
                                     'Y/m/d H:i',
                                     trim($dateText)
                                 )->format('Y-m-d');
-
                             }
-
-                        } catch(Exception $e) {
-
+                        } catch (Exception $e) {
                         }
 
 
 
+                        // 地區
+                        $place = $this->filterPlace($title);
+
+
+                        // 薪資
+                        $salary = $this->parseSalary($title);
+
+
+
                         $jobs[] = [
+
                             'title'   => $title,
-                            'link'    => $originUrl.$link,
+
+                            'link'    => $originUrl . $link,
+
                             'company' => $author,
-                            'date'    => $date ?? now()->format('Y-m-d'),
+
+                            'date'    => $date,
+
+                            'place'   => $place,
+
+                            'salary'  => $salary,
+
                         ];
+                    } catch (Exception $e) {
 
-
-                    } catch(Exception $e) {
 
                         Log::warning(
-                            'Parse article failed: '.$e->getMessage()
+                            'Parse article error: ' . $e->getMessage()
                         );
+
 
                         continue;
                     }
-
                 }
 
 
@@ -201,46 +275,52 @@ class ScraperPtt extends Command
                 // 下一頁
                 if ($currentPage < $maxPage) {
 
+
                     try {
+
 
                         $nextPageLink = $webDriver->findElement(
                             WebDriverBy::linkText('‹ 上頁')
                         );
 
+
                         $nextPageLink->click();
 
 
                         sleep(3);
+                    } catch (Exception $e) {
 
-
-                    } catch(Exception $e) {
 
                         Log::info(
-                            'No more pages to scrape.'
+                            'No more pages.'
                         );
 
+
                         break;
-
                     }
-
                 }
-
             }
 
 
 
-            // 寫入 DB
+
+            /**
+             * DB 儲存
+             */
             foreach ($jobs as $job) {
+
 
                 if (!JobPtt::where('link', $job['link'])->exists()) {
 
+
                     JobPtt::create($job);
+
 
                     $this->jobTexts[] =
                         $this->formatJobMessage($job);
                 }
-
             }
+
 
 
             $this->sendNotifications();
@@ -248,28 +328,23 @@ class ScraperPtt extends Command
 
 
             $this->info(
-                '總共抓取: '.count($jobs).' 筆'
+                '完成，共抓取 ' . count($jobs) . ' 筆'
             );
-
-
-        } catch(Exception $e) {
+        } catch (Exception $e) {
 
 
             Log::error(
-                'Error during scraping: '.$e->getMessage()
+                'Scraper Error: ' . $e->getMessage()
             );
 
 
             $this->error(
                 $e->getMessage()
             );
-
-
         } finally {
 
 
             $webDriver->quit();
-
         }
     }
 
