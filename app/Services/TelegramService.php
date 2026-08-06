@@ -483,6 +483,54 @@ class TelegramService
         ]);
     }
 
+    private function handleAuctionCallback(array $callback): void
+    {
+        $data = $callback['data'];
+
+        $chatId = $callback['message']['chat']['id'];
+
+        $id = (int) str_replace(
+            'auction_summary:',
+            '',
+            $data
+        );
+
+        $auction = JudicialAuction::find($id);
+
+        if (!$auction) {
+
+            $this->sendMessage(
+                $chatId,
+                "❌ 找不到法拍案件"
+            );
+
+        } else {
+
+            $summary = $this->formatTelegramText(
+                $auction->ai_summary ?? '尚未產生 AI 摘要'
+            );
+
+            $message =
+                "🧠 法拍案件分析\n\n" .
+                "🏛 法院：{$auction->court}\n" .
+                "📌 案號：{$auction->case_no}\n\n" .
+                $summary;
+
+
+            $this->sendMessage(
+                $chatId,
+                $message
+            );
+        }
+
+
+        Request::answerCallbackQuery([
+            'callback_query_id' => $callback['id'],
+            'text' => '案件分析完成',
+            'show_alert' => false,
+        ]);
+    }
+
     private function handleCallback(array $callback): void
     {
         $data = $callback['data'];
@@ -495,6 +543,11 @@ class TelegramService
 
         if (str_starts_with($data, 'yt|')) {
             $this->handleYoutubeCallback($callback);
+            return;
+        }
+
+        if (str_starts_with($data, 'auction_summary:')) {
+            $this->handleAuctionCallback($callback);
             return;
         }
 
