@@ -72,93 +72,68 @@ class ScraperPtt extends Command
 
     public function handle()
     {
-        //$originUrl = 'https://www.ptt.cc';
         $originUrl = 'https://www.pttweb.cc';
-        $baseUrl   = 'https://www.pttweb.cc/bbs/part-time/index.html';
+        $baseUrl = 'https://www.pttweb.cc/bbs/part-time/index.html';
+
         $webDriver = $this->seleniumService->openWebDriver();
 
         try {
-            $jobs    = [];
-            $maxPage = 2;
 
-            for ($currentPage = 1; $currentPage <= $maxPage; $currentPage++) {
-                $jobElements = $webDriver->findElements(
-                    WebDriverBy::cssSelector('.e7-container')
-                );
+            $webDriver->get($baseUrl);
 
-                $webDriver->get($baseUrl);
+            sleep(5);
 
-                sleep(5);
+            $this->info('目前網址: '.$webDriver->getCurrentURL());
 
-                $this->info('目前網址: '.$webDriver->getCurrentURL());
+            $this->info('標題: '.$webDriver->getTitle());
 
-                $this->info('找到文章數: '.count($jobElements));
 
-                foreach ($jobElements as $element) {
-                    try {
+            $jobElements = $webDriver->findElements(
+                WebDriverBy::cssSelector('.e7-container')
+            );
 
-    $jobs = [];
-    $maxPage = 2;
 
-    for ($currentPage = 1; $currentPage <= $maxPage; $currentPage++) {
+            $this->info(
+                '找到文章數: '.count($jobElements)
+            );
 
-        $jobElements = $webDriver->findElements(
-            WebDriverBy::cssSelector('.e7-container')
-        );
 
-        $this->info('找到文章數: '.count($jobElements));
+            foreach ($jobElements as $element) {
 
-        foreach ($jobElements as $element) {
-
-            try {
-
-                $linkElement = $element->findElement(
-                    WebDriverBy::cssSelector('.e7-title')
-                );
-
-                $title = $linkElement->getText();
-
-                $link = $element->findElement(
-                    WebDriverBy::cssSelector('a.e7-article-default')
-                )->getAttribute('href');
-
-                $jobs[] = [
-                    'title' => trim($title),
-                    'link' => $originUrl.trim($link),
-                ];
-
-            } catch(Exception $e) {
-                continue;
-            }
-        }
-
-    }
-
-} finally {
-    $webDriver->quit();
-}
-                }
                 try {
-                    $nextPageLink = $webDriver->findElement(WebDriverBy::linkText('‹ 上頁'));
-                    $nextPageLink->click();
-                } catch (Exception $e) {
-                    Log::info('No more pages to scrape.');
-                    break;
+
+                    $title = $element->findElement(
+                        WebDriverBy::cssSelector('.e7-title')
+                    )->getText();
+
+
+                    $link = $element->findElement(
+                        WebDriverBy::cssSelector('a.e7-article-default')
+                    )->getAttribute('href');
+
+
+                    dump([
+                        'title' => trim($title),
+                        'link' => $originUrl.$link,
+                    ]);
+
+
+                } catch(Exception $e) {
+
+                    dump($e->getMessage());
+
                 }
             }
 
-            foreach ($jobs as $job) {
-                if (!JobPtt::where('link', $job['link'])->exists()) {
-                    JobPtt::create($job);
-                    $this->jobTexts[] = $this->formatJobMessage($job);
-                }
-            }
 
-            $this->sendNotifications();
-        } catch (Exception $e) {
-            Log::error('Error during scraping: ' . $e->getMessage());
+        } catch(Exception $e) {
+
+            Log::error($e->getMessage());
+
         } finally {
+
             $webDriver->quit();
+
         }
     }
 
