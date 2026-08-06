@@ -91,52 +91,52 @@ class ScraperPtt extends Command
                 sleep(5);
 
                 $this->info('目前網址: '.$webDriver->getCurrentURL());
-                $this->info('標題: '.$webDriver->getTitle());
 
                 $this->info('找到文章數: '.count($jobElements));
 
                 foreach ($jobElements as $element) {
                     try {
-                        $linkElement = $element->findElement(
-                            WebDriverBy::cssSelector('.e7-title')
-                        );
 
-                        $link = $element->findElement(
-                            WebDriverBy::cssSelector('a.e7-article-default')
-                        )->getAttribute('href');
+    $jobs = [];
+    $maxPage = 2;
 
-                        $title = $linkElement->getText();
+    for ($currentPage = 1; $currentPage <= $maxPage; $currentPage++) {
 
-                        $author = $element->findElement(
-                            WebDriverBy::cssSelector('.e7-meta-container a')
-                        )->getText();
+        $jobElements = $webDriver->findElements(
+            WebDriverBy::cssSelector('.e7-container')
+        );
 
-                        $dateElements = $element->findElements(
-                            WebDriverBy::cssSelector('.e7-grey-text span')
-                        );
+        $this->info('找到文章數: '.count($jobElements));
 
-                        $date = null;
+        foreach ($jobElements as $element) {
 
-                        foreach ($dateElements as $span) {
-                            $text = trim($span->getText());
+            try {
 
-                            if (preg_match('/\d{4}\/\d{2}\/\d{2}/', $text)) {
-                                $date = Carbon::createFromFormat('Y/m/d H:i', $text)
-                                    ->format('Y-m-d');
+                $linkElement = $element->findElement(
+                    WebDriverBy::cssSelector('.e7-title')
+                );
 
-                                break;
-                            }
-                        }
+                $title = $linkElement->getText();
 
-                        $jobs[] = [
-                            'title'   => trim($title),
-                            'link'    => $originUrl . trim($link),
-                            'company' => trim($author),
-                            'date'    => trim($date),
-                        ];
-                    } catch (Exception $e) {
-                        continue;
-                    }
+                $link = $element->findElement(
+                    WebDriverBy::cssSelector('a.e7-article-default')
+                )->getAttribute('href');
+
+                $jobs[] = [
+                    'title' => trim($title),
+                    'link' => $originUrl.trim($link),
+                ];
+
+            } catch(Exception $e) {
+                continue;
+            }
+        }
+
+    }
+
+} finally {
+    $webDriver->quit();
+}
                 }
                 try {
                     $nextPageLink = $webDriver->findElement(WebDriverBy::linkText('‹ 上頁'));
