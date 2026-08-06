@@ -2,15 +2,16 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use App\Services\LineNotifyService;
-use App\Services\TelegramService;
-use App\Services\SeleniumService;
-use Illuminate\Support\Carbon;
-use Facebook\WebDriver\WebDriverBy;
 use App\Models\DeliveryCoupon;
+use App\Services\LineNotifyService;
+use App\Services\SeleniumService;
+use App\Services\TelegramService;
+use Facebook\WebDriver\WebDriverBy;
+use Illuminate\Console\Command;
+use Illuminate\Support\Carbon;
 
-class ScraperDeliveryCoupon extends Command {
+class ScraperDeliveryCoupon extends Command
+{
     /**
      * The name and signature of the console command.
      *
@@ -26,16 +27,21 @@ class ScraperDeliveryCoupon extends Command {
     protected $description = 'Command description';
 
     public $jobs = [];
+
     protected $lineNotifyService;
+
     protected $telegramService;
+
     protected $seleniumService;
+
     protected $jobTexts;
+
     protected $chatId = '-5419894094'; // 暫時先用全域變數 // 日後聊天室擴充再更改
 
     public function __construct(LineNotifyService $lineNotifyService, TelegramService $telegramService, SeleniumService $seleniumService)
     {
         parent::__construct();
-        $this->lineNotifyService      = $lineNotifyService;
+        $this->lineNotifyService = $lineNotifyService;
         $this->telegramService = $telegramService;
         $this->seleniumService = $seleniumService;
     }
@@ -43,8 +49,6 @@ class ScraperDeliveryCoupon extends Command {
     /**
      * Execute the console command.
      */
-
-
     public function handle()
     {
         $webDriver = $this->seleniumService->openWebDriver();
@@ -86,10 +90,14 @@ class ScraperDeliveryCoupon extends Command {
 
             foreach ($rows as $index => $row) {
 
-                if ($index === 0) continue; // 表頭
+                if ($index === 0) {
+                    continue;
+                } // 表頭
 
                 $cols = $row->findElements(WebDriverBy::tagName('td'));
-                if (count($cols) < 3) continue;
+                if (count($cols) < 3) {
+                    continue;
+                }
 
                 try {
                     $a = $cols[2]->findElement(WebDriverBy::tagName('a'));
@@ -99,10 +107,10 @@ class ScraperDeliveryCoupon extends Command {
 
                 $coupons[] = [
                     'section_title' => $title,
-                    'expire_date'   => trim($cols[0]->getText()),
-                    'content'       => trim($cols[1]->getText()),
-                    'code'          => trim($a->getText()),
-                    'link'          => trim($a->getAttribute('href')),
+                    'expire_date' => trim($cols[0]->getText()),
+                    'content' => trim($cols[1]->getText()),
+                    'code' => trim($a->getText()),
+                    'link' => trim($a->getAttribute('href')),
                 ];
             }
         }
@@ -117,7 +125,7 @@ class ScraperDeliveryCoupon extends Command {
             // section_title + content
             $contentHash = hash(
                 'sha256',
-                $coupon['section_title'] . '|' . $coupon['content']
+                $coupon['section_title'].'|'.$coupon['content']
             );
 
             // 已經推播 / 存過就跳過
@@ -131,12 +139,12 @@ class ScraperDeliveryCoupon extends Command {
             // 存 DB
             DeliveryCoupon::create([
                 'section_title' => $coupon['section_title'],
-                'platform'      => $platform,
-                'expire_date'   => $coupon['expire_date'],
-                'content'       => $coupon['content'],
-                'code'          => $coupon['code'],
-                'link'          => $coupon['link'],
-                'content_hash'  => $contentHash,
+                'platform' => $platform,
+                'expire_date' => $coupon['expire_date'],
+                'content' => $coupon['content'],
+                'code' => $coupon['code'],
+                'link' => $coupon['link'],
+                'content_hash' => $contentHash,
             ]);
 
             // 留給推播用
@@ -144,7 +152,7 @@ class ScraperDeliveryCoupon extends Command {
             $newCoupons[] = $coupon;
         }
 
-        if (!empty($newCoupons)) {
+        if (! empty($newCoupons)) {
 
             $skipPlatforms = [
                 '蝦皮美食外送',
@@ -158,6 +166,7 @@ class ScraperDeliveryCoupon extends Command {
                 // 停止營運的平台
                 if (in_array($platform, $skipPlatforms, true)) {
                     $this->info("Skip platform push: {$platform}");
+
                     continue;
                 }
 
@@ -171,7 +180,7 @@ class ScraperDeliveryCoupon extends Command {
                 sleep(2);
             }
 
-            $this->info('Telegram pushed. Coupons: ' . count($newCoupons));
+            $this->info('Telegram pushed. Coupons: '.count($newCoupons));
 
         } else {
             $this->info('No new coupons, no push.');
@@ -183,19 +192,18 @@ class ScraperDeliveryCoupon extends Command {
         string $platform,
         array $coupon,
         int $index
-    ): string
-    {
-        $text  = $this->getPlatformTitle($platform) . "\n";
+    ): string {
+        $text = $this->getPlatformTitle($platform)."\n";
         $text .= "📦 第 {$index} 筆\n\n";
 
-        $text .= '📌 ' . $coupon['content'] . "\n";
+        $text .= '📌 '.$coupon['content']."\n";
 
-        if (!empty($coupon['expire_date'])) {
-            $text .= '⏰ 期限：' . $coupon['expire_date'] . "\n";
+        if (! empty($coupon['expire_date'])) {
+            $text .= '⏰ 期限：'.$coupon['expire_date']."\n";
         }
 
-        if (!empty($coupon['code'])) {
-            $text .= '🎟 優惠碼：' . $coupon['code'] . "\n";
+        if (! empty($coupon['code'])) {
+            $text .= '🎟 優惠碼：'.$coupon['code']."\n";
         }
 
         return $text;
@@ -233,5 +241,4 @@ class ScraperDeliveryCoupon extends Command {
             default => '🍽 外送平台｜優惠',
         };
     }
-
 }

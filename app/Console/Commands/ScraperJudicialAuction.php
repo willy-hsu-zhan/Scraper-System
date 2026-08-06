@@ -2,22 +2,26 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Models\JudicialAuction;
-use App\Services\TelegramService;
-use App\Services\SeleniumService;
 use App\Services\GeminiService;
+use App\Services\SeleniumService;
+use App\Services\TelegramService;
 use Facebook\WebDriver\WebDriverBy;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 
 class ScraperJudicialAuction extends Command
 {
     protected $signature = 'app:scraper-judicial-auction';
+
     protected $description = 'Stable judicial auction scraper (multi-court safe version)';
 
     protected $telegramService;
+
     protected $seleniumService;
+
     protected $geminiService;
+
     protected $chatId = '-5434110194';
 
     public function __construct(
@@ -86,7 +90,7 @@ class ScraperJudicialAuction extends Command
         );
 
         // 選法院
-        $courtOptions = $driver->findElements(WebDriverBy::cssSelector("#court option"));
+        $courtOptions = $driver->findElements(WebDriverBy::cssSelector('#court option'));
 
         foreach ($courtOptions as $option) {
             if (str_contains($option->getAttribute('value'), $courtCode)) {
@@ -115,7 +119,7 @@ class ScraperJudicialAuction extends Command
 
         $rows = $driver->findElements(WebDriverBy::cssSelector('tr[id="trdata"]'));
 
-        $this->info("   ➜ {$courtName} 共 " . count($rows) . " 筆");
+        $this->info("   ➜ {$courtName} 共 ".count($rows).' 筆');
 
         foreach ($rows as $row) {
 
@@ -140,19 +144,19 @@ class ScraperJudicialAuction extends Command
 
                 $links = $cols[5]->findElements(WebDriverBy::cssSelector('a'));
 
-                if (!empty($links)) {
+                if (! empty($links)) {
 
                     $link = $links[0];
 
                     $text = trim($link->getText());
 
-                    if (!empty($text)) {
+                    if (! empty($text)) {
                         $address = $text;
                     }
 
                     $pdfFile = $link->getAttribute('data-filenm');
 
-                    if (!empty($pdfFile)) {
+                    if (! empty($pdfFile)) {
                         $pdfUrl = "https://aomp109.judicial.gov.tw/judbp/wkw/WHD1A02/DO_VIEWPDF.htm?filenm={$pdfFile}";
                     }
                 }
@@ -185,19 +189,19 @@ class ScraperJudicialAuction extends Command
                  * DB
                  */
                 $item = [
-                    'court'        => $courtName,
-                    'case_no'      => $caseNo,
+                    'court' => $courtName,
+                    'case_no' => $caseNo,
                     'auction_date' => $auctionDate,
-                    'area'         => $area,
-                    'address'      => $address,
-                    'price'        => $priceNumber,
-                    'is_handover'  => $isHandover,
-                    'pdf_url'      => $pdfUrl,
+                    'area' => $area,
+                    'address' => $address,
+                    'price' => $priceNumber,
+                    'is_handover' => $isHandover,
+                    'pdf_url' => $pdfUrl,
                 ];
 
                 $judicalAction = JudicialAuction::firstOrCreate(
                     [
-                        'court'   => $courtName,
+                        'court' => $courtName,
                         'case_no' => $caseNo,
                     ],
                     $item
@@ -209,22 +213,21 @@ class ScraperJudicialAuction extends Command
                      * 🧾 Telegram message
                      */
                     $message =
-                        "🏠 新法拍案件\n\n" .
-                        "🏛 法院：{$judicalAction->court}\n" .
-                        "📌 案號：{$judicalAction->case_no}\n" .
-                        "📅 拍賣日：{$judicalAction->auction_date}\n\n" .
-                        "📍 區域：{$judicalAction->area}\n\n" .
-                        "🏡 地址：{$judicalAction->address}\n\n" .
-                        "💰 價格：{$priceText}（{$priceNumber}元）\n\n" .
-                        "📦 點交：" . ($isHandover ?? '未標示') . "\n\n" .
+                        "🏠 新法拍案件\n\n".
+                        "🏛 法院：{$judicalAction->court}\n".
+                        "📌 案號：{$judicalAction->case_no}\n".
+                        "📅 拍賣日：{$judicalAction->auction_date}\n\n".
+                        "📍 區域：{$judicalAction->area}\n\n".
+                        "🏡 地址：{$judicalAction->address}\n\n".
+                        "💰 價格：{$priceText}（{$priceNumber}元）\n\n".
+                        '📦 點交：'.($isHandover ?? '未標示')."\n\n".
                         "📄 PDF：{$judicalAction->pdf_url}";
-
 
                     /**
                      * ⚠️ 防止 Telegram 超長
                      */
                     if (strlen($message) > 3800) {
-                        $message = mb_substr($message, 0, 3800) . "\n\n...(略)";
+                        $message = mb_substr($message, 0, 3800)."\n\n...(略)";
                     }
 
                     // BTN 產生
@@ -237,14 +240,14 @@ class ScraperJudicialAuction extends Command
                             $judicalAction->pdf_url
                         );
 
-                        if (!empty($summary)) {
+                        if (! empty($summary)) {
                             $judicalAction->update([
                                 'ai_summary' => $summary,
                             ]);
 
-                            $this->info("✅ AI 摘要完成");
+                            $this->info('✅ AI 摘要完成');
                         } else {
-                            $this->warn("⚠️ AI 沒有回傳摘要");
+                            $this->warn('⚠️ AI 沒有回傳摘要');
                         }
 
                     } catch (\Throwable $e) {
@@ -252,7 +255,7 @@ class ScraperJudicialAuction extends Command
                             'error' => $e->getMessage(),
                         ]);
 
-                        $this->warn("❌ AI 分析失敗：" . $e->getMessage());
+                        $this->warn('❌ AI 分析失敗：'.$e->getMessage());
                     }
 
                     $keyboard = [
@@ -260,10 +263,10 @@ class ScraperJudicialAuction extends Command
                             [
                                 [
                                     'text' => '產生 AI 摘要',
-                                    'callback_data' => "auction_summary:{$judicalAction->id}"
-                                ]
-                            ]
-                        ]
+                                    'callback_data' => "auction_summary:{$judicalAction->id}",
+                                ],
+                            ],
+                        ],
                     ];
 
                     $this->telegramService->sendMessage(

@@ -2,19 +2,20 @@
 
 namespace App\Services;
 
-use Longman\TelegramBot\Telegram;
-use Longman\TelegramBot\Request;
+use App\Models\GovOjt;
+use App\Models\JudicialAuction;
+use App\Models\TelegramBotLog;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Artisan;
-use App\Models\TelegramBotLog;
 use Longman\TelegramBot\Entities\InlineKeyboard;
-use App\Models\JudicialAuction;
-use App\Models\GovOjt;
+use Longman\TelegramBot\Request;
+use Longman\TelegramBot\Telegram;
 
 class TelegramService
 {
     protected $telegram;
+
     protected $apiKey;
 
     private const REPORT_CITIES = [
@@ -50,14 +51,12 @@ class TelegramService
         ],
     ];
 
-
     public function __construct()
     {
         $apiKey = config('telegram.apikey');
         $botUsername = config('telegram.username');
 
-        if (!$apiKey || !$botUsername)
-        {
+        if (! $apiKey || ! $botUsername) {
             throw new \Exception('Telegram bot configuration is missing.');
         }
 
@@ -75,43 +74,35 @@ class TelegramService
             $data['reply_markup'] = json_encode($keyboard);
         }
 
-        try
-        {
+        try {
             $result = Request::sendMessage($data);
+
             return $result->isOk() ? $result->getDescription() : $result->printError();
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
 
     public function sendDocument(string $chatId, string $filePath, string $fileName)
     {
-        try
-        {
+        try {
             $response = Http::timeout(600)
                 ->attach(
                     'document',
                     file_get_contents($filePath),
                     $fileName
                 )
-                ->post('https://api.telegram.org/bot' . config('telegram.apikey') . '/sendDocument', [
+                ->post('https://api.telegram.org/bot'.config('telegram.apikey').'/sendDocument', [
                     'chat_id' => $chatId,
                 ]);
 
-            if ($response->successful())
-            {
-                return "檔案上傳成功";
+            if ($response->successful()) {
+                return '檔案上傳成功';
+            } else {
+                return '檔案上傳失敗：'.$response->body();
             }
-            else
-            {
-                return "檔案上傳失敗：" . $response->body();
-            }
-        }
-        catch (\Exception $e)
-        {
-            return "檔案上傳失敗：" . $e->getMessage();
+        } catch (\Exception $e) {
+            return '檔案上傳失敗：'.$e->getMessage();
         }
     }
 
@@ -127,12 +118,14 @@ class TelegramService
         // === 一般訊息 ===
         if (isset($update['message'])) {
             $this->handleMessage($update['message']);
+
             return;
         }
 
         // === Callback ===
         if (isset($update['callback_query'])) {
             $this->handleCallback($update['callback_query']);
+
             return;
         }
     }
@@ -141,25 +134,27 @@ class TelegramService
     {
         if (TelegramBotLog::where('update_id', $update['update_id'])->exists()) {
             Log::info('Update ID already exists, skipping...');
+
             return true;
         }
 
         TelegramBotLog::create([
             'update_id' => $update['update_id'],
-            'message'   => json_encode($update),
+            'message' => json_encode($update),
         ]);
 
         Log::info('New update ID saved to database.');
+
         return false;
     }
 
     private function handleMessage(array $message): void
     {
-        if (!isset($message['text'])) {
+        if (! isset($message['text'])) {
             return;
         }
 
-        $text   = trim($message['text']);
+        $text = trim($message['text']);
         $chatId = $message['chat']['id'];
 
         // 🔀 依聊天室分流
@@ -180,12 +175,12 @@ class TelegramService
                 $this->handleOjtGroup($chatId, $text);
                 break;
 
-            // case -4664862172: // 爬蟲管理群
-            //     $this->handleCrawlerGroup($chatId, $text);
-            //     break;
+                // case -4664862172: // 爬蟲管理群
+                //     $this->handleCrawlerGroup($chatId, $text);
+                //     break;
 
             default:
-                Log::info("未定義聊天室訊息", compact('chatId', 'text'));
+                Log::info('未定義聊天室訊息', compact('chatId', 'text'));
                 break;
         }
     }
@@ -202,18 +197,19 @@ class TelegramService
 
             $course = GovOjt::find($id);
 
-            if (!$course) {
+            if (! $course) {
                 $this->sendMessage(
                     $chatId,
-                    "❌ 找不到課程"
+                    '❌ 找不到課程'
                 );
+
                 return;
             }
 
             $this->sendMessage(
                 $chatId,
                 "🧠 AI 課程分析\n\n"
-                . ($course->ai_summary ?? '尚未產生 AI 摘要')
+                .($course->ai_summary ?? '尚未產生 AI 摘要')
             );
 
             return;
@@ -225,7 +221,7 @@ class TelegramService
         // 輸入案件 ID
         $auctionId = intval($text);
 
-        if (!$auctionId) {
+        if (! $auctionId) {
             $this->sendMessage(
                 $chatId,
                 "請輸入法拍案件 ID，例如：\n\n184"
@@ -236,7 +232,7 @@ class TelegramService
 
         $auction = JudicialAuction::find($auctionId);
 
-        if (!$auction) {
+        if (! $auction) {
 
             $this->sendMessage(
                 $chatId,
@@ -250,16 +246,16 @@ class TelegramService
 
             $this->sendMessage(
                 $chatId,
-                "⏳ 此案件尚未產生 AI 摘要，請先點擊案件通知中的按鈕。"
+                '⏳ 此案件尚未產生 AI 摘要，請先點擊案件通知中的按鈕。'
             );
 
             return;
         }
 
         $message =
-            "🧠 AI摘要\n\n" .
-            "🏛 法院：{$auction->court}\n" .
-            "📌 案號：{$auction->case_no}\n\n" .
+            "🧠 AI摘要\n\n".
+            "🏛 法院：{$auction->court}\n".
+            "📌 案號：{$auction->case_no}\n\n".
             $auction->ai_summary;
 
         $this->sendMessage(
@@ -270,7 +266,7 @@ class TelegramService
 
     private function handleReportGroup(int|string $chatId, string $text): void
     {
-        if (!$this->looksLikeLocation($text)) {
+        if (! $this->looksLikeLocation($text)) {
             return;
         }
 
@@ -279,8 +275,9 @@ class TelegramService
 
         $cityData = $this->detectCity($cleanText);
 
-        if (!$cityData) {
-            $this->sendMessage($chatId, "⚠️ 無法判斷縣市，請確認地址是否包含「縣市名稱」");
+        if (! $cityData) {
+            $this->sendMessage($chatId, '⚠️ 無法判斷縣市，請確認地址是否包含「縣市名稱」');
+
             return;
         }
 
@@ -294,9 +291,9 @@ class TelegramService
         // ② 檢舉網站
         $this->sendMessage(
             $chatId,
-            "📍 判斷地點：{$cityData['city']}\n\n" .
-            "🔗 線上檢舉：\n{$cityData['url']}\n\n" .
-            "📞 簡訊報案電話："
+            "📍 判斷地點：{$cityData['city']}\n\n".
+            "🔗 線上檢舉：\n{$cityData['url']}\n\n".
+            '📞 簡訊報案電話：'
         );
 
         usleep(300000);
@@ -305,7 +302,6 @@ class TelegramService
         $this->sendMessage($chatId, $cityData['phone']);
     }
 
-
     private function handleMusicGroup(int $chatId, string $text): void
     {
         // 🎵 找歌
@@ -313,22 +309,24 @@ class TelegramService
             $keyword = trim(str_replace('找歌', '', $text));
 
             if ($keyword !== '') {
-                Log::info("搜尋歌曲", compact('keyword'));
+                Log::info('搜尋歌曲', compact('keyword'));
                 $this->searchSong($keyword);
             }
+
             return;
         }
 
         // ⬇️ 下載
-        if (!str_contains($text, '下載')) {
+        if (! str_contains($text, '下載')) {
             return;
         }
 
         preg_match('/https?:\/\/[^\s]+/', $text, $matches);
         $url = $matches[0] ?? null;
 
-        if (!$this->isValidYoutubeUrl($url)) {
+        if (! $this->isValidYoutubeUrl($url)) {
             $this->sendMessage($chatId, '請提供有效的 YouTube 影片網址');
+
             return;
         }
 
@@ -338,6 +336,7 @@ class TelegramService
                 'url' => $url,
                 '--audio-only' => true,
             ]);
+
             return;
         }
 
@@ -351,14 +350,14 @@ class TelegramService
 
     private function isValidYoutubeUrl(?string $url): bool
     {
-        return !empty($url)
+        return ! empty($url)
             && filter_var($url, FILTER_VALIDATE_URL)
             && preg_match('/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\//', $url);
     }
 
     private function handleCrawlerGroup(int $chatId, string $text): void
     {
-        if (!str_contains($text, '重新啟動爬蟲')) {
+        if (! str_contains($text, '重新啟動爬蟲')) {
             return;
         }
 
@@ -366,15 +365,15 @@ class TelegramService
 
         if ($status === 0) {
             exec('kill -9 $(lsof -t -i :4444)');
-            $this->sendMessage($chatId, "✅ 已終止佔用 4444 埠的程序");
+            $this->sendMessage($chatId, '✅ 已終止佔用 4444 埠的程序');
         } else {
-            $this->sendMessage($chatId, "ℹ️ 埠 4444 未被佔用");
+            $this->sendMessage($chatId, 'ℹ️ 埠 4444 未被佔用');
         }
 
         chdir('/var/www/Scraper-System/');
         exec('java -jar selenium-server.jar standalone --selenium-manager true > selenium.log 2>&1 &');
 
-        $this->sendMessage($chatId, "🚀 Selenium Server 已啟動");
+        $this->sendMessage($chatId, '🚀 Selenium Server 已啟動');
     }
 
     private function formatTelegramText(string $text): string
@@ -410,10 +409,10 @@ class TelegramService
 
         $course = GovOjt::find($id);
 
-        if (!$course) {
+        if (! $course) {
             $this->sendMessage(
                 $chatId,
-                "❌ 找不到課程"
+                '❌ 找不到課程'
             );
         } else {
             $summary = $this->formatTelegramText(
@@ -422,7 +421,7 @@ class TelegramService
 
             $this->sendMessage(
                 $chatId,
-                "🧠 AI 課程分析\n\n" . $summary
+                "🧠 AI 課程分析\n\n".$summary
             );
         }
 
@@ -445,7 +444,6 @@ class TelegramService
             ? base64_decode($encodedTitle)
             : '未知標題';
 
-
         if ($type === 'yt') {
 
             $url = "https://www.youtube.com/watch?v={$videoId}";
@@ -462,7 +460,6 @@ class TelegramService
                 ]);
             }
 
-
             if ($mode === 'video') {
                 $this->sendMessage(
                     $chatId,
@@ -474,7 +471,6 @@ class TelegramService
                 ]);
             }
         }
-
 
         Request::answerCallbackQuery([
             'callback_query_id' => $callback['id'],
@@ -497,11 +493,11 @@ class TelegramService
 
         $auction = JudicialAuction::find($id);
 
-        if (!$auction) {
+        if (! $auction) {
 
             $this->sendMessage(
                 $chatId,
-                "❌ 找不到法拍案件"
+                '❌ 找不到法拍案件'
             );
 
         } else {
@@ -511,18 +507,16 @@ class TelegramService
             );
 
             $message =
-                "🧠 法拍案件分析\n\n" .
-                "🏛 法院：{$auction->court}\n" .
-                "📌 案號：{$auction->case_no}\n\n" .
+                "🧠 法拍案件分析\n\n".
+                "🏛 法院：{$auction->court}\n".
+                "📌 案號：{$auction->case_no}\n\n".
                 $summary;
-
 
             $this->sendMessage(
                 $chatId,
                 $message
             );
         }
-
 
         Request::answerCallbackQuery([
             'callback_query_id' => $callback['id'],
@@ -537,20 +531,21 @@ class TelegramService
 
         if (str_starts_with($data, 'ojt_summary:')) {
             $this->handleOjtCallback($callback);
+
             return;
         }
 
-
         if (str_starts_with($data, 'yt|')) {
             $this->handleYoutubeCallback($callback);
+
             return;
         }
 
         if (str_starts_with($data, 'auction_summary:')) {
             $this->handleAuctionCallback($callback);
+
             return;
         }
-
 
         Request::answerCallbackQuery([
             'callback_query_id' => $callback['id'],
@@ -559,45 +554,46 @@ class TelegramService
         ]);
     }
 
-
     public function searchSong($keyword)
     {
         $apiKey = env('YOUTUBE_API_KEY');
         $url = 'https://www.googleapis.com/youtube/v3/search';
 
         $response = Http::get($url, [
-            'part'            => 'snippet',
-            'q'               => $keyword,
-            'type'            => 'video',
+            'part' => 'snippet',
+            'q' => $keyword,
+            'type' => 'video',
             //'videoCategoryId' => '10',
-            'maxResults'      => 3,
-            'key'             => $apiKey,
+            'maxResults' => 3,
+            'key' => $apiKey,
         ]);
 
-        if (!$response->successful()) {
+        if (! $response->successful()) {
             Log::error('YouTube API 請求失敗', ['status' => $response->status()]);
+
             return;
         }
 
         $videos = $response->json()['items'];
         $chatId = '-5401712481';
-        Log::info(json_encode(print_r($videos,true)));
+        Log::info(json_encode(print_r($videos, true)));
         if (empty($videos)) {
             Request::sendMessage([
                 'chat_id' => $chatId,
-                'text'    => "🔍 找不到相關音樂\n\n關鍵字：{$keyword}\n請嘗試其他歌名或歌手 🙏",
+                'text' => "🔍 找不到相關音樂\n\n關鍵字：{$keyword}\n請嘗試其他歌名或歌手 🙏",
             ]);
+
             return;
         }
 
         foreach ($videos as $video) {
             $videoId = $video['id']['videoId'];
-            $title   = $video['snippet']['title'];
+            $title = $video['snippet']['title'];
             $channel = $video['snippet']['channelTitle'];
             $encodedTitle = base64_encode(mb_substr($title, 0, 10, 'UTF-8'));  // 防止過長
             $text =
-                "🎵 {$title}\n" .
-                "📺 {$channel}\n" .
+                "🎵 {$title}\n".
+                "📺 {$channel}\n".
                 "🔗 https://www.youtube.com/watch?v={$videoId}";
 
             $keyboard = new InlineKeyboard(
@@ -614,8 +610,8 @@ class TelegramService
             );
 
             Request::sendMessage([
-                'chat_id'      => $chatId,
-                'text'         => $text,
+                'chat_id' => $chatId,
+                'text' => $text,
                 'reply_markup' => $keyboard,
             ]);
         }
@@ -646,8 +642,8 @@ class TelegramService
             foreach ($data['keywords'] as $keyword) {
                 if (str_contains($text, $keyword)) {
                     return [
-                        'city'  => $city,
-                        'url'   => $data['url'],
+                        'city' => $city,
+                        'url' => $data['url'],
                         'phone' => $data['phone'],
                     ];
                 }
@@ -660,13 +656,13 @@ class TelegramService
     private function buildReportTemplate(string $city, string $locationText): string
     {
         return
-            "違規地點：\n" .
-            "{$locationText}\n\n" .
-            "違規情形：\n" .
-            "車號 XXX-XXXX 違規停車，\n" .
-            "已嚴重影響行人通行及出入動線，\n" .
-            "造成用路人不便與安全疑慮。\n\n" .
-            "請派員前往查處並依法取締，謝謝。";
+            "違規地點：\n".
+            "{$locationText}\n\n".
+            "違規情形：\n".
+            "車號 XXX-XXXX 違規停車，\n".
+            "已嚴重影響行人通行及出入動線，\n".
+            "造成用路人不便與安全疑慮。\n\n".
+            '請派員前往查處並依法取締，謝謝。';
     }
 
     private function normalizeAddressText(string $text): string
@@ -674,5 +670,4 @@ class TelegramService
         // 移除開頭的郵遞區號，例如：22158新北市、 221 新北市
         return preg_replace('/^\s*\d{3,5}\s*/u', '', $text);
     }
-
 }

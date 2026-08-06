@@ -9,6 +9,6 @@ class Job104 extends Model
     protected $table = 'job_104';
 
     protected $fillable = [
-        'id','title','link','company','salary','place','date',
+        'id', 'title', 'link', 'company', 'salary', 'place', 'date',
     ];
 }

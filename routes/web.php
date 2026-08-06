@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/donation', [DonationController::class, 'index'])->name('donate');
 
 Route::get('/youtube/download/{filename}', function ($filename) {
-    $path = storage_path('app/youtube/' . $filename);
+    $path = storage_path('app/youtube/'.$filename);
 
     abort_unless(file_exists($path), 404);
 

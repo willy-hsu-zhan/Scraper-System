@@ -2,12 +2,13 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Services\GeminiService;
+use Illuminate\Console\Command;
 
 class GeminiTest extends Command
 {
     protected $signature = 'app:gemini-test {text?}';
+
     protected $description = 'Test Gemini text summarization';
 
     protected $geminiService;
@@ -22,34 +23,35 @@ class GeminiTest extends Command
     {
         $text = $this->argument('text');
 
-        if (!$text) {
-            $text = "
-        ";
+        if (! $text) {
+            $text = '
+        ';
         }
 
-        $this->info("🧠 輸入內容：");
+        $this->info('🧠 輸入內容：');
         $this->line($text);
 
-        $this->info("🤖 呼叫 Gemini...");
+        $this->info('🤖 呼叫 Gemini...');
 
         $url = 'https://ojt.wda.gov.tw/ClassSearch/Detail?PlanType=1&OCID=173299';
         try {
             //$summary = $this->geminiService->summarizeText($text);
             $summary = $this->geminiService->summarizeCourseByUrl($url);
-            if (!$summary) {
-                $this->error("❌ Gemini 回傳為空（null）");
+            if (! $summary) {
+                $this->error('❌ Gemini 回傳為空（null）');
+
                 return 1;
             }
 
-            $this->info("✅ AI 摘要結果：");
-            $this->line("--------------------------------------------------");
+            $this->info('✅ AI 摘要結果：');
+            $this->line('--------------------------------------------------');
             $this->line($summary);
-            $this->line("--------------------------------------------------");
+            $this->line('--------------------------------------------------');
 
             return 0;
         } catch (\Throwable $e) {
 
-            $this->error("🔥 Gemini 發生錯誤：");
+            $this->error('🔥 Gemini 發生錯誤：');
             $this->line($e->getMessage());
 
             logger()->error('Gemini Error', [

@@ -2,10 +2,11 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use Goutte\Client;
+use Illuminate\Console\Command;
 
-class ScraperFreeProxy extends Command {
+class ScraperFreeProxy extends Command
+{
     /**
      * The name and signature of the console command.
      *
@@ -35,12 +36,13 @@ class ScraperFreeProxy extends Command {
             $columns = $row->filter('td')->each(function ($col) {
                 return $col->text();
             });
+
             return $columns; // return td屬性
         });
-        foreach($proxies as $index => $proxy)
-        {
-            if (!isset($proxy[6])) {
+        foreach ($proxies as $index => $proxy) {
+            if (! isset($proxy[6])) {
                 unset($proxies[$index]);
+
                 continue;
             }
             if (is_numeric($proxy[6])) {
@@ -50,6 +52,6 @@ class ScraperFreeProxy extends Command {
         $proxies = array_values($proxies);
 
         $ramdomProxy = $proxies[array_rand($proxies)];
-        $url = 'http://' . $ramdomProxy[0] . ':' . $ramdomProxy[1];
+        $url = 'http://'.$ramdomProxy[0].':'.$ramdomProxy[1];
     }
 }

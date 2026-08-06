@@ -15,6 +15,6 @@ class JobPtt extends Model
         'company',
         'salary',
         'place',
-        'date'
+        'date',
     ];
 }

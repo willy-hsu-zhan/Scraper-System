@@ -2,14 +2,14 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Models\GovOjt;
-use Illuminate\Support\Facades\Log;
 use App\Services\LineNotifyService;
-use App\Services\TelegramService;
-use App\Services\SeleniumService;
 use App\Services\ReurlService;
+use App\Services\SeleniumService;
+use App\Services\TelegramService;
 use Carbon\Carbon;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class NotifyOpenGovCourses extends Command
 {
@@ -18,9 +18,13 @@ class NotifyOpenGovCourses extends Command
     protected $description = '通知今天開放報名的政府訓練課程';
 
     protected $lineNotifyService;
+
     protected $telegramService;
+
     protected $seleniumService;
+
     protected $reurlService;
+
     protected $chatId = '-5185362500';
 
     public function __construct(LineNotifyService $lineNotifyService, TelegramService $telegramService, SeleniumService $seleniumService, ReurlService $reurlService)
@@ -65,35 +69,36 @@ class NotifyOpenGovCourses extends Command
         // 補通知漏掉的
         // $this->notifyMissedCourses($now->copy(), '📣 課程已開放報名（補通知）');
 
-        $this->info("✅ 所有時間點的課程通知完成。");
+        $this->info('✅ 所有時間點的課程通知完成。');
+
         return Command::SUCCESS;
     }
 
     protected function notifyCourses($startTime, $endTime, $notifyField, $prefix)
     {
         $courses = GovOjt::whereBetween('registration_start_at', [$startTime, $endTime])
-                        ->where(function ($query) use ($notifyField) {
-                            $query->whereNull($notifyField)->orWhere($notifyField, '');
-                        })
-                        ->get();
+            ->where(function ($query) use ($notifyField) {
+                $query->whereNull($notifyField)->orWhere($notifyField, '');
+            })
+            ->get();
 
         foreach ($courses as $course) {
             $calendarLink = $this->generateGoogleCalendarLink($course);
-            $message = "{$prefix}\n\n" .
-                    "📘 *課程名稱：* {$course->course_name}\n" .
-                    "📅 *訓練日期：* {$course->scheduled_start_date} ~ {$course->scheduled_end_date}\n" .
-                    "🕒 *報名時間：* {$course->registration_start_at}\n" .
-                    "📍 *地點：* {$course->training_location}\n" .
-                    "💰 *學員自付：* {$course->student_cost} 元\n" .
+            $message = "{$prefix}\n\n".
+                    "📘 *課程名稱：* {$course->course_name}\n".
+                    "📅 *訓練日期：* {$course->scheduled_start_date} ~ {$course->scheduled_end_date}\n".
+                    "🕒 *報名時間：* {$course->registration_start_at}\n".
+                    "📍 *地點：* {$course->training_location}\n".
+                    "💰 *學員自付：* {$course->student_cost} 元\n".
                     "🔗 *報名網址：* {$course->training_unit_url}";
-                    //"📅 *加入 Google 日曆提醒：* {$calendarLink}";
+            //"📅 *加入 Google 日曆提醒：* {$calendarLink}";
 
             sleep(5);
 
             $this->telegramService->sendMessage($this->chatId, $message);
 
             $course->update([
-                $notifyField => now('Asia/Taipei')
+                $notifyField => now('Asia/Taipei'),
             ]);
 
             Log::info("🔔 已發送「{$prefix}」通知：{$course->course_name}");
@@ -104,21 +109,21 @@ class NotifyOpenGovCourses extends Command
     protected function notifyMissedCourses($now, $prefix)
     {
         $courses = GovOjt::where('registration_start_at', '<=', $now)
-                    ->whereNull('notified_3days_before')
-                    ->whereNull('notified_1day_before')
-                    ->whereNull('notified_1hour_before')
-                    ->get();
+            ->whereNull('notified_3days_before')
+            ->whereNull('notified_1day_before')
+            ->whereNull('notified_1hour_before')
+            ->get();
 
         foreach ($courses as $course) {
             $calendarLink = $this->generateGoogleCalendarLink($course);
-            $message = "{$prefix}\n\n" .
-                    "📘 *課程名稱：* {$course->course_name}\n" .
-                    "📅 *訓練日期：* {$course->scheduled_start_date} ~ {$course->scheduled_end_date}\n" .
-                    "🕒 *報名時間：* {$course->registration_start_at}\n" .
-                    "📍 *地點：* {$course->training_location}\n" .
-                    "💰 *學員自付：* {$course->student_cost} 元\n" .
+            $message = "{$prefix}\n\n".
+                    "📘 *課程名稱：* {$course->course_name}\n".
+                    "📅 *訓練日期：* {$course->scheduled_start_date} ~ {$course->scheduled_end_date}\n".
+                    "🕒 *報名時間：* {$course->registration_start_at}\n".
+                    "📍 *地點：* {$course->training_location}\n".
+                    "💰 *學員自付：* {$course->student_cost} 元\n".
                     "🔗 *報名網址：* {$course->training_unit_url}";
-                    //"📅 *加入 Google 日曆提醒：* {$calendarLink}";
+            //"📅 *加入 Google 日曆提醒：* {$calendarLink}";
 
             sleep(2);
 
@@ -126,7 +131,7 @@ class NotifyOpenGovCourses extends Command
 
             // 只記錄補通知時間到其中一個欄位，例如 notified_1hour_before
             $course->update([
-                'notified_1hour_before' => now('Asia/Taipei')
+                'notified_1hour_before' => now('Asia/Taipei'),
             ]);
 
             Log::info("📣 已補發通知：{$course->course_name}");
@@ -143,7 +148,7 @@ class NotifyOpenGovCourses extends Command
     protected function generateGoogleCalendarLink(GovOjt $course): string
     {
         $title = urlencode($course->course_name);
-        $details = urlencode("報名網址：" . $course->training_unit_url);
+        $details = urlencode('報名網址：'.$course->training_unit_url);
         $location = urlencode($course->training_location ?? '');
 
         // 報名開始時間（台灣）
@@ -157,14 +162,13 @@ class NotifyOpenGovCourses extends Command
 
         $dates = "{$startUTC}/{$endUTC}";
 
-        $url = "https://calendar.google.com/calendar/render?action=TEMPLATE";
+        $url = 'https://calendar.google.com/calendar/render?action=TEMPLATE';
         $url .= "&text={$title}";
         $url .= "&dates={$dates}";
         $url .= "&details={$details}";
         $url .= "&location={$location}";
-        $url .= "&reminder=popup:60";
-        $url .= "&sf=true&output=xml";
-
+        $url .= '&reminder=popup:60';
+        $url .= '&sf=true&output=xml';
 
         // 轉短網址
         return $this->reurlService->shorten(
@@ -177,7 +181,8 @@ class NotifyOpenGovCourses extends Command
         ) ?? $url;
     }
 
-    protected function convertTaiwanDatetimeRange($range) {
+    protected function convertTaiwanDatetimeRange($range)
+    {
         [$startStr, $endStr] = explode(' ~ ', $range);
 
         return [
@@ -186,7 +191,8 @@ class NotifyOpenGovCourses extends Command
         ];
     }
 
-    protected function convertTaiwanDateRange($range) {
+    protected function convertTaiwanDateRange($range)
+    {
         [$startStr, $endStr] = explode(' ~ ', $range);
 
         return [
@@ -195,22 +201,27 @@ class NotifyOpenGovCourses extends Command
         ];
     }
 
-    protected function convertTaiwanDatetime($taiwanDatetime) {
+    protected function convertTaiwanDatetime($taiwanDatetime)
+    {
         // 轉西元年
         $parts = explode(' ', $taiwanDatetime);
         [$y, $m, $d] = explode('/', $parts[0]);
         $hour = $parts[1] ?? '00:00:00';
-        return (intval($y) + 1911) . "-$m-$d $hour";
+
+        return (intval($y) + 1911)."-$m-$d $hour";
     }
 
-    protected function convertTaiwanDate($taiwanDate) {
+    protected function convertTaiwanDate($taiwanDate)
+    {
         [$y, $m, $d] = explode('/', $taiwanDate);
-        return (intval($y) + 1911) . "-$m-$d";
+
+        return (intval($y) + 1911)."-$m-$d";
     }
 
     protected function toGoogleCalendarDateTime($dateString)
     {
         $dt = Carbon::createFromFormat('Y-m-d', $dateString, 'Asia/Taipei');
+
         return $dt->copy()->setTimezone('UTC')->format('Ymd\THis\Z');
     }
 }

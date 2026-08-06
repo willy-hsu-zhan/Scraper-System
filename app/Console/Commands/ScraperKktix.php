@@ -37,7 +37,7 @@ class ScraperKktix extends Command
                 storage_path('app/kktix_1_before_cf.png')
             );
 
-            $this->info("Waiting Cloudflare...");
+            $this->info('Waiting Cloudflare...');
 
             $this->waitUntilPassed($driver);
 
@@ -58,7 +58,7 @@ class ScraperKktix extends Command
         JS);
 
             if ($this->isBlocked($result)) {
-                throw new \Exception("Still blocked");
+                throw new \Exception('Still blocked');
             }
 
             Storage::disk('local')->put(
@@ -66,7 +66,7 @@ class ScraperKktix extends Command
                 $result
             );
 
-            $this->info("Success");
+            $this->info('Success');
         } finally {
             $driver->quit();
         }
@@ -77,21 +77,22 @@ class ScraperKktix extends Command
      */
     private function waitUntilPassed($driver, $timeout = 60)
     {
-        $this->info("Waiting Cloudflare clearance...");
+        $this->info('Waiting Cloudflare clearance...');
 
         for ($i = 0; $i < $timeout; $i++) {
 
             $html = $driver->getPageSource();
 
-            if (!$this->isBlocked($html)) {
-                $this->info("Cloudflare passed ✔");
+            if (! $this->isBlocked($html)) {
+                $this->info('Cloudflare passed ✔');
+
                 return;
             }
 
             sleep(1);
         }
 
-        throw new \Exception("Cloudflare timeout");
+        throw new \Exception('Cloudflare timeout');
     }
 
     /**

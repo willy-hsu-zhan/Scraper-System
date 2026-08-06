@@ -11,7 +11,7 @@ class KktixPlaywrightService
         $response = Http::timeout(120)
             ->get("http://127.0.0.1:3000/scrape/{$event}");
 
-        if (!$response->ok()) {
+        if (! $response->ok()) {
             return [
                 'captured' => [],
                 'error' => 'Node service failed',

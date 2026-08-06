@@ -2,10 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use Illuminate\Support\Carbon;
 use App\Models\JobChickpt;
 use App\Models\JobPtt;
+use Illuminate\Console\Command;
 
 class DeleteOldRecord extends Command
 {
@@ -30,11 +29,9 @@ class DeleteOldRecord extends Command
     {
         $jobChickpt = JobChickpt::all();
         $subCount = JobChickpt::all()->count() - 100; // 維持總數=100
-        
-        if($subCount > 0) // 防呆
-        {
-            for($i = 0; $i < $subCount; $i++)
-            {
+
+        if ($subCount > 0) { // 防呆
+            for ($i = 0; $i < $subCount; $i++) {
                 $jobChickpt[$i]->delete();
             }
         }
@@ -42,10 +39,8 @@ class DeleteOldRecord extends Command
         $jobPtt = JobPtt::all();
         $subCount = JobPtt::all()->count() - 100; // 維持總數=100
 
-        if($subCount > 0) // 防呆
-        {
-            for($i = 0; $i < $subCount; $i++)
-            {
+        if ($subCount > 0) { // 防呆
+            for ($i = 0; $i < $subCount; $i++) {
                 $jobPtt[$i]->delete();
             }
         }

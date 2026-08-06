@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use App\Services\LineNotifyService;
+use Illuminate\Support\ServiceProvider;
 
 class LineNotifyServiceProvider extends ServiceProvider
 {

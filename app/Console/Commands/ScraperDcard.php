@@ -2,19 +2,25 @@
 
 namespace App\Console\Commands;
 
+use App\Services\LineNotifyService;
+use App\Services\ProxyService;
+use App\Services\TelegramService;
 use Goutte\Client;
 use Illuminate\Console\Command;
-use App\Services\TelegramService;
-use App\Services\ProxyService;
-use App\Services\LineNotifyService;
 use Illuminate\Support\Facades\Http;
 
-class ScraperDcard extends Command {
+class ScraperDcard extends Command
+{
     public $jobs = [];
+
     protected $lineNotifyService;
+
     protected $telegramService;
+
     protected $proxyService;
+
     protected $jobTexts;
+
     protected $chatId = '-4664862172'; // 暫時先用全域變數 // 日後聊天室擴充再更改
 
     /**
@@ -34,9 +40,9 @@ class ScraperDcard extends Command {
     public function __construct(LineNotifyService $lineNotifyService, TelegramService $telegramService, ProxyService $proxyService)
     {
         parent::__construct();
-        $this->lineNotifyService      = $lineNotifyService;
+        $this->lineNotifyService = $lineNotifyService;
         $this->telegramService = $telegramService;
-        $this->proxyService    = $proxyService;
+        $this->proxyService = $proxyService;
     }
 
     public function handle()
@@ -56,8 +62,8 @@ class ScraperDcard extends Command {
         // 獲取網頁內容
         $content = $response->body();
         // 使用 Goutte 客戶端分析 HTML 內容
-        $client  = new Client();
-        $crawler = $client->request('GET', 'data:text/html,' . urlencode($content));
+        $client = new Client();
+        $crawler = $client->request('GET', 'data:text/html,'.urlencode($content));
 
         // 顯示抓取的內容
         dd($crawler->text());

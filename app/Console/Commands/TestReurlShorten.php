@@ -24,7 +24,7 @@ class TestReurlShorten extends Command
             'utm_medium' => 'notification',
         ]);
 
-        $this->info('HTTP Status: ' . $response->status());
+        $this->info('HTTP Status: '.$response->status());
 
         $this->line(
             json_encode(

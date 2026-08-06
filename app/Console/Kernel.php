@@ -71,7 +71,8 @@ class Kernel extends ConsoleKernel
             ->timezone('Asia/Taipei')
             ->when(function () {
                 $hour = now('Asia/Taipei')->hour;
-                return !($hour >= 1 && $hour < 7);
+
+                return ! ($hour >= 1 && $hour < 7);
             });
 
         $schedule->command('app:scraper-judicial-auction')
@@ -89,7 +90,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands(): void
     {
-        $this->load(__DIR__ . '/Commands');
+        $this->load(__DIR__.'/Commands');
 
         require base_path('routes/console.php');
     }

@@ -14,16 +14,18 @@ class CleanYoutubeFiles extends Command
     protected $description = '清理 YouTube 下載的舊檔案';
 
     protected string $basePath;
+
     protected string $videoPath;
+
     protected string $audioPath;
 
     public function __construct()
     {
         parent::__construct();
 
-        $this->basePath  = storage_path('app/youtube');
-        $this->videoPath = $this->basePath . '/video';
-        $this->audioPath = $this->basePath . '/audio';
+        $this->basePath = storage_path('app/youtube');
+        $this->videoPath = $this->basePath.'/video';
+        $this->audioPath = $this->basePath.'/audio';
     }
 
     public function handle()
@@ -37,12 +39,13 @@ class CleanYoutubeFiles extends Command
         $this->deleteOldFiles($this->audioPath, $cutoff);
 
         $this->info('清理完成！');
+
         return 0;
     }
 
     private function deleteOldFiles(string $path, int $cutoff)
     {
-        if (!File::exists($path)) {
+        if (! File::exists($path)) {
             return;
         }
 
@@ -55,7 +58,7 @@ class CleanYoutubeFiles extends Command
                     Log::info("刪除舊檔案: {$file->getFilename()}");
                 } catch (\Throwable $e) {
                     Log::error("刪除檔案失敗: {$file->getFilename()}", [
-                        'error' => $e->getMessage()
+                        'error' => $e->getMessage(),
                     ]);
                 }
             }

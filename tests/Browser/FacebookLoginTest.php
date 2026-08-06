@@ -2,34 +2,27 @@
 
 namespace Tests\Browser;
 
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Laravel\Dusk\Browser;
-use Tests\DuskTestCase;
-use Goutte\Client;
-use Illuminate\Support\Carbon;
-use Symfony\Component\DomCrawler\Crawler;
 use App\Models\JobFacebook;
 use App\Services\LineNotify;
 use Exception;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
+use Laravel\Dusk\Browser;
+use Symfony\Component\DomCrawler\Crawler;
+use Tests\DuskTestCase;
 
 class FacebookLoginTest extends DuskTestCase
 {
     /**
      * A Dusk test example.
      */
-
     public function testExample(): void
     {
-        $this->browse(function (Browser $browser)
-        {
+        $this->browse(function (Browser $browser) {
             /** 克服難點
              *
              * 1.登入帳號密碼 一段時間auth_platform會跑出來 導致花面沒有跑出預期
              * 2.擷取的 css選擇器 會不定時失效
-             *
-             *
-             *
              */
             $account = config('facebook.account');
             $password = config('facebook.password');
@@ -40,32 +33,25 @@ class FacebookLoginTest extends DuskTestCase
             $groupUrl = 'groups/2276905072551692'; // 程式付費研究社 群組ID
             //$searchConditionUrl = '?sorting_setting=RECENT_ACTIVITY'; // 搜尋條件: 最相關
             $searchConditionUrl = '?sorting_setting=CHRONOLOGICAL'; // 搜尋條件: 最新
-            try
-            {
+            try {
                 $browser->visit($baseUrl)
                     ->type('email', $account)
                     ->type('pass', $password)
                     ->press('login')
                     ->waitForLocation('/auth_platform/afad/') // 等待跳轉至該頁面
                     ->assertPathIs('/auth_platform/afad/');
-            }
-            catch (Exception $e)
-            {
+            } catch (Exception $e) {
                 //dd($e->getMessage());  // 顯示錯誤訊息
             }
-            $url = $baseUrl . $groupUrl . $searchConditionUrl;
+            $url = $baseUrl.$groupUrl.$searchConditionUrl;
 
-            try
-            {
+            try {
                 $browser->visit($url)
                     ->waitFor('.x193iq5w.xeuugli.x13faqbe', 20)  // 使用CSS選擇器
-                    ->script("window.scrollTo(0, document.body.scrollHeight);");
-            }
-            catch (Exception $e)
-            {
+                    ->script('window.scrollTo(0, document.body.scrollHeight);');
+            } catch (Exception $e) {
                 //dd('Error: ' . $e->getMessage());  // 顯示錯誤訊息
             }
-
 
             // for( $i = 0; $i < 1; ++$i ) // 滾動網頁5次 // 暫時失效 待解決方法
             // {
@@ -85,8 +71,7 @@ class FacebookLoginTest extends DuskTestCase
 
             $date = Carbon::now()->toDateString();
 
-            $jobList->each(function ($jobNode) use (&$jobs, $date)
-            {
+            $jobList->each(function ($jobNode) use (&$jobs, $date) {
                 $title = $jobNode->filter('div[style="text-align: start;"]')->eq(0)->text();
                 $level = $jobNode->filter('div[style="text-align: start;"]')->eq(1)->text();
                 $language = $jobNode->filter('div[style="text-align: start;"]')->eq(2)->text();
@@ -102,16 +87,15 @@ class FacebookLoginTest extends DuskTestCase
                     'deadline' => trim($deadline),
                 ];
             });
-            $sendNotifyText = "";
+            $sendNotifyText = '';
 
-            foreach ($jobs as $job)
-            {
+            foreach ($jobs as $job) {
                 $date = Carbon::now()->toDateString();
 
-                if (!JobFacebook::where('title', $job['title'])->where('deadline', $job['deadline'])->first())
-                {
-                    if (empty($sendNotifyText))
-                        $sendNotifyText .= "\n" . "大學付費研究社任務列表" . "\n" . "\n";
+                if (! JobFacebook::where('title', $job['title'])->where('deadline', $job['deadline'])->first()) {
+                    if (empty($sendNotifyText)) {
+                        $sendNotifyText .= "\n".'大學付費研究社任務列表'."\n"."\n";
+                    }
 
                     JobFacebook::create([
                         'title' => $job['title'],
@@ -122,29 +106,27 @@ class FacebookLoginTest extends DuskTestCase
                         'date' => $date,
                     ]);
 
-                    $sendNotifyText .= $job['title'] . "\n";
-                    $sendNotifyText .= $job['level'] . "\n";
-                    $sendNotifyText .= $job['language'] . "\n";
-                    $sendNotifyText .= $job['salary'] . "\n";
-                    $sendNotifyText .= $job['deadline'] . "\n";
+                    $sendNotifyText .= $job['title']."\n";
+                    $sendNotifyText .= $job['level']."\n";
+                    $sendNotifyText .= $job['language']."\n";
+                    $sendNotifyText .= $job['salary']."\n";
+                    $sendNotifyText .= $job['deadline']."\n";
                 }
 
-                if (!empty($sendNotifyText))
-                    $sendNotifyText .= "\n" . "\n";
+                if (! empty($sendNotifyText)) {
+                    $sendNotifyText .= "\n"."\n";
+                }
             }
 
-
-            if (!empty($sendNotifyText))
-            {
+            if (! empty($sendNotifyText)) {
                 $lineNotify = app(LineNotify::class);
 
                 $response = $lineNotify->sendMessage($sendNotifyText);
 
                 $data = json_decode($response);
 
-                if ($data->status != '200' && $data->message != 'ok')
-                {
-                    Log::error('send notify error! ' . $data->message);
+                if ($data->status != '200' && $data->message != 'ok') {
+                    Log::error('send notify error! '.$data->message);
                 }
             }
         });

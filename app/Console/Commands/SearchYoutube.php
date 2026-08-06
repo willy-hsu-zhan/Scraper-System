@@ -2,21 +2,23 @@
 
 namespace App\Console\Commands;
 
+use App\Models\YoutubeVideo;
+use App\Services\TelegramService;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Carbon\Carbon;
-use App\Models\YoutubeVideo;
-use App\Services\TelegramService;
 use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Request;
 
 class SearchYoutube extends Command
 {
     protected $signature = 'app:search-youtube {region?} {category?}';
+
     protected $description = 'Fetch popular YouTube music and push to Telegram with download buttons';
 
     protected TelegramService $telegramService;
+
     protected string $chatId = '-5401712481';
 
     public function __construct(TelegramService $telegramService)
@@ -31,25 +33,24 @@ class SearchYoutube extends Command
 
         $categories = [
             '19' => [
-                'label'   => '✈️ 旅遊',
+                'label' => '✈️ 旅遊',
                 'chat_id' => '-5100480609',
             ],
             '10' => [
-                'label'   => '🎵 音樂',
+                'label' => '🎵 音樂',
                 'chat_id' => '-4661576369',
             ],
             '20' => [
-                'label'   => '🎮 遊戲',
+                'label' => '🎮 遊戲',
                 'chat_id' => '-5023352255',
             ],
             '24' => [
-                'label'   => '🎬 電影',
+                'label' => '🎬 電影',
                 'chat_id' => '-4997962376',
             ],
         ];
 
-
-        $regionInput   = strtoupper($this->argument('region') ?? 'ALL');
+        $regionInput = strtoupper($this->argument('region') ?? 'ALL');
         $categoryInput = $this->argument('category') ?? 'ALL';
 
         $useCategories = ($categoryInput === 'ALL')
@@ -58,6 +59,7 @@ class SearchYoutube extends Command
 
         if (empty($useCategories)) {
             $this->error("❌ 不支援的分類 ID：{$categoryInput}");
+
             return Command::FAILURE;
         }
 
@@ -74,9 +76,9 @@ class SearchYoutube extends Command
 
         if (empty($useRegions)) {
             $this->error("❌ 不支援的地區代碼：{$regionInput}");
+
             return Command::FAILURE;
         }
-
 
         $recentLimit = Carbon::now()->subWeeks(2);
 
@@ -86,20 +88,21 @@ class SearchYoutube extends Command
                 $this->info("▶ {$regionCode} / {$categoryConfig['label']}");
 
                 $response = Http::get('https://www.googleapis.com/youtube/v3/videos', [
-                    'part'            => 'snippet',
-                    'chart'           => 'mostPopular',
-                    'regionCode'      => $regionCode,
+                    'part' => 'snippet',
+                    'chart' => 'mostPopular',
+                    'regionCode' => $regionCode,
                     'videoCategoryId' => $categoryId,
-                    'maxResults'      => 5,
-                    'key'             => $apiKey,
+                    'maxResults' => 5,
+                    'key' => $apiKey,
                 ]);
 
-                if (!$response->successful()) {
+                if (! $response->successful()) {
                     Log::error('YouTube API failed', [
-                        'region'   => $regionCode,
+                        'region' => $regionCode,
                         'category' => $categoryId,
-                        'status'   => $response->status(),
+                        'status' => $response->status(),
                     ]);
+
                     continue;
                 }
 
@@ -117,18 +120,18 @@ class SearchYoutube extends Command
                     }
 
                     YoutubeVideo::create([
-                        'video_id'     => $videoId,
-                        'title'        => $video['snippet']['title'],
+                        'video_id' => $videoId,
+                        'title' => $video['snippet']['title'],
                         'channel_name' => $video['snippet']['channelTitle'],
                         'published_at' => $publishedAt->toDateTimeString(),
-                        'region'       => $regionCode,
-                        'category_id'  => $categoryId,
+                        'region' => $regionCode,
+                        'category_id' => $categoryId,
                     ]);
 
                     $text =
-                        "{$regionLabel} {$categoryConfig['label']}\n\n" .
-                        "🎬 {$video['snippet']['title']}\n" .
-                        "📺 {$video['snippet']['channelTitle']}\n" .
+                        "{$regionLabel} {$categoryConfig['label']}\n\n".
+                        "🎬 {$video['snippet']['title']}\n".
+                        "📺 {$video['snippet']['channelTitle']}\n".
                         "🔗 https://www.youtube.com/watch?v={$videoId}";
 
                     $keyboard = new InlineKeyboard(
@@ -145,8 +148,8 @@ class SearchYoutube extends Command
                     );
 
                     Request::sendMessage([
-                        'chat_id'      => $categoryConfig['chat_id'],
-                        'text'         => $text,
+                        'chat_id' => $categoryConfig['chat_id'],
+                        'text' => $text,
                         'reply_markup' => $keyboard,
                     ]);
 
@@ -157,5 +160,4 @@ class SearchYoutube extends Command
 
         return 0;
     }
-
 }

@@ -23,22 +23,22 @@ class GeminiService
             ->get($pdfUrl)
             ->body();
 
-        if (!$pdfBinary) {
+        if (! $pdfBinary) {
             return null;
         }
 
         // 2️⃣ base64 encode
         $base64 = base64_encode($pdfBinary);
 
-        $endpoint = "https://generativelanguage.googleapis.com/v1/models/" .
-            config('gemini.model') .
+        $endpoint = 'https://generativelanguage.googleapis.com/v1/models/'.
+            config('gemini.model').
             ":generateContent?key={$this->apiKey}";
         $response = Http::post($endpoint, [
-            "contents" => [
+            'contents' => [
                 [
-                    "parts" => [
+                    'parts' => [
                         [
-                            "text" => "你是專業法拍套利投資顧問（台灣市場），請用保守投資角度分析以下法拍 PDF：
+                            'text' => '你是專業法拍套利投資顧問（台灣市場），請用保守投資角度分析以下法拍 PDF：
 輸出必須包含：
 
 - 投資評分（0~100分）
@@ -48,24 +48,24 @@ class GeminiService
 - 1個最重要機會點
 - 建議最高出價區間（如果可判斷）
 
-請避免空泛描述，要偏實戰決策。"
+請避免空泛描述，要偏實戰決策。',
                         ],
                         [
-                            "inline_data" => [
-                                "mime_type" => "application/pdf",
-                                "data" => $base64
-                            ]
-                        ]
-                    ]
-                ]
+                            'inline_data' => [
+                                'mime_type' => 'application/pdf',
+                                'data' => $base64,
+                            ],
+                        ],
+                    ],
+                ],
             ],
-            "generationConfig" => [
-                "temperature" => config('gemini.temperature', 0.2),
-                "maxOutputTokens" => config('gemini.max_output_tokens', 2048),
-            ]
+            'generationConfig' => [
+                'temperature' => config('gemini.temperature', 0.2),
+                'maxOutputTokens' => config('gemini.max_output_tokens', 2048),
+            ],
         ]);
 
-        if (!$response->successful()) {
+        if (! $response->successful()) {
             return null;
         }
 
@@ -79,26 +79,23 @@ class GeminiService
             ->get($url)
             ->body();
 
-
         // 2. 移除 HTML 標籤
         $text = strip_tags($html);
 
         // 清理空白
         $text = preg_replace('/\s+/', ' ', $text);
 
-
         // 3. Gemini
-        $endpoint = "https://generativelanguage.googleapis.com/v1/models/" .
-            config('gemini.model') .
+        $endpoint = 'https://generativelanguage.googleapis.com/v1/models/'.
+            config('gemini.model').
             ":generateContent?key={$this->apiKey}";
 
-
         $response = Http::post($endpoint, [
-            "contents" => [
+            'contents' => [
                 [
-                    "parts" => [
+                    'parts' => [
                         [
-                            "text" => "
+                            'text' => "
 你是一位專業的課程顧問，請分析以下課程資料。
 
 請不要只做摘要，請從以下角度評估：
@@ -166,22 +163,20 @@ class GeminiService
 以下是課程資料：
 
 {$text}
-"
-                        ]
-                    ]
-                ]
+",
+                        ],
+                    ],
+                ],
             ],
-            "generationConfig" => [
-                "temperature" => 0.2,
-                "maxOutputTokens" => 2048,
-            ]
+            'generationConfig' => [
+                'temperature' => 0.2,
+                'maxOutputTokens' => 2048,
+            ],
         ]);
 
-
-        if (!$response->successful()) {
+        if (! $response->successful()) {
             return null;
         }
-
 
         return data_get(
             $response->json(),
@@ -192,27 +187,27 @@ class GeminiService
     public function summarizeText(string $text): ?string
     {
         $endpoint = config('gemini.base_url')
-            . "/models/"
-            . config('gemini.model')
-            . ":generateContent?key={$this->apiKey}";
+            .'/models/'
+            .config('gemini.model')
+            .":generateContent?key={$this->apiKey}";
 
         $response = Http::post($endpoint, [
-            "contents" => [
+            'contents' => [
                 [
-                    "parts" => [
+                    'parts' => [
                         [
-                            "text" => "請幫我整理以下法拍案件內容，輸出條列重點（風險 + 投資建議）：\n\n" . $text
-                        ]
-                    ]
-                ]
+                            'text' => "請幫我整理以下法拍案件內容，輸出條列重點（風險 + 投資建議）：\n\n".$text,
+                        ],
+                    ],
+                ],
             ],
-            "generationConfig" => [
-                "temperature" => config('gemini.temperature', 0.2),
-                "maxOutputTokens" => config('gemini.max_output_tokens', 1024),
-            ]
+            'generationConfig' => [
+                'temperature' => config('gemini.temperature', 0.2),
+                'maxOutputTokens' => config('gemini.max_output_tokens', 1024),
+            ],
         ]);
 
-        if (!$response->successful()) {
+        if (! $response->successful()) {
             return null;
         }
 

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class YoutubeDownloadController extends Controller
 {
@@ -11,7 +10,7 @@ class YoutubeDownloadController extends Controller
     {
         $path = storage_path("app/youtube/video/{$filename}");
 
-        if (!file_exists($path)) {
+        if (! file_exists($path)) {
             abort(404);
         }
 

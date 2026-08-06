@@ -36,25 +36,21 @@ class TelegramBotTest extends Command
             $telegram = new Telegram($botApiKey, $botUsername);
             Request::initialize($telegram);
 
-            // 問使用者輸入
-            // $chatId = $this->ask('Enter the chat ID (e.g., -123456789 for groups):');
-            // $message = $this->ask('Enter the message:');
-
             // 準備數據
             $data = [
                 'chat_id' => '-4664862172',
-                'text'    => 'YAAAAA',
+                'text' => 'YAAAAA',
             ];
 
             // 發送訊息
             $result = Request::sendMessage($data);
             if ($result->isOk()) {
-                $this->info('Message sent: ' . $result->getDescription());
+                $this->info('Message sent: '.$result->getDescription());
             } else {
-                $this->error('Failed to send message: ' . $result->printError());
+                $this->error('Failed to send message: '.$result->printError());
             }
         } catch (\Exception $e) {
-            $this->error('Error: ' . $e->getMessage());
+            $this->error('Error: '.$e->getMessage());
         }
     }
 }

@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\YoutubeVideo;
-use App\Models\Rent591;
-use App\Models\FreeGame4Gamers;
 use App\Models\DeliveryCoupon;
-
+use App\Models\FreeGame4Gamers;
+use App\Models\Rent591;
+use App\Models\YoutubeVideo;
 
 class FeedController extends Controller
 {
@@ -21,8 +20,8 @@ class FeedController extends Controller
                 'title' => $item->title,
                 'subtitle' => $item->channel_name,
                 'time' => $item->published_at,
-                'link' => 'https://www.youtube.com/watch?v=' . $item->video_id,   // 點擊用
-                'embed_url' => 'https://www.youtube.com/embed/' . $item->video_id, // iframe 用
+                'link' => 'https://www.youtube.com/watch?v='.$item->video_id,   // 點擊用
+                'embed_url' => 'https://www.youtube.com/embed/'.$item->video_id, // iframe 用
             ];
         });
 
@@ -31,10 +30,10 @@ class FeedController extends Controller
             return [
                 'type' => 'rent',
                 'title' => $item->title,
-                'subtitle' => $item->region . ' ・ $' . number_format($item->price_info) . ' / 月',
+                'subtitle' => $item->region.' ・ $'.number_format($item->price_info).' / 月',
                 'price' => $item->price_info,
                 'link' => $item->link,
-                'time' => (string)$item->created_at,
+                'time' => (string) $item->created_at,
             ];
         });
 
@@ -57,7 +56,7 @@ class FeedController extends Controller
                 'code' => $item->code,
                 'expire_date' => $item->expire_date,
                 'link' => $item->link,
-                'time' => (string)$item->created_at,
+                'time' => (string) $item->created_at,
             ];
         });
 

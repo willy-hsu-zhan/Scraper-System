@@ -37,7 +37,7 @@ class BirthdayDiscount extends Model
 
     public function isExpired(): bool
     {
-        if (!$this->expire_date) {
+        if (! $this->expire_date) {
             return false;
         }
 

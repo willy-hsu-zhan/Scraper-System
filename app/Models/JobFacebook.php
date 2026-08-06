@@ -9,6 +9,6 @@ class JobFacebook extends Model
     protected $table = 'job_facebook';
 
     protected $fillable = [
-        'id','title','level','language','salary','date',
+        'id', 'title', 'level', 'language', 'salary', 'date',
     ];
 }

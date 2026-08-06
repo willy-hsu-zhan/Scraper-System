@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Services\LineNotifyService;
+use Illuminate\Console\Command;
 
 class SendLineNotify extends Command
 {
@@ -34,8 +34,6 @@ class SendLineNotify extends Command
      */
     public function handle()
     {
-        $message = "\n" . 'Hello, this is a Line Notify message from Laravel!';
-        $response = $this->lineNotifyService->sendMessage($message);
-        //return response()->json(['response' => $response]);
+        $message = "\n".'Hello, this is a Line Notify message from Laravel!';
     }
 }

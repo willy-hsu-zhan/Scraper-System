@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class FreeGame4Gamers extends Model
 {
     use HasFactory;
+
     protected $table = 'free_games_4gamers';
 
     protected $fillable = [

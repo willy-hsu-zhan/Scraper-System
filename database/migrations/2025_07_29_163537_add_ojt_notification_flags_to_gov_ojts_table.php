@@ -27,7 +27,7 @@ return new class extends Migration
             $table->dropColumn([
                 'notified_3days_before',
                 'notified_1day_before',
-                'notified_1hour_before'
+                'notified_1hour_before',
             ]);
         });
     }

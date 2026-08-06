@@ -2,15 +2,15 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use App\Services\TelegramService;
-use App\Services\SeleniumService;
 use App\Models\BirthdayDiscount;
-use Illuminate\Support\Carbon;
+use App\Services\SeleniumService;
+use App\Services\TelegramService;
 use Facebook\WebDriver\WebDriverBy;
+use Illuminate\Console\Command;
+use Illuminate\Support\Carbon;
 
-
-class ScraperBirthdayDiscount extends Command {
+class ScraperBirthdayDiscount extends Command
+{
     /**
      * The name and signature of the console command.
      *
@@ -26,10 +26,15 @@ class ScraperBirthdayDiscount extends Command {
     protected $description = 'Command description';
 
     public $jobs = [];
+
     protected $lineNotifyService;
+
     protected $telegramService;
+
     protected $seleniumService;
+
     protected $jobTexts;
+
     protected $chatId = '-5445385394'; // 暫時先用全域變數 // 日後聊天室擴充再更改
 
     public function __construct(TelegramService $telegramService, SeleniumService $seleniumService)
@@ -55,7 +60,7 @@ class ScraperBirthdayDiscount extends Command {
             )->getText();
 
             if (preg_match('/共計\s*(\d+)\s*筆/', $footerText, $m)) {
-                $totalCount = (int)$m[1] - 1;
+                $totalCount = (int) $m[1] - 1;
             }
         } catch (\Exception $e) {
 
@@ -72,7 +77,7 @@ class ScraperBirthdayDiscount extends Command {
         $allEvents = [];
 
         for ($page = 0; $page < $totalPages; $page++) {
-            $pageUrl = 'https://happybirthday.com.tw/list?page=' . $page;
+            $pageUrl = 'https://happybirthday.com.tw/list?page='.$page;
             $this->info("Scanning page: {$page}");
 
             $webDriver->get($pageUrl);
@@ -87,7 +92,7 @@ class ScraperBirthdayDiscount extends Command {
                 try {
                     $a = $item->findElement(WebDriverBy::cssSelector('h2 a'));
                     $title = trim($a->getText());
-                    $link  = 'https://happybirthday.com.tw' . $a->getAttribute('href');
+                    $link = 'https://happybirthday.com.tw'.$a->getAttribute('href');
                 } catch (\Exception $e) {
                     continue;
                 }
@@ -102,18 +107,20 @@ class ScraperBirthdayDiscount extends Command {
                     if (preg_match('/(\d{4}-\d{2}-\d{2})/', $finalText, $m)) {
                         $expireDate = $m[1];
                     }
-                } catch (\Exception $e) {}
+                } catch (\Exception $e) {
+                }
 
                 $desc = '';
                 try {
                     $desc = trim(
                         $item->findElement(WebDriverBy::tagName('p'))->getText()
                     );
-                } catch (\Exception $e) {}
+                } catch (\Exception $e) {
+                }
 
                 $allEvents[] = [
-                    'title'       => $title,
-                    'link'        => $link,
+                    'title' => $title,
+                    'link' => $link,
                     'expire_date' => $expireDate,
                     'description' => $desc,
                 ];
@@ -134,21 +141,22 @@ class ScraperBirthdayDiscount extends Command {
                 $record->update([
                     'expire_date' => $event['expire_date'],
                     'description' => $event['description'],
-                    'link'        => $event['link'],
-                    'is_expired'  => false,
+                    'link' => $event['link'],
+                    'is_expired' => false,
                 ]);
+
                 continue;
             }
 
             // 新資料
             BirthdayDiscount::create([
-                'title'        => $event['title'],
-                'title_hash'   => $titleHash,
-                'link'         => $event['link'],
-                'expire_date'  => $event['expire_date'],
-                'description'  => $event['description'],
-                'is_expired'   => false,
-                'is_push'      => 0,
+                'title' => $event['title'],
+                'title_hash' => $titleHash,
+                'link' => $event['link'],
+                'expire_date' => $event['expire_date'],
+                'description' => $event['description'],
+                'is_expired' => false,
+                'is_push' => 0,
             ]);
 
             $newEvents[] = $event;
@@ -170,11 +178,11 @@ class ScraperBirthdayDiscount extends Command {
 
         foreach ($events as $index => $event) {
 
-            $text  = "🎂 本月壽星優惠整理（" . Carbon::now()->format('Y/m') . "）\n";
-            $text .= "📦 第 " . ($index + 1) . " 筆\n\n";
-            $text .= '🎉 ' . $event->title . "\n";
-            $text .= '⏰ 截止：' . $event->expire_date . "\n";
-            $text .= '🔗 ' . $event->link . "\n";
+            $text = '🎂 本月壽星優惠整理（'.Carbon::now()->format('Y/m')."）\n";
+            $text .= '📦 第 '.($index + 1)." 筆\n\n";
+            $text .= '🎉 '.$event->title."\n";
+            $text .= '⏰ 截止：'.$event->expire_date."\n";
+            $text .= '🔗 '.$event->link."\n";
 
             // 推播
             $this->telegramService->sendMessage($this->chatId, $text);

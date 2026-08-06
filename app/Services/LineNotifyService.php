@@ -17,7 +17,7 @@ class LineNotifyService
     {
         $url = 'https://notify-api.line.me/api/notify';
 
-        $response = Http::withToken($this->token)->asForm()->post($url, ['message' => $message,]);
+        $response = Http::withToken($this->token)->asForm()->post($url, ['message' => $message]);
 
         return $response->getBody()->getContents();
     }

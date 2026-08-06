@@ -1,9 +1,9 @@
 <?php
 
+use App\Http\Controllers\FeedController;
+use App\Http\Controllers\TelegramController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TelegramController;
-use App\Http\Controllers\FeedController;
 
 /*
 |--------------------------------------------------------------------------

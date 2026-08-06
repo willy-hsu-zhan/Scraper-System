@@ -2,5 +2,5 @@
 
 return [
     'account' => env('FACEBOOK_ACCOUNT'),
-    'password' => env('FACEBOOK_PASSWORD')
+    'password' => env('FACEBOOK_PASSWORD'),
 ];

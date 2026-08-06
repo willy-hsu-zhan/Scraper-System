@@ -19,7 +19,7 @@ class ReurlService
      */
     public function shorten(string $url, array $utm = []): ?string
     {
-        if (!$this->apiKey) {
+        if (! $this->apiKey) {
             Log::warning('Reurl API key missing');
 
             return null;
