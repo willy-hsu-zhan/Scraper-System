@@ -86,6 +86,13 @@ class ScraperPtt extends Command
                     WebDriverBy::cssSelector('.e7-container')
                 );
 
+                $webDriver->get($baseUrl);
+
+                sleep(5);
+
+                $this->info('目前網址: '.$webDriver->getCurrentURL());
+                $this->info('標題: '.$webDriver->getTitle());
+
                 $this->info('找到文章數: '.count($jobElements));
 
                 foreach ($jobElements as $element) {
