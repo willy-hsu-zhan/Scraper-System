@@ -15,7 +15,6 @@ use App\Models\GovOjt;
 use Carbon\Carbon;
 use App\Services\ReurlService;
 use App\Services\GeminiService;
-use Longman\TelegramBot\Entities\InlineKeyboard;
 
 class ScraperOjt extends Command
 {
@@ -174,7 +173,7 @@ class ScraperOjt extends Command
                     } catch (\Facebook\WebDriver\Exception\StaleElementReferenceException $e) {
                         // 重抓 row
                         try {
-                            $row = $driver->findElements(WebDriverBy::xpath('//table//tr[@valign="middle"]'))[$index];
+                            $row = $driver->findElements(WebDriverBy::xpath('//table//tr[@valign="middle"]'))[0];
                             $cols = $row->findElements(WebDriverBy::tagName('td'));
                             // 重試原本的操作
                         } catch (\Facebook\WebDriver\Exception\StaleElementReferenceException $e2) {

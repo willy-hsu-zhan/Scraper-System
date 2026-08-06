@@ -8,7 +8,7 @@ use App\Services\TelegramService;
 use App\Services\SeleniumService;
 use App\Services\GeminiService;
 use Facebook\WebDriver\WebDriverBy;
-use Longman\TelegramBot\Entities\InlineKeyboard;
+use Illuminate\Support\Facades\Log;
 
 class ScraperJudicialAuction extends Command
 {
@@ -228,6 +228,32 @@ class ScraperJudicialAuction extends Command
                     }
 
                     // BTN 產生
+
+                    // AI 摘要
+                    try {
+                        $this->info("🤖 正在分析：{$judicalAction->course_name}");
+
+                        $summary = $this->geminiService->summarizePdfByUrl(
+                            $judicalAction->pdf_url
+                        );
+
+                        if (!empty($summary)) {
+                            $judicalAction->update([
+                                'ai_summary' => $summary,
+                            ]);
+
+                            $this->info("✅ AI 摘要完成");
+                        } else {
+                            $this->warn("⚠️ AI 沒有回傳摘要");
+                        }
+
+                    } catch (\Throwable $e) {
+                        Log::error('AI 摘要失敗', [
+                            'error' => $e->getMessage(),
+                        ]);
+
+                        $this->warn("❌ AI 分析失敗：" . $e->getMessage());
+                    }
 
                     $keyboard = [
                         'inline_keyboard' => [
