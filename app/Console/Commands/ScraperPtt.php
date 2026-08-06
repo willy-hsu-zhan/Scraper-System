@@ -187,6 +187,11 @@ class ScraperPtt extends Command
                             )->getText()
                         );
 
+                        if ($this->shouldSkipArticle($title)) {
+
+                            continue;
+                        }
+
 
                         $link = $element->getAttribute('href');
 
@@ -348,6 +353,32 @@ class ScraperPtt extends Command
         }
     }
 
+    private function shouldSkipArticle(string $title): bool
+    {
+        $skipKeywords = [
+            '[公告]',
+            'Fw:',
+            'FW:',
+            'Re:',
+            '板規',
+            '置底',
+            '版主',
+            '問答',
+        ];
+
+
+        foreach ($skipKeywords as $keyword) {
+
+            if (mb_strpos($title, $keyword) !== false) {
+
+                return true;
+            }
+        }
+
+
+        return false;
+    }
+    
     public function formatJobMessage(array $job): string
     {
         return <<<TEXT
