@@ -8,6 +8,7 @@ use App\Services\TelegramService;
 use App\Services\SeleniumService;
 use App\Services\GeminiService;
 use Facebook\WebDriver\WebDriverBy;
+use Longman\TelegramBot\Entities\InlineKeyboard;
 
 class ScraperJudicialAuction extends Command
 {
@@ -229,10 +230,8 @@ class ScraperJudicialAuction extends Command
                     // BTN 產生
                     $keyboard = [
                         [
-                            [
-                                'text' => '🧠 產生 AI 摘要',
-                                'callback_data' => "auction_summary:{$record->id}"
-                            ]
+                            'text' => '🧠 產生 AI 摘要',
+                            'callback_data' => "auction_summary:{$record->id}"
                         ]
                     ];
 
