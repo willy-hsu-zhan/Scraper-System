@@ -73,64 +73,200 @@ class ScraperPtt extends Command
     public function handle()
     {
         $originUrl = 'https://www.pttweb.cc';
-        $baseUrl = 'https://www.pttweb.cc/bbs/part-time/index.html';
+        $baseUrl   = 'https://www.pttweb.cc/bbs/part-time/index.html';
 
         $webDriver = $this->seleniumService->openWebDriver();
 
         try {
 
+            $jobs = [];
+            $maxPage = 2;
+
+
+            // 先開啟網頁
             $webDriver->get($baseUrl);
 
-            sleep(5);
-
-            $this->info('目前網址: '.$webDriver->getCurrentURL());
-
-            $this->info('標題: '.$webDriver->getTitle());
-
-
-            $jobElements = $webDriver->findElements(
-                WebDriverBy::cssSelector('.e7-container')
+            // 等待 Vue render
+            $webDriver->wait(15)->until(
+                function ($driver) {
+                    return count(
+                        $driver->findElements(
+                            WebDriverBy::cssSelector('a.e7-article-default')
+                        )
+                    ) > 0;
+                }
             );
+
+
+            for ($currentPage = 1; $currentPage <= $maxPage; $currentPage++) {
+
+
+                $this->info(
+                    '目前網址: '.$webDriver->getCurrentURL()
+                );
+
+
+                $articleElements = $webDriver->findElements(
+                    WebDriverBy::cssSelector('a.e7-article-default')
+                );
+
+
+                $this->info(
+                    '找到文章數: '.count($articleElements)
+                );
+
+
+                foreach ($articleElements as $element) {
+
+                    try {
+
+
+                        $title = trim(
+                            $element->findElement(
+                                WebDriverBy::cssSelector('.e7-title')
+                            )->getText()
+                        );
+
+
+                        $link = $element->getAttribute('href');
+
+
+                        // 找作者
+                        $author = '';
+
+                        try {
+
+                            $author = trim(
+                                $element->findElement(
+                                    WebDriverBy::xpath(
+                                        "./ancestor::div[contains(@class,'e7-container')]//div[contains(@class,'e7-meta-container')]//a"
+                                    )
+                                )->getText()
+                            );
+
+                        } catch(Exception $e) {
+
+                        }
+
+
+
+                        // 找日期
+                        $date = null;
+
+                        try {
+
+                            $dateText = $element->findElement(
+                                WebDriverBy::xpath(
+                                    "./ancestor::div[contains(@class,'e7-container')]//div[contains(@class,'e7-grey-text')]//span[last()]"
+                                )
+                            )->getText();
+
+
+                            if (preg_match('/\d{4}\/\d{2}\/\d{2}/', $dateText)) {
+
+                                $date = Carbon::createFromFormat(
+                                    'Y/m/d H:i',
+                                    trim($dateText)
+                                )->format('Y-m-d');
+
+                            }
+
+                        } catch(Exception $e) {
+
+                        }
+
+
+
+                        $jobs[] = [
+                            'title'   => $title,
+                            'link'    => $originUrl.$link,
+                            'company' => $author,
+                            'date'    => $date ?? now()->format('Y-m-d'),
+                        ];
+
+
+                    } catch(Exception $e) {
+
+                        Log::warning(
+                            'Parse article failed: '.$e->getMessage()
+                        );
+
+                        continue;
+                    }
+
+                }
+
+
+
+                // 下一頁
+                if ($currentPage < $maxPage) {
+
+                    try {
+
+                        $nextPageLink = $webDriver->findElement(
+                            WebDriverBy::linkText('‹ 上頁')
+                        );
+
+                        $nextPageLink->click();
+
+
+                        sleep(3);
+
+
+                    } catch(Exception $e) {
+
+                        Log::info(
+                            'No more pages to scrape.'
+                        );
+
+                        break;
+
+                    }
+
+                }
+
+            }
+
+
+
+            // 寫入 DB
+            foreach ($jobs as $job) {
+
+                if (!JobPtt::where('link', $job['link'])->exists()) {
+
+                    JobPtt::create($job);
+
+                    $this->jobTexts[] =
+                        $this->formatJobMessage($job);
+                }
+
+            }
+
+
+            $this->sendNotifications();
+
 
 
             $this->info(
-                '找到文章數: '.count($jobElements)
+                '總共抓取: '.count($jobs).' 筆'
             );
-
-
-            foreach ($jobElements as $element) {
-
-                try {
-
-                    $title = $element->findElement(
-                        WebDriverBy::cssSelector('.e7-title')
-                    )->getText();
-
-
-                    $link = $element->findElement(
-                        WebDriverBy::cssSelector('a.e7-article-default')
-                    )->getAttribute('href');
-
-
-                    dump([
-                        'title' => trim($title),
-                        'link' => $originUrl.$link,
-                    ]);
-
-
-                } catch(Exception $e) {
-
-                    dump($e->getMessage());
-
-                }
-            }
 
 
         } catch(Exception $e) {
 
-            Log::error($e->getMessage());
+
+            Log::error(
+                'Error during scraping: '.$e->getMessage()
+            );
+
+
+            $this->error(
+                $e->getMessage()
+            );
+
 
         } finally {
+
 
             $webDriver->quit();
 
