@@ -86,6 +86,8 @@ class ScraperPtt extends Command
                     WebDriverBy::cssSelector('.e7-container')
                 );
 
+                $this->info('找到文章數: '.count($jobElements));
+
                 foreach ($jobElements as $element) {
                     try {
                         $linkElement = $element->findElement(
