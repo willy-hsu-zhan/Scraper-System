@@ -30,7 +30,7 @@ class ScraperDeliveryCoupon extends Command {
     protected $telegramService;
     protected $seleniumService;
     protected $jobTexts;
-    protected $chatId = '-5055523902'; // 暫時先用全域變數 // 日後聊天室擴充再更改
+    protected $chatId = '-5419894094'; // 暫時先用全域變數 // 日後聊天室擴充再更改
 
     public function __construct(LineNotifyService $lineNotifyService, TelegramService $telegramService, SeleniumService $seleniumService)
     {
