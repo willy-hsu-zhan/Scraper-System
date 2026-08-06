@@ -195,7 +195,7 @@ class ScraperJudicialAuction extends Command
                     'pdf_url'      => $pdfUrl,
                 ];
 
-                $record = JudicialAuction::firstOrCreate(
+                $judicalAction = JudicialAuction::firstOrCreate(
                     [
                         'court'   => $courtName,
                         'case_no' => $caseNo,
@@ -203,21 +203,21 @@ class ScraperJudicialAuction extends Command
                     $item
                 );
 
-                if ($record->wasRecentlyCreated) {
+                if ($judicalAction->wasRecentlyCreated) {
 
                     /**
                      * 🧾 Telegram message
                      */
                     $message =
                         "🏠 新法拍案件\n\n" .
-                        "🏛 法院：{$record->court}\n" .
-                        "📌 案號：{$record->case_no}\n" .
-                        "📅 拍賣日：{$record->auction_date}\n\n" .
-                        "📍 區域：{$record->area}\n\n" .
-                        "🏡 地址：{$record->address}\n\n" .
+                        "🏛 法院：{$judicalAction->court}\n" .
+                        "📌 案號：{$judicalAction->case_no}\n" .
+                        "📅 拍賣日：{$judicalAction->auction_date}\n\n" .
+                        "📍 區域：{$judicalAction->area}\n\n" .
+                        "🏡 地址：{$judicalAction->address}\n\n" .
                         "💰 價格：{$priceText}（{$priceNumber}元）\n\n" .
                         "📦 點交：" . ($isHandover ?? '未標示') . "\n\n" .
-                        "📄 PDF：{$record->pdf_url}";
+                        "📄 PDF：{$judicalAction->pdf_url}";
 
 
                     /**
@@ -228,11 +228,14 @@ class ScraperJudicialAuction extends Command
                     }
 
                     // BTN 產生
+
                     $keyboard = [
-                        [
+                        'inline_keyboard' => [
                             [
-                                'text' => '🧠 產生 AI 摘要',
-                                'callback_data' => "auction_summary:{$record->id}"
+                                [
+                                    'text' => '產生 AI 摘要',
+                                    'callback_data' => "auction_summary:{$judicalAction->id}"
+                                ]
                             ]
                         ]
                     ];
