@@ -8,10 +8,6 @@ use Facebook\WebDriver\Remote\RemoteWebDriver;
 
 class SeleniumService
 {
-    public function __construct()
-    {
-    }
-
     public function openWebDriver(
         bool $useProxy = false,
         string $proxyIpPort = '',
