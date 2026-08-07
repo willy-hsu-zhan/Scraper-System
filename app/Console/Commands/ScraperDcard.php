@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Services\LineNotifyService;
 use App\Services\ProxyService;
+use App\Services\Scraper\Dcard\DcardScraper;
 use App\Services\TelegramService;
 use Goutte\Client;
 use Illuminate\Console\Command;
@@ -47,25 +48,16 @@ class ScraperDcard extends Command
 
     public function handle()
     {
-        // 獲取代理
-        $proxy = $this->proxyService->getRamdomProxy();
+        $scraper = new DcardScraper($this->proxyService);
+        $items = $scraper->run();
 
-        // 使用 Http facade 進行請求並設定代理
-        $response = Http::withOptions([
-            'proxy' => $proxy,          // 設定代理
-            'timeout' => 6000,            // 設定超時時間（以秒為單位）
-            'connect_timeout' => 600,    // 設定連線超時
-        ])->withHeaders([
-            'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-        ])->get('https://www.dcard.tw/f/food?tab=latest');
+        if (! empty($items)) {
+            foreach ($items as $item) {
+                $this->telegramService->sendMessage($this->chatId, $scraper->format($item));
+                sleep(3);
+            }
+        }
 
-        // 獲取網頁內容
-        $content = $response->body();
-        // 使用 Goutte 客戶端分析 HTML 內容
-        $client = new Client();
-        $crawler = $client->request('GET', 'data:text/html,'.urlencode($content));
-
-        // 顯示抓取的內容
-        dd($crawler->text());
+        $this->info('完成，共抓取 '.count($items).' 筆');
     }
 }

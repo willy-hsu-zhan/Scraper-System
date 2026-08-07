@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\JobChickpt;
 use App\Services\LineNotifyService;
+use App\Services\Scraper\Chickpt\ChickptScraper;
 use App\Services\SeleniumService;
 use App\Services\TelegramService;
 use Exception;
@@ -56,120 +57,17 @@ class ScraperChickpt extends Command
      */
     public function handle()
     {
-        $baseUrl = 'https://www.chickpt.com.tw';
+        $scraper = new ChickptScraper($this->seleniumService);
+        $items = $scraper->run();
 
-        // 連接到 Selenium WebDriver
-        $webDriver = $this->seleniumService->openWebDriver();
-        // 開啟瀏覽器
-        // 203.74.125.18:8888
-        //$proxy_ip = '44.199.110.54:3128';
-        //$webDriver = $this->seleniumService->openWebDriver(true, $proxy_ip);
-
-        // 初始資料
-        $jobs = [];
-
-        $areas = [
-            '不限地區' => 'https://www.chickpt.com.tw/cases?is_address_no_limit=1',
-            '台北' => 'https://www.chickpt.com.tw/cases?area=Taipei',
-            '新北' => 'https://www.chickpt.com.tw/cases?area=NewTaipei',
-            '基隆' => 'https://www.chickpt.com.tw/cases?area=Keelung',
-            //'台南'     => 'https://www.chickpt.com.tw/cases?area=Tainan',
-            //'高雄'     => 'https://www.chickpt.com.tw/cases?area=Kaohsiung',
-        ];
-
-        foreach ($areas as $areaName => $url) {
-            // 設定頁碼
-            $currentPage = 1; // 預設為第1頁
-            // 開啟網頁
-            $webDriver->get($url);
-            while (true) {
-                try {
-                    // 檢查是否有 QR code 的彈出條，如果有，點擊關閉
-                    try {
-                        $webDriver->wait(10)->until(
-                            WebDriverExpectedCondition::elementToBeClickable(WebDriverBy::id('qrcodebar-pc-closebtn'))
-                        );
-                        $closeButton = $webDriver->findElement(WebDriverBy::id('qrcodebar-pc-closebtn'));
-                        $closeButton->click();
-                        Log::info('QRCode bar closed.');
-                    } catch (Exception $e) {
-                        Log::info('No QR code bar to close or error closing: '.$e->getMessage());
-                    }
-
-                    // 查找並點擊分頁連結
-                    $link = $webDriver->findElement(WebDriverBy::linkText((string) $currentPage));
-                    $link->click();
-
-                    try {
-                        $webDriver->wait(10)->until(
-                            WebDriverExpectedCondition::visibilityOfElementLocated(WebDriverBy::linkText((string) $currentPage))
-                        );
-                        $webDriver->wait(10)->until(
-                            WebDriverExpectedCondition::elementToBeClickable(WebDriverBy::linkText((string) $currentPage))
-                        );
-                    } catch (Exception $e) {
-                        Log::error('Error clicking element on page '.$currentPage.': '.$e->getMessage());
-                        $this->sendErrorLog('Error clicking element on page '.$currentPage.': '.$e->getMessage());
-                    }
-
-                    // 取得 job 列表
-                    $jobElements = $webDriver->findElements(WebDriverBy::cssSelector('.jobs-wrap ul#job-list.job-list.show li'));
-
-                    foreach ($jobElements as $jobNode) {
-                        $title = $jobNode->findElement(WebDriverBy::cssSelector('h2'))->getText();
-                        $link = $jobNode->findElement(WebDriverBy::cssSelector('a'))->getAttribute('href');
-                        $company = $jobNode->findElement(WebDriverBy::cssSelector('.ellipsis-job-company'))->getText();
-                        $salary = $jobNode->findElement(WebDriverBy::cssSelector('.salary'))->getText();
-                        $place = $jobNode->findElement(WebDriverBy::cssSelector('.place'))->getText();
-                        $update_time = $jobNode->findElement(WebDriverBy::cssSelector('.date-time'))->getText();
-
-                        $link = $baseUrl.$link;
-                        // 檢查是否已存在資料庫中
-                        if (! JobChickpt::where('link', $link)->first()) {
-                            $date = Carbon::now()->toDateString();
-                            JobChickpt::create([
-                                'title' => $title,
-                                'link' => $link,
-                                'company' => $company,
-                                'salary' => $salary,
-                                'place' => $place,
-                                'date' => $date,
-                            ]);
-
-                            // 儲存爬取的工作資訊
-                            $jobs[] = [
-                                'title' => trim($title),
-                                'link' => trim($link),
-                                'company' => trim($company),
-                                'salary' => trim($salary),
-                                'place' => trim($place),
-                                'update_time' => trim($update_time),
-                            ];
-                        }
-                    }
-
-                    if ($currentPage >= 3) { // 限制掃描頁數以避免過多請求
-                        break;
-                    }
-
-                    // 增加頁碼
-                    $currentPage++;
-                } catch (Exception $e) {
-                    Log::error('Error scraping page '.$currentPage.': '.$e->getMessage());
-                    //$this->sendErrorLog('Error scraping page ' . $currentPage . ': ' . $e->getMessage());
-                    break; // 跳出循環
-                }
+        if (! empty($items)) {
+            foreach ($items as $item) {
+                $this->telegramService->sendMessage($this->chatId, $scraper->format($item));
+                sleep(3);
             }
         }
 
-        $webDriver->quit(); // 完成後退出 WebDriver
-
-        // 傳送通知
-        if (! empty($jobs)) {
-            $this->sendJobNotifications($jobs);
-        } else {
-            //$this->sendPeriodNoJobMsg();
-        }
+        $this->info('完成，共抓取 '.count($items).' 筆');
     }
 
     public function sumTotalPrice($jobs)

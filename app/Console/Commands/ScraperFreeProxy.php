@@ -2,56 +2,23 @@
 
 namespace App\Console\Commands;
 
-use Goutte\Client;
+use App\Services\Scraper\FreeProxy\FreeProxyScraper;
 use Illuminate\Console\Command;
 
 class ScraperFreeProxy extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
     protected $signature = 'app:scraper-free-proxy';
+    protected $description = 'Fetch a list of publicly available free proxies';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Command description';
-
-    /**
-     * Execute the console command.
-     */
     public function handle()
     {
-        $client = new Client();
+        $scraper = new FreeProxyScraper();
+        $proxies = $scraper->run();
 
-        $url = 'https://free-proxy-list.net/';
+        $this->info('Found '.count($proxies).' proxies.');
 
-        $crawler = $client->request('GET', $url);
-
-        $proxies = $crawler->filter('table.table tbody tr')->each(function ($row) {
-            $columns = $row->filter('td')->each(function ($col) {
-                return $col->text();
-            });
-
-            return $columns; // return td屬性
-        });
-        foreach ($proxies as $index => $proxy) {
-            if (! isset($proxy[6])) {
-                unset($proxies[$index]);
-
-                continue;
-            }
-            if (is_numeric($proxy[6])) {
-                unset($proxies[$index]);
-            }
+        if (! empty($proxies)) {
+            $this->info('Example: '.$scraper->format($proxies[0]));
         }
-        $proxies = array_values($proxies);
-
-        $ramdomProxy = $proxies[array_rand($proxies)];
-        $url = 'http://'.$ramdomProxy[0].':'.$ramdomProxy[1];
     }
 }

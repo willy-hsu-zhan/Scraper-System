@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\JobPtt;
 use App\Services\LineNotifyService;
+use App\Services\Scraper\Ptt\PttScraper;
 use App\Services\SeleniumService;
 use App\Services\TelegramService;
 use Carbon\Carbon;
@@ -121,183 +122,22 @@ class ScraperPtt extends Command
 
     public function handle()
     {
-        $originUrl = 'https://www.pttweb.cc';
-        $baseUrl = 'https://www.pttweb.cc/bbs/part-time/index.html';
+        $scraper = new PttScraper($this->seleniumService);
+        $newJobs = $scraper->run();
 
-        $webDriver = $this->seleniumService->openWebDriver();
-
-        try {
-
-            $jobs = [];
-            $maxPage = 2;
-
-            // 初始化
-            $webDriver->get($baseUrl);
-
-            // 等待 Vue render
-            $webDriver->wait(15)->until(
-                function ($driver) {
-                    return count(
-                        $driver->findElements(
-                            WebDriverBy::cssSelector('a.e7-article-default')
-                        )
-                    ) > 0;
-                }
-            );
-
-            for ($currentPage = 1; $currentPage <= $maxPage; $currentPage++) {
-
-                $this->info(
-                    '目前網址: '.$webDriver->getCurrentURL()
-                );
-
-                $articleElements = $webDriver->findElements(
-                    WebDriverBy::cssSelector('a.e7-article-default')
-                );
-
-                $this->info(
-                    '找到文章數: '.count($articleElements)
-                );
-
-                foreach ($articleElements as $element) {
-
-                    try {
-
-                        $title = trim(
-                            $element->findElement(
-                                WebDriverBy::cssSelector('.e7-title')
-                            )->getText()
-                        );
-
-                        if ($this->shouldSkipArticle($title)) {
-
-                            continue;
-                        }
-
-                        $link = $element->getAttribute('href');
-
-                        // 作者
-                        $author = '';
-
-                        try {
-
-                            $author = trim(
-                                $element->findElement(
-                                    WebDriverBy::xpath(
-                                        "./ancestor::div[contains(@class,'e7-container')]//div[contains(@class,'e7-meta-container')]//a"
-                                    )
-                                )->getText()
-                            );
-                        } catch (Exception $e) {
-                        }
-
-                        // 日期
-                        $date = now()->format('Y-m-d');
-
-                        try {
-
-                            $dateText = $element->findElement(
-                                WebDriverBy::xpath(
-                                    "./ancestor::div[contains(@class,'e7-container')]//div[contains(@class,'e7-grey-text')]//span[last()]"
-                                )
-                            )->getText();
-
-                            if (preg_match('/\d{4}\/\d{2}\/\d{2}/', $dateText)) {
-
-                                $date = Carbon::createFromFormat(
-                                    'Y/m/d H:i',
-                                    trim($dateText)
-                                )->format('Y-m-d');
-                            }
-                        } catch (Exception $e) {
-                        }
-
-                        // 地區
-                        $place = $this->filterPlace($title);
-
-                        // 薪資
-                        $salary = $this->parseSalary($title);
-
-                        $jobs[] = [
-
-                            'title' => $title,
-
-                            'link' => $originUrl.$link,
-
-                            'company' => $author,
-
-                            'date' => $date,
-
-                            'place' => $place,
-
-                            'salary' => $salary,
-
-                        ];
-                    } catch (Exception $e) {
-
-                        Log::warning(
-                            'Parse article error: '.$e->getMessage()
-                        );
-
-                        continue;
-                    }
-                }
-
-                // 下一頁
-                if ($currentPage < $maxPage) {
-
-                    try {
-
-                        $nextPageLink = $webDriver->findElement(
-                            WebDriverBy::linkText('‹ 上頁')
-                        );
-
-                        $nextPageLink->click();
-
-                        sleep(3);
-                    } catch (Exception $e) {
-
-                        Log::info(
-                            'No more pages.'
-                        );
-
-                        break;
-                    }
-                }
+        if (! empty($newJobs)) {
+            foreach ($newJobs as $job) {
+                $this->telegramService->sendMessage($this->chatId, $scraper->format($job));
+                sleep(3);
             }
 
-            /**
-             * DB 儲存
-             */
-            foreach ($jobs as $job) {
-
-                if (! JobPtt::where('link', $job['link'])->exists()) {
-
-                    JobPtt::create($job);
-
-                    $this->jobTexts[] =
-                        $this->formatJobMessage($job);
-                }
-            }
-
-            $this->sendNotifications();
-
-            $this->info(
-                '完成，共抓取 '.count($jobs).' 筆'
+            $this->telegramService->sendMessage(
+                $this->chatId,
+                '最後更新時間：'.Carbon::now()->setTimezone('Asia/Taipei')->format('Y-m-d H:i:s')
             );
-        } catch (Exception $e) {
-
-            Log::error(
-                'Scraper Error: '.$e->getMessage()
-            );
-
-            $this->error(
-                $e->getMessage()
-            );
-        } finally {
-
-            $webDriver->quit();
         }
+
+        $this->info('完成，共抓取 '.count($newJobs).' 筆');
     }
 
     private function shouldSkipArticle(string $title): bool

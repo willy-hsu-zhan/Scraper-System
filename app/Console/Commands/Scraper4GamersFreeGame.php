@@ -2,31 +2,19 @@
 
 namespace App\Console\Commands;
 
-use App\Models\FreeGame4Gamers;
+use App\Services\Scraper\FreeGame\FreeGameScraper;
 use App\Services\SeleniumService;
 use App\Services\TelegramService;
-use Facebook\WebDriver\WebDriverBy;
 use Illuminate\Console\Command;
 
 class Scraper4GamersFreeGame extends Command
 {
-    /**
-     * The name and signature of the console command.
-     */
     protected $signature = 'app:scraper-4gamers-free';
-
-    /**
-     * The console command description.
-     */
     protected $description = 'Scrape 4Gamers 限時免費 news';
 
     protected $telegramService;
-
     protected $seleniumService;
-
-    protected $jobTexts;
-
-    protected $chatId = '-5107922211'; // 暫時先用全域變數 // 日後聊天室擴充再更改
+    protected $chatId = '-5107922211';
 
     public function __construct(TelegramService $telegramService, SeleniumService $seleniumService)
     {
@@ -37,124 +25,14 @@ class Scraper4GamersFreeGame extends Command
 
     public function handle()
     {
-        $webDriver = $this->seleniumService->openWebDriver();
+        $scraper = new FreeGameScraper($this->seleniumService);
+        $newItems = $scraper->run();
 
-        $webDriver->get('https://www.4gamers.com.tw/news/tag/限時免費');
-        sleep(3);
-
-        $items = $webDriver->findElements(
-            WebDriverBy::cssSelector('section ul > li')
-        );
-
-        $results = [];
-
-        foreach ($items as $item) {
-
-            try {
-                // 連結
-                $a = $item->findElement(WebDriverBy::cssSelector('a'));
-                $link = 'https://www.4gamers.com.tw'.$a->getAttribute('href');
-
-                // 標題
-                $title = trim(
-                    $item->findElement(WebDriverBy::cssSelector('h3'))->getText()
-                );
-
-                // 簡介
-                $desc = '';
-                try {
-                    $desc = trim(
-                        $item->findElement(WebDriverBy::cssSelector('p'))->getText()
-                    );
-                } catch (\Exception $e) {
-                }
-
-                // 日期
-                $date = null;
-                try {
-                    $time = $item->findElement(WebDriverBy::cssSelector('time'));
-                    $date = $time->getAttribute('datetime');
-                } catch (\Exception $e) {
-                }
-
-                $results[] = [
-                    'title' => $title,
-                    'link' => $link,
-                    'description' => $desc,
-                    'date' => $date,
-                ];
-
-            } catch (\Exception $e) {
-                continue;
-            }
-        }
-
-        $newItems = [];
-
-        foreach ($results as $item) {
-            $titleHash = FreeGame4Gamers::makeTitleHash($item['title']);
-            $record = FreeGame4Gamers::where('title_hash', $titleHash)->first();
-
-            if ($record) {
-                // 已存在 → 更新內容（避免描述變動）
-                $record->update([
-                    'description' => $item['description'],
-                    'link' => $item['link'],
-                    'publish_date' => $item['date'],
-                ]);
-
-                continue;
-            }
-
-            // 新資料
-            FreeGame4Gamers::create([
-                'title' => $item['title'],
-                'title_hash' => $titleHash,
-                'description' => $item['description'],
-                'link' => $item['link'],
-                'publish_date' => $item['date'],
-                'is_push' => false,
-            ]);
-
-            $newItems[] = $item;
-        }
-
-        $this->pushNewFreeGames();
-        $webDriver->quit();
-    }
-
-    private function pushNewFreeGames()
-    {
-        $items = FreeGame4Gamers::where('is_push', false)
-            ->orderByDesc('publish_date')
-            ->get();
-
-        if ($items->isEmpty()) {
-            return;
-        }
-
-        foreach ($items as $index => $game) {
-
-            $text = "🎮 4Gamers 限時免費\n\n";
-            $text .= '🆓 '.$game->title."\n";
-
-            if (! empty($game->description)) {
-                $text .= '📝 '.$game->description."\n";
-            }
-
-            if (! empty($game->publish_date)) {
-                $text .= '📅 發布日期：'.$game->publish_date."\n";
-            }
-
-            $text .= "\n🔗 ".$game->link;
-
-            $this->telegramService->sendMessage($this->chatId, $text);
-
-            $game->update([
-                'is_push' => true,
-            ]);
-
+        foreach ($newItems as $item) {
+            $this->telegramService->sendMessage($this->chatId, $scraper->format($item));
             sleep(2);
         }
+
+        $this->info('完成，共抓取 '.count($newItems).' 筆');
     }
 }
