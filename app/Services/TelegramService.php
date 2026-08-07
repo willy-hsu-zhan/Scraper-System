@@ -63,7 +63,11 @@ class TelegramService
         $this->parser = $parser;
     }
 
-    public function sendMessage(string $chatId, string $message, ?array $keyboard = null)
+    public function sendMessage(
+        string $chatId,
+        string $message,
+        ?InlineKeyboard $keyboard = null
+    )
     {
         return $this->apiClient->sendMessage($chatId, $message, $keyboard);
     }
@@ -290,7 +294,7 @@ class TelegramService
             return;
         }
 
-        $this->answerCallbackQuery($callbackQueryId, '未知指令');
+        $this->answerCallbackQuery($callbackQueryId, '已收到指令，開始處理');
     }
 
     private function handleOjtCallback(?int $chatId, string $data, string $callbackQueryId): void
@@ -345,7 +349,7 @@ class TelegramService
             ]);
         }
 
-        $this->answerCallbackQuery($callback['id'], '已收到指令，開始處理');
+        $this->answerCallbackQuery($callbackQueryId, '已收到指令，開始處理');
     }
 
     private function handleAuctionCallback(?int $chatId, string $data, string $callbackQueryId): void
@@ -372,7 +376,7 @@ class TelegramService
             $summary;
 
         $this->sendMessage($chatId, $message);
-        $this->answerCallbackQuery($callback['id'], '案件分析完成');
+        $this->answerCallbackQuery($callbackQueryId, '案件分析完成');
     }
 
     public function searchSong(string $keyword)
