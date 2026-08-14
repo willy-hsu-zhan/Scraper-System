@@ -4,7 +4,7 @@ namespace App\Services\Telegram;
 
 class TelegramChat
 {
-    public const REPORT = -5276842274;
+    public const REPORT = -5491295263;
 
     public const MUSIC = -5401712481;
 
