@@ -112,6 +112,7 @@ class ChickptScraper extends BaseScraper
             'company' => $item['company'] ?? null,
             'salary' => $item['salary'] ?? null,
             'place' => $item['place'] ?? null,
+            'date' => now()->toDateString(),
         ]);
 
         return $item;
