@@ -117,4 +117,15 @@ class ScraperOjt extends Command
             ->timezone('Asia/Taipei')
             ->format('Y-m-d H:i');
     }
+
+    private function formatDate($date): string
+    {
+        if (empty($date)) {
+            return '未提供';
+        }
+
+        return Carbon::parse($date)
+            ->timezone('Asia/Taipei')
+            ->format('Y-m-d');
+    }
 }
