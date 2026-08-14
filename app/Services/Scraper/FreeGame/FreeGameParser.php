@@ -6,6 +6,8 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class FreeGameParser
 {
+    private const SOURCE_URL = 'https://www.4gamers.com.tw/news/tag/限時免費';
+
     public function parse(string $html): array
     {
         $crawler = new Crawler($html);
@@ -15,17 +17,13 @@ class FreeGameParser
             function (Crawler $node) use (&$items) {
                 $title = trim($node->text());
 
-                if ($title === '') {
+                if (empty($title)) {
                     return;
                 }
 
-                $link = $node->filter('a')->count()
-                    ? $node->filter('a')->attr('href')
-                    : null;
-
                 $items[] = [
                     'title' => $title,
-                    'link' => $link,
+                    'link' => self::SOURCE_URL,
                     'description' => null,
                     'date' => null,
                 ];

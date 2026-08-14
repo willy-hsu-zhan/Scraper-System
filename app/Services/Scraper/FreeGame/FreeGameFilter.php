@@ -6,6 +6,6 @@ class FreeGameFilter
 {
     public function shouldKeep(array $item): bool
     {
-        return ! empty($item['title']) && ! empty($item['link']);
+        return ! empty($item['title']);
     }
 }
