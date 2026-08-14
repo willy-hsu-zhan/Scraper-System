@@ -137,14 +137,12 @@ class SearchYoutube extends Command
 
                     $keyboard = new InlineKeyboard([
                         [
-                            [
-                                'text' => '🎵 下載音樂',
-                                'callback_data' => "yt|audio|{$videoId}",
-                            ],
-                            [
-                                'text' => '🎬 下載影片',
-                                'callback_data' => "yt|video|{$videoId}",
-                            ],
+                            'text' => '🎵 下載音樂',
+                            'callback_data' => "yt|audio|{$videoId}",
+                        ],
+                        [
+                            'text' => '🎬 下載影片',
+                            'callback_data' => "yt|video|{$videoId}",
                         ],
                     ]);
 

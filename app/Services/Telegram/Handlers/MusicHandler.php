@@ -96,14 +96,12 @@ class MusicHandler
 
             $keyboard = new InlineKeyboard([
                 [
-                    [
-                        'text' => '🎵 下載音樂',
-                        'callback_data' => "yt|audio|{$videoId}|{$encodedTitle}",
-                    ],
-                    [
-                        'text' => '🎬 下載影片',
-                        'callback_data' => "yt|video|{$videoId}|{$encodedTitle}",
-                    ],
+                    'text' => '🎵 下載音樂',
+                    'callback_data' => "yt|audio|{$videoId}|{$encodedTitle}",
+                ],
+                [
+                    'text' => '🎬 下載影片',
+                    'callback_data' => "yt|video|{$videoId}|{$encodedTitle}",
                 ],
             ]);
 
