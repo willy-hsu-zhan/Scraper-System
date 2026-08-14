@@ -35,26 +35,76 @@ class FreeGameScraper extends BaseScraper
             $webDriver->get($url);
             sleep(3);
 
-            $elements = $webDriver->findElements(WebDriverBy::cssSelector('section ul > li'));
+            logger()->info('FreeGame Debug', [
+                'url' => $webDriver->getCurrentURL(),
+                'title' => $webDriver->getTitle(),
+                'html_length' => strlen($webDriver->getPageSource()),
+            ]);
 
-            foreach ($elements as $element) {
+            $elements = $webDriver->findElements(
+                WebDriverBy::cssSelector('section ul > li')
+            );
+
+            logger()->info('FreeGame Elements', [
+                'count' => count($elements),
+            ]);
+
+            foreach ($elements as $index => $element) {
                 try {
-                    $linkElement = $element->findElement(WebDriverBy::cssSelector('a'));
-                    $header = $element->findElement(WebDriverBy::cssSelector('h3'));
+                    $linkElement = $element->findElement(
+                        WebDriverBy::cssSelector('a')
+                    );
+
+                    $header = $element->findElement(
+                        WebDriverBy::cssSelector('h3')
+                    );
+
+                    $title = trim($header->getText());
+
+                    $href = $linkElement->getAttribute('href');
 
                     $items[] = [
-                        'title' => trim($header->getText()),
-                        'link' => 'https://www.4gamers.com.tw'.$linkElement->getAttribute('href'),
-                        'description' => $this->safeGetText($element, WebDriverBy::cssSelector('p')),
-                        'date' => $this->safeGetAttribute($element, WebDriverBy::cssSelector('time'), 'datetime'),
+                        'title' => $title,
+                        'link' => str_starts_with($href, 'http')
+                            ? $href
+                            : 'https://www.4gamers.com.tw'.$href,
+                        'description' => $this->safeGetText(
+                            $element,
+                            WebDriverBy::cssSelector('p')
+                        ),
+                        'date' => $this->safeGetAttribute(
+                            $element,
+                            WebDriverBy::cssSelector('time'),
+                            'datetime'
+                        ),
                     ];
+
+                    logger()->info('FreeGame Item', [
+                        'index' => $index,
+                        'title' => $title,
+                        'href' => $href,
+                    ]);
                 } catch (\Exception $e) {
+                    logger()->error('FreeGame Parse Error', [
+                        'index' => $index,
+                        'message' => $e->getMessage(),
+                        'html' => $element->getAttribute('outerHTML'),
+                    ]);
+
                     continue;
                 }
             }
         } finally {
-            $webDriver->quit();
+            try {
+                $webDriver->quit();
+            } catch (\Exception $e) {
+                // Selenium session 已中斷時，不需要再次拋出錯誤
+            }
         }
+
+        logger()->info('FreeGame Result', [
+            'count' => count($items),
+        ]);
 
         return $items;
     }
