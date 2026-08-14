@@ -69,18 +69,19 @@ class TelegramService
         }
     }
 
-    protected function isDuplicateUpdate(int $updateId): bool
+    protected function isDuplicateUpdate(array $update): bool
     {
-        if (TelegramBotLog::where('update_id', $updateId)->exists()) {
+        if (TelegramBotLog::where('update_id', $update['update_id'])->exists()) {
             Log::info('Update ID already exists, skipping...', [
-                'update_id' => $updateId,
+                'update_id' => $update['update_id'],
             ]);
 
             return true;
         }
 
         TelegramBotLog::create([
-            'update_id' => $updateId,
+            'update_id' => $update['update_id'],
+            'message' => json_encode($update, JSON_UNESCAPED_UNICODE),
         ]);
 
         Log::info('New update ID saved to database.');
