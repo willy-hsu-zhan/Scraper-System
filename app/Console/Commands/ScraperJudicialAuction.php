@@ -14,11 +14,15 @@ use Illuminate\Support\Facades\Log;
 class ScraperJudicialAuction extends Command
 {
     protected $signature = 'app:scraper-judicial-auction';
+
     protected $description = 'Stable judicial auction scraper (multi-court safe version)';
 
     protected $telegramService;
+
     protected $seleniumService;
+
     protected $geminiService;
+
     protected $chatId = TelegramChat::AUCTION_GROUP_CHAT_ID;
 
     public function __construct(

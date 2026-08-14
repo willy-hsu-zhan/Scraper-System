@@ -12,8 +12,11 @@ use Facebook\WebDriver\WebDriverWait;
 class Rent591Scraper extends BaseScraper
 {
     protected SeleniumService $seleniumService;
+
     protected Rent591Parser $parser;
+
     protected Rent591Filter $filter;
+
     protected Rent591Formatter $formatter;
 
     public function __construct(SeleniumService $seleniumService)
@@ -46,7 +49,7 @@ class Rent591Scraper extends BaseScraper
             foreach ($regions as $regionData) {
                 $regionName = $regionData['name'];
                 $regionCode = $regionData['region'];
-                $url = $baseUrl . '&region=' . $regionCode;
+                $url = $baseUrl.'&region='.$regionCode;
 
                 $webDriver->get($url);
 

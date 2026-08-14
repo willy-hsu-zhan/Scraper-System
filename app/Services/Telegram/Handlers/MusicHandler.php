@@ -37,6 +37,7 @@ class MusicHandler
 
         if (! $this->isValidYoutubeUrl($url)) {
             $this->sendMessage($chatId, '請提供有效的 YouTube 影片網址');
+
             return;
         }
 
@@ -73,6 +74,7 @@ class MusicHandler
 
         if (! $response->successful()) {
             Log::error('YouTube API 請求失敗', ['status' => $response->status()]);
+
             return;
         }
 
@@ -81,6 +83,7 @@ class MusicHandler
 
         if (empty($videos)) {
             $this->sendMessage($chatId, "🔍 找不到相關音樂\n\n關鍵字：{$keyword}\n請嘗試其他歌名或歌手 🙏");
+
             return;
         }
 

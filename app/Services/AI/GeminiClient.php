@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\Http;
 class GeminiClient implements GeminiClientInterface
 {
     protected string $apiKey;
+
     protected string $baseUrl;
+
     protected int $timeout;
 
     public function __construct()
@@ -40,6 +42,6 @@ class GeminiClient implements GeminiClientInterface
     {
         $model = config('gemini.model');
 
-        return rtrim($this->baseUrl, '/') . "/models/{$model}:generateContent?key={$this->apiKey}";
+        return rtrim($this->baseUrl, '/')."/models/{$model}:generateContent?key={$this->apiKey}";
     }
 }

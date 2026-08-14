@@ -23,6 +23,7 @@ class YoutubeHandler
 
         if ($type !== 'yt') {
             $this->apiClient->answerCallbackQuery($callbackQueryId, '未知指令');
+
             return;
         }
 

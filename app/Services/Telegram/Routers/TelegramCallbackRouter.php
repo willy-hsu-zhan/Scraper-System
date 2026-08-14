@@ -29,16 +29,19 @@ class TelegramCallbackRouter
 
         if (str_starts_with($data, 'ojt_summary:')) {
             $this->ojtHandler->handleCallback($chatId, $data, $callbackQueryId);
+
             return;
         }
 
         if (str_starts_with($data, 'yt|')) {
             $this->youtubeHandler->handleCallback($chatId, $data, $callbackQueryId);
+
             return;
         }
 
         if (str_starts_with($data, 'auction_summary:')) {
             $this->auctionHandler->handleCallback($chatId, $data, $callbackQueryId);
+
             return;
         }
 

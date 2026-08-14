@@ -259,7 +259,7 @@ class DownloadYoutube extends Command
         );
 
         $command = sprintf(
-            '%s --cookies %s --sleep-requests 3 --min-sleep-interval 2 --max-sleep-interval 6 --concurrent-fragments 1 ' .
+            '%s --cookies %s --sleep-requests 3 --min-sleep-interval 2 --max-sleep-interval 6 --concurrent-fragments 1 '.
             '-f %s --merge-output-format mp4 -o %s %s',
             escapeshellcmd($this->ytDlpPath()),
             escapeshellarg($this->cookiesPath()),

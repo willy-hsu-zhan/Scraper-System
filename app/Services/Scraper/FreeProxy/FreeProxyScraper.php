@@ -8,7 +8,9 @@ use Goutte\Client;
 class FreeProxyScraper extends BaseScraper
 {
     protected FreeProxyParser $parser;
+
     protected FreeProxyFilter $filter;
+
     protected FreeProxyFormatter $formatter;
 
     public function __construct()

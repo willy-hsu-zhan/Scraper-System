@@ -33,18 +33,23 @@ class TelegramMessageRouter
         switch (true) {
             case $chatIdInt === TelegramChat::REPORT:
                 $this->reportHandler->handleMessage($chatId, $text);
+
                 return;
             case $chatIdInt === TelegramChat::MUSIC:
                 $this->musicHandler->handleMessage($chatId, $text);
+
                 return;
             case $chatIdInt === TelegramChat::AUCTION:
                 $this->auctionHandler->handleMessage($chatId, $text);
+
                 return;
             case $chatIdInt === TelegramChat::OJT:
                 $this->ojtHandler->handleMessage($chatId, $text);
+
                 return;
             default:
                 Log::info('未定義聊天室訊息', ['chatId' => $chatId, 'text' => $text]);
+
                 return;
         }
     }

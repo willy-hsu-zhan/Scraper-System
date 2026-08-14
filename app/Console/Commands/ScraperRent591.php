@@ -11,10 +11,13 @@ use Illuminate\Console\Command;
 class ScraperRent591 extends Command
 {
     protected $signature = 'app:scraper-rent591';
+
     protected $description = 'Collect rental listings from 591.com.tw';
 
     protected $telegramService;
+
     protected $seleniumService;
+
     protected $chatId = TelegramChat::RENT591_GROUP_CHAT_ID;
 
     public function __construct(TelegramService $telegramService, SeleniumService $seleniumService)

@@ -2,18 +2,14 @@
 
 namespace App\Console\Commands;
 
-use App\Models\JobPtt;
 use App\Services\LineNotifyService;
 use App\Services\Scraper\Ptt\PttScraper;
 use App\Services\SeleniumService;
 use App\Services\Telegram\TelegramChat;
 use App\Services\TelegramService;
 use Carbon\Carbon;
-use Exception;
-use Facebook\WebDriver\WebDriverBy;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Log;
 
 class ScraperPtt extends Command
 {

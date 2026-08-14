@@ -10,8 +10,11 @@ use Facebook\WebDriver\WebDriverBy;
 class BirthdayDiscountScraper extends BaseScraper
 {
     protected SeleniumService $seleniumService;
+
     protected BirthdayDiscountParser $parser;
+
     protected BirthdayDiscountFilter $filter;
+
     protected BirthdayDiscountFormatter $formatter;
 
     public function __construct(SeleniumService $seleniumService)
@@ -44,7 +47,7 @@ class BirthdayDiscountScraper extends BaseScraper
             $totalPages = $totalCount > 0 ? (int) ceil($totalCount / $perPage) : 1;
 
             for ($page = 0; $page < $totalPages; $page++) {
-                $pageUrl = 'https://happybirthday.com.tw/list?page=' . $page;
+                $pageUrl = 'https://happybirthday.com.tw/list?page='.$page;
                 $webDriver->get($pageUrl);
                 sleep(2);
 
@@ -54,7 +57,7 @@ class BirthdayDiscountScraper extends BaseScraper
                     try {
                         $linkElement = $element->findElement(WebDriverBy::cssSelector('h2 a'));
                         $title = trim($linkElement->getText());
-                        $link = 'https://happybirthday.com.tw' . $linkElement->getAttribute('href');
+                        $link = 'https://happybirthday.com.tw'.$linkElement->getAttribute('href');
                     } catch (\Exception $e) {
                         continue;
                     }

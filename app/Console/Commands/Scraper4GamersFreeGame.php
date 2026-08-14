@@ -11,10 +11,13 @@ use Illuminate\Console\Command;
 class Scraper4GamersFreeGame extends Command
 {
     protected $signature = 'app:scraper-4gamers-free';
+
     protected $description = 'Scrape 4Gamers 限時免費 news';
 
     protected $telegramService;
+
     protected $seleniumService;
+
     protected $chatId = TelegramChat::FREE_GAME_GROUP_CHAT_ID;
 
     public function __construct(TelegramService $telegramService, SeleniumService $seleniumService)

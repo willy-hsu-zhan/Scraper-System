@@ -4,18 +4,17 @@ namespace App\Services\Scraper\Ptt;
 
 use App\Models\JobPtt;
 use App\Services\Scraper\BaseScraper;
-use App\Services\Scraper\Ptt\PttFilter;
-use App\Services\Scraper\Ptt\PttFormatter;
-use App\Services\Scraper\Ptt\PttParser;
 use App\Services\SeleniumService;
-use Carbon\Carbon;
 use Facebook\WebDriver\WebDriverBy;
 
 class PttScraper extends BaseScraper
 {
     protected SeleniumService $seleniumService;
+
     protected PttParser $parser;
+
     protected PttFilter $filter;
+
     protected PttFormatter $formatter;
 
     public function __construct(SeleniumService $seleniumService)

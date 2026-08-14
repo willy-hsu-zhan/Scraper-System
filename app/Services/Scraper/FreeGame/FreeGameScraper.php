@@ -10,8 +10,11 @@ use Facebook\WebDriver\WebDriverBy;
 class FreeGameScraper extends BaseScraper
 {
     protected SeleniumService $seleniumService;
+
     protected FreeGameParser $parser;
+
     protected FreeGameFilter $filter;
+
     protected FreeGameFormatter $formatter;
 
     public function __construct(SeleniumService $seleniumService)

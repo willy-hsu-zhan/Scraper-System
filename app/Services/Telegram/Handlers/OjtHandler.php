@@ -25,6 +25,7 @@ class OjtHandler
 
         if (! $course) {
             $this->sendMessage($chatId, '❌ 找不到課程');
+
             return;
         }
 
@@ -46,6 +47,7 @@ class OjtHandler
         if (! $course) {
             $this->sendMessage($chatId, '❌ 找不到課程');
             $this->apiClient->answerCallbackQuery($callbackQueryId, '找不到課程');
+
             return;
         }
 

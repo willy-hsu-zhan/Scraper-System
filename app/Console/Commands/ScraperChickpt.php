@@ -141,7 +141,6 @@ class ScraperChickpt extends Command
 
         $totalPrice = $this->sumTotalPrice($jobs);
 
-
         $infoText = '本回任務含金量總共為：'.$totalPrice.'元整';
         $this->telegramService->sendMessage($this->chatId, $infoText);
 

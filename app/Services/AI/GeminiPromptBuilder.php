@@ -16,7 +16,7 @@ class GeminiPromptBuilder implements GeminiPromptBuilderInterface
             ."- 3個最關鍵風險點\n"
             ."- 1個最重要機會點\n"
             ."- 建議最高出價區間（如果可判斷）\n\n"
-            ."請避免空泛描述，要偏實戰決策。";
+            .'請避免空泛描述，要偏實戰決策。';
     }
 
     public function buildCoursePrompt(string $courseText): string

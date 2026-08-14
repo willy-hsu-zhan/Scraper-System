@@ -10,8 +10,11 @@ use Facebook\WebDriver\WebDriverBy;
 class JudicialAuctionScraper extends BaseScraper
 {
     protected SeleniumService $seleniumService;
+
     protected JudicialAuctionParser $parser;
+
     protected JudicialAuctionFilter $filter;
+
     protected JudicialAuctionFormatter $formatter;
 
     public function __construct(SeleniumService $seleniumService)

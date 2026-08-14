@@ -18,11 +18,17 @@ use Facebook\WebDriver\WebDriverKeys;
 class OjtScraper extends BaseScraper
 {
     protected SeleniumService $seleniumService;
+
     protected GeminiService $geminiService;
+
     protected ReurlService $reurlService;
+
     protected TelegramService $telegramService;
+
     protected OjtParser $parser;
+
     protected OjtFilter $filter;
+
     protected OjtFormatter $formatter;
 
     public function __construct(
@@ -78,6 +84,7 @@ class OjtScraper extends BaseScraper
 
             $driver->wait(15)->until(function ($driver) {
                 $rows = $driver->findElements(WebDriverBy::cssSelector('table tbody tr'));
+
                 return count($rows) > 15;
             });
 
@@ -200,6 +207,7 @@ class OjtScraper extends BaseScraper
     {
         $driver->wait($timeout)->until(function ($driver) {
             $rows = $driver->findElements(WebDriverBy::cssSelector('table tbody tr'));
+
             return count($rows) > 0;
         });
     }

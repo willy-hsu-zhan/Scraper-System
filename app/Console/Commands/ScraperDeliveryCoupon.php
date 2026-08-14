@@ -11,10 +11,13 @@ use Illuminate\Console\Command;
 class ScraperDeliveryCoupon extends Command
 {
     protected $signature = 'app:scraper-delivery-coupon';
+
     protected $description = 'Collect delivery coupon and discount codes';
 
     protected $telegramService;
+
     protected $seleniumService;
+
     protected $chatId = TelegramChat::DELIVERY_COUPON_GROUP_CHAT_ID;
 
     public function __construct(TelegramService $telegramService, SeleniumService $seleniumService)

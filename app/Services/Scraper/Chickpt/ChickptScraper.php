@@ -11,8 +11,11 @@ use Facebook\WebDriver\WebDriverExpectedCondition;
 class ChickptScraper extends BaseScraper
 {
     protected SeleniumService $seleniumService;
+
     protected ChickptParser $parser;
+
     protected ChickptFilter $filter;
+
     protected ChickptFormatter $formatter;
 
     public function __construct(SeleniumService $seleniumService)
@@ -54,7 +57,7 @@ class ChickptScraper extends BaseScraper
                     try {
                         $title = trim($jobNode->findElement(WebDriverBy::cssSelector('h2'))->getText());
                         $relativeLink = $jobNode->findElement(WebDriverBy::cssSelector('a'))->getAttribute('href');
-                        $link = str_starts_with($relativeLink, 'http') ? $relativeLink : $baseUrl . $relativeLink;
+                        $link = str_starts_with($relativeLink, 'http') ? $relativeLink : $baseUrl.$relativeLink;
                         $company = trim($jobNode->findElement(WebDriverBy::cssSelector('.ellipsis-job-company'))->getText());
                         $salary = trim($jobNode->findElement(WebDriverBy::cssSelector('.salary'))->getText());
                         $place = trim($jobNode->findElement(WebDriverBy::cssSelector('.place'))->getText());

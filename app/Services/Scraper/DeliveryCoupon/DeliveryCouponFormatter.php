@@ -7,7 +7,7 @@ class DeliveryCouponFormatter
     public function format(array $item): string
     {
         $text = ($item['platform'] ?? '外送平台').' 優惠';
-        $text .= "\n📌 " . ($item['content'] ?? '');
+        $text .= "\n📌 ".($item['content'] ?? '');
 
         if (! empty($item['code'])) {
             $text .= "\n🎟 優惠碼：{$item['code']}";

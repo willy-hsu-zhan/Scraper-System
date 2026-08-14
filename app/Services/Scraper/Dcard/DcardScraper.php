@@ -2,19 +2,19 @@
 
 namespace App\Services\Scraper\Dcard;
 
-use App\Services\Scraper\BaseScraper;
 use App\Services\ProxyService;
-use App\Services\Scraper\Dcard\DcardFilter;
-use App\Services\Scraper\Dcard\DcardFormatter;
-use App\Services\Scraper\Dcard\DcardParser;
+use App\Services\Scraper\BaseScraper;
 use Goutte\Client;
 use Illuminate\Support\Facades\Http;
 
 class DcardScraper extends BaseScraper
 {
     protected ProxyService $proxyService;
+
     protected DcardParser $parser;
+
     protected DcardFilter $filter;
+
     protected DcardFormatter $formatter;
 
     public function __construct(ProxyService $proxyService)

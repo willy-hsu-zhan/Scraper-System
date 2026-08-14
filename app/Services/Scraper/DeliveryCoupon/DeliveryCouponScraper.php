@@ -10,8 +10,11 @@ use Facebook\WebDriver\WebDriverBy;
 class DeliveryCouponScraper extends BaseScraper
 {
     protected SeleniumService $seleniumService;
+
     protected DeliveryCouponParser $parser;
+
     protected DeliveryCouponFilter $filter;
+
     protected DeliveryCouponFormatter $formatter;
 
     public function __construct(SeleniumService $seleniumService)
@@ -84,7 +87,7 @@ class DeliveryCouponScraper extends BaseScraper
                         'content' => $content,
                         'code' => $code,
                         'link' => $link,
-                        'content_hash' => hash('sha256', $sectionTitle . '|' . $content),
+                        'content_hash' => hash('sha256', $sectionTitle.'|'.$content),
                     ];
                 }
             }

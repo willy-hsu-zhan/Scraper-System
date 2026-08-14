@@ -14,7 +14,7 @@ class PttParser
 
     public function extractLink($element, string $originUrl): string
     {
-        return $originUrl . $element->getAttribute('href');
+        return $originUrl.$element->getAttribute('href');
     }
 
     public function extractAuthor($element): string
@@ -87,19 +87,19 @@ class PttParser
     public function extractSalary(string $title): ?string
     {
         if (preg_match('/時薪\s?(\d+)/u', $title, $match)) {
-            return '時薪 ' . $match[1];
+            return '時薪 '.$match[1];
         }
 
         if (preg_match('/月薪\s?(\d+)/u', $title, $match)) {
-            return '月薪 ' . $match[1];
+            return '月薪 '.$match[1];
         }
 
         if (preg_match('/日薪\s?(\d+)/u', $title, $match)) {
-            return '日薪 ' . $match[1];
+            return '日薪 '.$match[1];
         }
 
         if (preg_match('/(\d+)\s?(元|\/hr|\/小時|\/時)/u', $title, $match)) {
-            return $match[1] . '元';
+            return $match[1].'元';
         }
 
         if (mb_strpos($title, '面議') !== false) {

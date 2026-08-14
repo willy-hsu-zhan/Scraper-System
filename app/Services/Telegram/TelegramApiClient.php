@@ -9,6 +9,7 @@ use Longman\TelegramBot\Request;
 class TelegramApiClient implements TelegramApiClientInterface
 {
     protected string $apiKey;
+
     protected string $apiBaseUrl;
 
     public function __construct()
@@ -75,6 +76,6 @@ class TelegramApiClient implements TelegramApiClientInterface
 
     protected function getApiUrl(string $path): string
     {
-        return rtrim($this->apiBaseUrl, '/') . '/' . ltrim($path, '/');
+        return rtrim($this->apiBaseUrl, '/').'/'.ltrim($path, '/');
     }
 }

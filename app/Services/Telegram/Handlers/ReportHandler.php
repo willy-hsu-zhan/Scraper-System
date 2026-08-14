@@ -55,6 +55,7 @@ class ReportHandler
 
         if (! $cityData) {
             $this->sendMessage($chatId, '⚠️ 無法判斷縣市，請確認地址是否包含「縣市名稱」');
+
             return;
         }
 

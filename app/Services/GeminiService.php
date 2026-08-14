@@ -9,10 +9,15 @@ use Illuminate\Support\Facades\Http;
 class GeminiService
 {
     protected GeminiClientInterface $client;
+
     protected GeminiPromptBuilderInterface $promptBuilder;
+
     protected int $timeout;
+
     protected int $maxOutputTokens;
+
     protected float $temperature;
+
     protected string $systemPrompt;
 
     public function __construct(GeminiClientInterface $client, GeminiPromptBuilderInterface $promptBuilder)
@@ -94,7 +99,7 @@ class GeminiService
         return $this->buildPayload($text);
     }
 
-    protected function buildPayload(string $prompt, array $inlineData = null): array
+    protected function buildPayload(string $prompt, ?array $inlineData = null): array
     {
         $parts = [];
 
@@ -188,7 +193,7 @@ class GeminiService
             ."- 3個最關鍵風險點\n"
             ."- 1個最重要機會點\n"
             ."- 建議最高出價區間（如果可判斷）\n\n"
-            ."請避免空泛描述，要偏實戰決策。";
+            .'請避免空泛描述，要偏實戰決策。';
     }
 
     protected function sendRequest(array $payload): ?array

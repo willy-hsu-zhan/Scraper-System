@@ -20,6 +20,7 @@ class AuctionHandler
 
         if (! $auctionId) {
             $this->sendMessage($chatId, "請輸入法拍案件 ID，例如：\n\n184");
+
             return;
         }
 
@@ -27,11 +28,13 @@ class AuctionHandler
 
         if (! $auction) {
             $this->sendMessage($chatId, "❌ 找不到案件 ID：{$auctionId}");
+
             return;
         }
 
         if (empty($auction->ai_summary)) {
             $this->sendMessage($chatId, '⏳ 此案件尚未產生 AI 摘要，請先點擊案件通知中的按鈕。');
+
             return;
         }
 
@@ -55,6 +58,7 @@ class AuctionHandler
         if (! $auction) {
             $this->sendMessage($chatId, '❌ 找不到法拍案件');
             $this->apiClient->answerCallbackQuery($callbackQueryId, '找不到案件');
+
             return;
         }
 
