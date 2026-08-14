@@ -7,7 +7,7 @@ class TelegramChat
     public const REPORT = -5276842274;
 
     public const MUSIC = -5401712481;
-    
+
     public const AUCTION = -5434110194;
 
     public const OJT = -5185362500;
@@ -26,7 +26,7 @@ class TelegramChat
 
     public const DELIVERY_COUPON = -5419894094;
 
-    public const RENT591 = -4675025353;
+    public const RENT591 = -5405727577;
 
     public const PTT = -5234655807;
 
