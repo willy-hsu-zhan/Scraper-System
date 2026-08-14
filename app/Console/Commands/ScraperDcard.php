@@ -5,10 +5,9 @@ namespace App\Console\Commands;
 use App\Services\LineNotifyService;
 use App\Services\ProxyService;
 use App\Services\Scraper\Dcard\DcardScraper;
+use App\Services\Telegram\TelegramChat;
 use App\Services\TelegramService;
-use Goutte\Client;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Http;
 
 class ScraperDcard extends Command
 {
@@ -22,7 +21,7 @@ class ScraperDcard extends Command
 
     protected $jobTexts;
 
-    protected $chatId = '-4664862172'; // 暫時先用全域變數 // 日後聊天室擴充再更改
+    protected $chatId = TelegramChat::DCARD_GROUP_CHAT_ID;
 
     /**
      * The name and signature of the console command.

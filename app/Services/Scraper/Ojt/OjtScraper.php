@@ -7,6 +7,8 @@ use App\Services\GeminiService;
 use App\Services\ReurlService;
 use App\Services\Scraper\BaseScraper;
 use App\Services\SeleniumService;
+use App\Services\Telegram\TelegramChat;
+use App\Services\TelegramService;
 use Facebook\WebDriver\Interactions\WebDriverActions;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\WebDriverBy;
@@ -18,6 +20,7 @@ class OjtScraper extends BaseScraper
     protected SeleniumService $seleniumService;
     protected GeminiService $geminiService;
     protected ReurlService $reurlService;
+    protected TelegramService $telegramService;
     protected OjtParser $parser;
     protected OjtFilter $filter;
     protected OjtFormatter $formatter;
@@ -25,11 +28,13 @@ class OjtScraper extends BaseScraper
     public function __construct(
         SeleniumService $seleniumService,
         GeminiService $geminiService,
-        ReurlService $reurlService
+        ReurlService $reurlService,
+        TelegramService $telegramService
     ) {
         $this->seleniumService = $seleniumService;
         $this->geminiService = $geminiService;
         $this->reurlService = $reurlService;
+        $this->telegramService = $telegramService;
         $this->parser = new OjtParser();
         $this->filter = new OjtFilter();
         $this->formatter = new OjtFormatter();
@@ -167,9 +172,21 @@ class OjtScraper extends BaseScraper
             return null;
         }
 
-        GovOjt::create($item);
+        $course = GovOjt::create($item);
+        $this->notifyNewCourse($course);
 
-        return $item;
+        return $course->toArray();
+    }
+
+    protected function notifyNewCourse(GovOjt $course): void
+    {
+        $message = $this->formatter->format([
+            'course_name' => $course->course_name,
+            'registration_start_at' => $course->registration_start_at ? $course->registration_start_at->format('Y-m-d') : null,
+            'training_unit_url' => $course->training_unit_url,
+        ]);
+
+        $this->telegramService->sendMessage(TelegramChat::OJT_GROUP_CHAT_ID, $message);
     }
 
     protected function clickElement(RemoteWebDriver $driver, string $cssSelector): void

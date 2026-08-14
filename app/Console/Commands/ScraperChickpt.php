@@ -6,10 +6,9 @@ use App\Models\JobChickpt;
 use App\Services\LineNotifyService;
 use App\Services\Scraper\Chickpt\ChickptScraper;
 use App\Services\SeleniumService;
+use App\Services\Telegram\TelegramChat;
 use App\Services\TelegramService;
 use Exception;
-use Facebook\WebDriver\WebDriverBy;
-use Facebook\WebDriver\WebDriverExpectedCondition;
 use Goutte\Client;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
@@ -42,7 +41,7 @@ class ScraperChickpt extends Command
 
     protected $jobTexts;
 
-    protected $chatId = '-1004460159382'; // 暫時先用全域變數 // 日後聊天室擴充再更改
+    protected $chatId = TelegramChat::CHICKPT_GROUP_CHAT_ID;
 
     public function __construct(LineNotifyService $lineNotifyService, TelegramService $telegramService, SeleniumService $seleniumService)
     {
@@ -124,13 +123,13 @@ class ScraperChickpt extends Command
         $sendNotifyText = '';
         foreach ($jobs as $job) {
             $sendNotifyText = <<<TEXT
-            🐥 小雞上工
+            📢 新的工作機會
 
-            📌 {$job['title']}
+            📍 {$job['title']}
             🏢 {$job['company']}
             📍 {$job['place']}
             💰 {$job['salary']}
-            🔗 {$job['link']}
+            🌐 {$job['link']}
 
             ────────────────
             TEXT;
@@ -142,9 +141,6 @@ class ScraperChickpt extends Command
 
         $totalPrice = $this->sumTotalPrice($jobs);
 
-        if ($totalPrice >= 1000) { // 本次掃描工作職缺若有超過1000就送發財圖
-            //$this->sendFachaiGIF(); // 送發財圖
-        }
 
         $infoText = '本回任務含金量總共為：'.$totalPrice.'元整';
         $this->telegramService->sendMessage($this->chatId, $infoText);

@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\YoutubeVideo;
+use App\Services\Telegram\TelegramChat;
 use App\Services\TelegramService;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -19,7 +20,7 @@ class SearchYoutube extends Command
 
     protected TelegramService $telegramService;
 
-    protected string $chatId = '-5401712481';
+    protected string $chatId = TelegramChat::MUSIC_GROUP_CHAT_ID;
 
     public function __construct(TelegramService $telegramService)
     {
@@ -34,19 +35,19 @@ class SearchYoutube extends Command
         $categories = [
             '19' => [
                 'label' => '✈️ 旅遊',
-                'chat_id' => '-5100480609',
+                'chat_id' => TelegramChat::YOUTUBE_TRAVEL_GROUP_CHAT_ID,
             ],
             '10' => [
                 'label' => '🎵 音樂',
-                'chat_id' => '-4661576369',
+                'chat_id' => TelegramChat::YOUTUBE_MUSIC_CATEGORY_GROUP_CHAT_ID,
             ],
             '20' => [
                 'label' => '🎮 遊戲',
-                'chat_id' => '-5023352255',
+                'chat_id' => TelegramChat::YOUTUBE_GAME_GROUP_CHAT_ID,
             ],
             '24' => [
                 'label' => '🎬 電影',
-                'chat_id' => '-4997962376',
+                'chat_id' => TelegramChat::YOUTUBE_MOVIE_GROUP_CHAT_ID,
             ],
         ];
 
@@ -58,16 +59,16 @@ class SearchYoutube extends Command
             : array_intersect_key($categories, [$categoryInput => true]);
 
         if (empty($useCategories)) {
-            $this->error("❌ 不支援的分類 ID：{$categoryInput}");
+            $this->error("??銝?渡??? ID嚗$categoryInput}");
 
             return Command::FAILURE;
         }
 
         $allRegions = [
-            'TW' => '🇹🇼 中文熱門',
-            'US' => '🇺🇸 英文熱門',
-            'JP' => '🇯🇵 日文熱門',
-            'KR' => '🇰🇷 韓文熱門',
+            'TW' => '🇹🇼 台灣',
+            'US' => '🇺🇸 美國',
+            'JP' => '🇯🇵 日本',
+            'KR' => '🇰🇷 韓國',
         ];
 
         $useRegions = ($regionInput === 'ALL')
@@ -85,7 +86,7 @@ class SearchYoutube extends Command
         foreach ($useRegions as $regionCode => $regionLabel) {
             foreach ($useCategories as $categoryId => $categoryConfig) {
 
-                $this->info("▶ {$regionCode} / {$categoryConfig['label']}");
+                $this->info("❌ {$regionCode} / {$categoryConfig['label']}");
 
                 $response = Http::get('https://www.googleapis.com/youtube/v3/videos', [
                     'part' => 'snippet',

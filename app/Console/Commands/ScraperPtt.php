@@ -6,6 +6,7 @@ use App\Models\JobPtt;
 use App\Services\LineNotifyService;
 use App\Services\Scraper\Ptt\PttScraper;
 use App\Services\SeleniumService;
+use App\Services\Telegram\TelegramChat;
 use App\Services\TelegramService;
 use Carbon\Carbon;
 use Exception;
@@ -37,7 +38,7 @@ class ScraperPtt extends Command
 
     protected $lineNotifyService;
 
-    protected $chatId = '-5234655807'; // 暫時先用全域變數 // 日後聊天室擴充再更改
+    protected $chatId = TelegramChat::PTT_GROUP_CHAT_ID;
 
     protected $telegramService;
 
@@ -186,19 +187,14 @@ class ScraperPtt extends Command
                 sleep(3);
             }
 
-            // 送發財圖
-            //$this->sendFachaiGIF();
-            // 辨別已看過的訊息分隔用
             $this->telegramService->sendMessage($this->chatId, '最後更新時間：'.Carbon::now()->setTimezone('Asia/Taipei')->format('Y-m-d H:i:s'));
-        } else {
-            //$this->sendPeriodNoJobMsg();
         }
     }
 
     public function sendPeriodNoJobMsg()
     {
-        $errorMessage = "🚨 **PTT通知** 🚨\n\n";
-        $errorMessage .= '時間：'.
+        $errorMessage = "📢 **PTT 打工板** 📢\n\n";
+        $errorMessage .= '最近更新時間：'.
             Carbon::now()->setTimezone('Asia/Taipei')->format('Y-m-d H:i:s').
             ' ~ '.
             Carbon::now()->subMinutes(30)->setTimezone('Asia/Taipei')->format('Y-m-d H:i:s')."\n";

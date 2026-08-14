@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Services\Telegram\TelegramChat;
 use App\Services\TelegramService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
@@ -20,11 +21,11 @@ class DownloadYoutube extends Command
 
     protected string $basePath;
 
-    protected string $chatId3 = '-5437101799'; // 影片輸出群
+    protected string $chatId3 = TelegramChat::YOUTUBE_VIDEO_OUTPUT_GROUP_CHAT_ID;
 
-    protected string $chatId2 = '-5401712481'; // 音樂分享群
+    protected string $chatId2 = TelegramChat::MUSIC_GROUP_CHAT_ID;
 
-    protected string $chatId = '-5229387465'; // 影片輸出記錄群
+    protected string $chatId = TelegramChat::YOUTUBE_VIDEO_OUTPUT_LOG_GROUP_CHAT_ID;
 
     public function __construct(TelegramService $telegramService)
     {
@@ -35,12 +36,7 @@ class DownloadYoutube extends Command
 
     public function handle()
     {
-        // $this->telegramService->sendMessage(
-        //     $this->chatId2,
-        //     '✅ 已收到下載指令，請至輸出群查看'
-        // );
-
-        $lock = Cache::lock('youtube:downloading', 120); // 最多鎖 2 分鐘
+        $lock = Cache::lock('youtube:downloading', 120);
 
         if (! $lock->get()) {
             $this->telegramService->sendMessage(
@@ -190,15 +186,12 @@ class DownloadYoutube extends Command
                 File::delete($filepath);
 
                 return 0;
-
             } catch (\Throwable $e) {
-
                 Log::error('Telegram sendDocument failed', [
                     'file' => $filename,
                     'error' => $e->getMessage(),
                 ]);
 
-                // 使用者一定要知道發生什麼事
                 $this->telegramService->sendMessage(
                     $this->chatId,
                     "⚠️ 檔案已下載完成，但 Telegram 傳送失敗\n".
@@ -206,12 +199,9 @@ class DownloadYoutube extends Command
                     "檔名：{$filename}"
                 );
 
-                // 不刪檔，避免使用者要重試卻找不到
                 return 1;
             }
-
         } catch (\Throwable $e) {
-
             Log::error('DownloadYoutube failed', [
                 'error' => $e->getMessage(),
             ]);
@@ -269,7 +259,7 @@ class DownloadYoutube extends Command
         );
 
         $command = sprintf(
-            '%s --cookies %s --sleep-requests 3 --min-sleep-interval 2 --max-sleep-interval 6 --concurrent-fragments 1 '.
+            '%s --cookies %s --sleep-requests 3 --min-sleep-interval 2 --max-sleep-interval 6 --concurrent-fragments 1 ' .
             '-f %s --merge-output-format mp4 -o %s %s',
             escapeshellcmd($this->ytDlpPath()),
             escapeshellarg($this->cookiesPath()),
@@ -298,7 +288,6 @@ class DownloadYoutube extends Command
             "📦 {$formatLabel} 下載完成\n檔案大小：{$sizeMB} MB"
         );
 
-        // Telegram 安全上限（保守抓 48MB）
         if ($sizeMB > 48) {
             $this->telegramService->sendMessage(
                 $this->chatId,
@@ -310,7 +299,6 @@ class DownloadYoutube extends Command
             return false;
         }
 
-        // 尺寸 OK → 直接上傳這個已下載好的檔案
         return $this->uploadToTelegram($file->getPathname(), $file->getFilename(), $sizeMB) === 0;
     }
 
@@ -349,7 +337,6 @@ class DownloadYoutube extends Command
             File::delete($filepath);
 
             return 0;
-
         } catch (\Throwable $e) {
             Log::error('Telegram sendDocument failed', [
                 'file' => $filename,
@@ -363,7 +350,6 @@ class DownloadYoutube extends Command
                 "檔名：{$filename}"
             );
 
-            // 不刪檔
             return 1;
         }
     }
