@@ -54,7 +54,7 @@ class TelegramService
     {
         $parsedUpdate = $this->parser->parseUpdate($update);
 
-        if (! isset($parsedUpdate['update_id']) || $this->isDuplicateUpdate($parsedUpdate['update_id'])) {
+        if (! isset($parsedUpdate['update_id']) || $this->isDuplicateUpdate($parsedUpdate)) {
             return;
         }
 
