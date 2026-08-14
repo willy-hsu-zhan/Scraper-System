@@ -4,22 +4,18 @@ namespace App\Services\Scraper\FreeGame;
 
 use App\Models\FreeGame4Gamers;
 use App\Services\Scraper\BaseScraper;
-use App\Services\SeleniumService;
-use Facebook\WebDriver\WebDriverBy;
+use Illuminate\Support\Facades\Http;
 
 class FreeGameScraper extends BaseScraper
 {
-    protected SeleniumService $seleniumService;
-
     protected FreeGameParser $parser;
 
     protected FreeGameFilter $filter;
 
     protected FreeGameFormatter $formatter;
 
-    public function __construct(SeleniumService $seleniumService)
+    public function __construct()
     {
-        $this->seleniumService = $seleniumService;
         $this->parser = new FreeGameParser();
         $this->filter = new FreeGameFilter();
         $this->formatter = new FreeGameFormatter();
@@ -29,29 +25,43 @@ class FreeGameScraper extends BaseScraper
     {
         $url = 'https://www.4gamers.com.tw/news/tag/限時免費';
 
-        $webDriver = $this->seleniumService->openWebDriver();
-
         try {
-            $webDriver->get($url);
+            $response = Http::timeout(30)
+                ->withHeaders([
+                    'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36',
+                    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+                    'Accept-Language' => 'zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7',
+                ])
+                ->get($url);
 
-            sleep(3);
-
-            logger()->info('FreeGame Debug', [
-                'url' => $webDriver->getCurrentURL(),
-                'title' => $webDriver->getTitle(),
-                'html_length' => strlen($webDriver->getPageSource()),
-                'user_agent' => $webDriver->executeScript('return navigator.userAgent;'),
+            logger()->info('FreeGame Request', [
+                'status' => $response->status(),
+                'url' => $url,
+                'html_length' => strlen($response->body()),
             ]);
 
-            logger()->info('FreeGame Body', [
-                'body' => $webDriver->findElement(
-                    WebDriverBy::tagName('body')
-                )->getText(),
+            if (! $response->successful()) {
+                logger()->error('FreeGame Request Failed', [
+                    'status' => $response->status(),
+                    'body' => $response->body(),
+                ]);
+
+                return [];
+            }
+
+            $items = $this->parser->parse($response->body());
+
+            logger()->info('FreeGame Result', [
+                'count' => count($items),
+            ]);
+
+            return $items;
+        } catch (\Throwable $e) {
+            logger()->error('FreeGame Scrape Error', [
+                'message' => $e->getMessage(),
             ]);
 
             return [];
-        } finally {
-            $webDriver->quit();
         }
     }
 
@@ -79,7 +89,11 @@ class FreeGameScraper extends BaseScraper
         }
 
         $titleHash = FreeGame4Gamers::makeTitleHash($item['title']);
-        $record = FreeGame4Gamers::where('title_hash', $titleHash)->first();
+
+        $record = FreeGame4Gamers::where(
+            'title_hash',
+            $titleHash
+        )->first();
 
         if ($record) {
             $record->update([
@@ -92,7 +106,7 @@ class FreeGameScraper extends BaseScraper
         }
 
         FreeGame4Gamers::create([
-            'title' => $item['title'] ?? null,
+            'title' => $item['title'],
             'title_hash' => $titleHash,
             'description' => $item['description'] ?? null,
             'link' => $item['link'] ?? null,
@@ -101,23 +115,5 @@ class FreeGameScraper extends BaseScraper
         ]);
 
         return $item;
-    }
-
-    protected function safeGetText($element, $by): string
-    {
-        try {
-            return trim($element->findElement($by)->getText());
-        } catch (\Exception $e) {
-            return '';
-        }
-    }
-
-    protected function safeGetAttribute($element, $by, string $attribute): ?string
-    {
-        try {
-            return trim($element->findElement($by)->getAttribute($attribute));
-        } catch (\Exception $e) {
-            return null;
-        }
     }
 }
