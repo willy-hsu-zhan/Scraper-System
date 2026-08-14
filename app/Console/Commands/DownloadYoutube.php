@@ -21,11 +21,11 @@ class DownloadYoutube extends Command
 
     protected string $basePath;
 
-    protected string $chatId3 = TelegramChat::YOUTUBE_VIDEO_OUTPUT_GROUP_CHAT_ID;
+    protected int $chatId3 = TelegramChat::YOUTUBE_VIDEO_OUTPUT;
 
-    protected string $chatId2 = TelegramChat::MUSIC_GROUP_CHAT_ID;
+    protected int $chatId2 = TelegramChat::MUSIC;
 
-    protected string $chatId = TelegramChat::YOUTUBE_VIDEO_OUTPUT_LOG_GROUP_CHAT_ID;
+    protected int $chatId = TelegramChat::YOUTUBE_VIDEO_OUTPUT_LOG;
 
     public function __construct(TelegramService $telegramService)
     {

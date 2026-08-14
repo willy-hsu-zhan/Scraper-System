@@ -34,7 +34,7 @@ class ScraperBirthdayDiscount extends Command
 
     protected $jobTexts;
 
-    protected $chatId = TelegramChat::BIRTHDAY_DISCOUNT_GROUP_CHAT_ID;
+    protected $chatId = TelegramChat::BIRTHDAY_DISCOUNT;
 
     public function __construct(TelegramService $telegramService, SeleniumService $seleniumService)
     {

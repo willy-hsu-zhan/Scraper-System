@@ -39,7 +39,7 @@ class TelegramBotTest extends Command
 
             // 準備數據
             $data = [
-                'chat_id' => TelegramChat::DCARD_GROUP_CHAT_ID,
+                'chat_id' => TelegramChat::DCARD,
                 'text' => 'YAAAAA',
             ];
 

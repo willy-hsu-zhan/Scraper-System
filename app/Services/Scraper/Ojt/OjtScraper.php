@@ -193,7 +193,7 @@ class OjtScraper extends BaseScraper
             'training_unit_url' => $course->training_unit_url,
         ]);
 
-        $this->telegramService->sendMessage(TelegramChat::OJT_GROUP_CHAT_ID, $message);
+        $this->telegramService->sendMessage(TelegramChat::OJT, $message);
     }
 
     protected function clickElement(RemoteWebDriver $driver, string $cssSelector): void

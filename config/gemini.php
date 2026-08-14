@@ -5,7 +5,7 @@ return [
     /**
      * Gemini API Key
      */
-    'api_key' => env('GEMINI_API_KEY'),
+    'api_key' => env('GEMINI_API_KEY', ''),
 
     /**
      * 預設模型

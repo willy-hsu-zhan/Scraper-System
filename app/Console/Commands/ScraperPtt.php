@@ -34,7 +34,7 @@ class ScraperPtt extends Command
 
     protected $lineNotifyService;
 
-    protected $chatId = TelegramChat::PTT_GROUP_CHAT_ID;
+    protected $chatId = TelegramChat::PTT;
 
     protected $telegramService;
 

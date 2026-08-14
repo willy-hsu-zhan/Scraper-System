@@ -17,8 +17,7 @@ class ScraperRent591 extends Command
     protected $telegramService;
 
     protected $seleniumService;
-
-    protected $chatId = TelegramChat::RENT591_GROUP_CHAT_ID;
+    protected $chatId = TelegramChat::RENT591;
 
     public function __construct(TelegramService $telegramService, SeleniumService $seleniumService)
     {

@@ -14,17 +14,18 @@ class TelegramApiClient implements TelegramApiClientInterface
 
     public function __construct()
     {
-        $this->apiKey = config('telegram.apikey');
-
-        if (! $this->apiKey) {
-            throw new \RuntimeException('Telegram bot API key is missing.');
-        }
-
-        $this->apiBaseUrl = "https://api.telegram.org/bot{$this->apiKey}";
+        $this->apiKey = (string) config('telegram.apikey', '');
+        $this->apiBaseUrl = $this->apiKey !== ''
+            ? "https://api.telegram.org/bot{$this->apiKey}"
+            : '';
     }
 
     public function sendMessage(string $chatId, string $message, ?array $keyboard = null)
     {
+        if ($this->apiKey === '') {
+            return 'Telegram bot API key is not configured.';
+        }
+
         $payload = [
             'chat_id' => $chatId,
             'text' => $message,
@@ -39,6 +40,10 @@ class TelegramApiClient implements TelegramApiClientInterface
 
     public function sendDocument(string $chatId, string $filePath, string $fileName)
     {
+        if ($this->apiKey === '') {
+            return 'Telegram bot API key is not configured.';
+        }
+
         try {
             $response = Http::timeout(600)
                 ->attach('document', file_get_contents($filePath), $fileName)
@@ -56,6 +61,10 @@ class TelegramApiClient implements TelegramApiClientInterface
 
     public function answerCallbackQuery(string $callbackQueryId, string $text, bool $showAlert = false): void
     {
+        if ($this->apiKey === '') {
+            return;
+        }
+
         Request::answerCallbackQuery([
             'callback_query_id' => $callbackQueryId,
             'text' => $text,
