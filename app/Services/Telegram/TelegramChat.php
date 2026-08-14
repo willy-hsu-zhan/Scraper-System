@@ -24,7 +24,7 @@ class TelegramChat
 
     public const DCARD = -4664862172;
 
-    public const DELIVERY_COUPON = -5419894094;
+    public const DELIVERY_COUPON = -5447108111;
 
     public const RENT591 = -5405727577;
 
