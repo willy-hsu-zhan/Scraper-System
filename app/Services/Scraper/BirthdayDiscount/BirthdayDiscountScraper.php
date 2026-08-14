@@ -39,6 +39,17 @@ class BirthdayDiscountScraper extends BaseScraper
 
                 $webDriver->get($pageUrl);
 
+logger()->info('BirthdayDiscount Debug', [
+    'page' => $page + 1,
+    'url' => $webDriver->getCurrentURL(),
+    'title' => $webDriver->getTitle(),
+    'offer_count' => count(
+        $webDriver->findElements(
+            WebDriverBy::cssSelector('.offer')
+        )
+    ),
+    'html_length' => strlen($webDriver->getPageSource()),
+]);
                 // 等待優惠列表出現
                 try {
                     $webDriver->wait(10)->until(
