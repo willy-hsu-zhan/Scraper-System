@@ -28,56 +28,53 @@ class PttScraper extends BaseScraper
     public function scrape(): array
     {
         $originUrl = 'https://www.pttweb.cc';
-        $baseUrl = 'https://www.pttweb.cc/bbs/part-time/index.html';
+        $baseUrl = 'https://www.pttweb.cc/bbs/part-time';
+
         $jobs = [];
 
         $webDriver = $this->seleniumService->openWebDriver();
 
         try {
             $webDriver->get($baseUrl);
-            $webDriver->wait(15)->until(function ($driver) {
-                return count($driver->findElements(WebDriverBy::cssSelector('a.e7-article-default'))) > 0;
+
+            $webDriver->wait(5)->until(function ($driver) {
+                return count(
+                    $driver->findElements(
+                        WebDriverBy::cssSelector('a.e7-article-default')
+                    )
+                ) > 0;
             });
 
-            $maxPage = 2;
+            $articleElements = $webDriver->findElements(
+                WebDriverBy::cssSelector('a.e7-article-default')
+            );
 
-            for ($currentPage = 1; $currentPage <= $maxPage; $currentPage++) {
-                $articleElements = $webDriver->findElements(WebDriverBy::cssSelector('a.e7-article-default'));
+            dump('抓到文章：'.count($articleElements));
 
-                foreach ($articleElements as $element) {
-                    try {
-                        $title = $this->parser->extractTitle($element);
+            foreach ($articleElements as $element) {
+                try {
+                    $title = $this->parser->extractTitle($element);
 
-                        if ($this->filter($this->cleanItem(['title' => $title]))) {
-                            continue;
-                        }
+                    dump('標題：'.$title);
 
-                        $jobs[] = [
-                            'title' => $title,
-                            'link' => $this->parser->extractLink($element, $originUrl),
-                            'company' => $this->parser->extractAuthor($element),
-                            'date' => $this->parser->extractDate($element),
-                            'place' => $this->parser->extractPlace($title),
-                            'salary' => $this->parser->extractSalary($title),
-                        ];
-                    } catch (\Exception $e) {
-                        continue;
-                    }
-                }
-
-                if ($currentPage < $maxPage) {
-                    try {
-                        $nextPageLink = $webDriver->findElement(WebDriverBy::linkText('‹ 上頁'));
-                        $nextPageLink->click();
-                        sleep(3);
-                    } catch (\Exception $e) {
-                        break;
-                    }
+                    $jobs[] = [
+                        'title' => $title,
+                        'link' => $this->parser->extractLink($element, $originUrl),
+                        'company' => $this->parser->extractAuthor($element),
+                        'date' => $this->parser->extractDate($element),
+                        'place' => $this->parser->extractPlace($title),
+                        'salary' => $this->parser->extractSalary($title),
+                    ];
+                } catch (\Exception $e) {
+                    dump('解析失敗：'.$e->getMessage());
+                    continue;
                 }
             }
         } finally {
             $webDriver->quit();
         }
+
+        dump('scrape 最後取得：'.count($jobs));
 
         return $jobs;
     }
