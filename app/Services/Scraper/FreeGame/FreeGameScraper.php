@@ -95,6 +95,11 @@ class FreeGameScraper extends BaseScraper
         )->first();
 
         if ($record) {
+            logger()->info('FreeGame Existing', [
+                'title' => $item['title'],
+                'id' => $record->id,
+            ]);
+
             $record->update([
                 'description' => $item['description'] ?? null,
                 'link' => $item['link'] ?? null,
@@ -111,6 +116,10 @@ class FreeGameScraper extends BaseScraper
             'link' => $item['link'] ?? null,
             'publish_date' => $item['date'] ?? null,
             'is_push' => false,
+        ]);
+
+        logger()->info('FreeGame Created', [
+            'title' => $item['title'],
         ]);
 
         return $item;
