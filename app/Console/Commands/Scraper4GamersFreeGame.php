@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Services\Scraper\FreeGame\FreeGameScraper;
 use App\Services\SeleniumService;
+use App\Services\Telegram\TelegramChat;
 use App\Services\TelegramService;
 use Illuminate\Console\Command;
 
@@ -14,7 +15,7 @@ class Scraper4GamersFreeGame extends Command
 
     protected $telegramService;
     protected $seleniumService;
-    protected $chatId = TelegramService::FREE_GAME_GROUP_CHAT_ID;
+    protected $chatId = TelegramChat::FREE_GAME_GROUP_CHAT_ID;
 
     public function __construct(TelegramService $telegramService, SeleniumService $seleniumService)
     {

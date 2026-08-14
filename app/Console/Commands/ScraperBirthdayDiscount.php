@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Services\Scraper\BirthdayDiscount\BirthdayDiscountScraper;
 use App\Services\SeleniumService;
+use App\Services\Telegram\TelegramChat;
 use App\Services\TelegramService;
 use Illuminate\Console\Command;
 
@@ -33,7 +34,7 @@ class ScraperBirthdayDiscount extends Command
 
     protected $jobTexts;
 
-    protected $chatId = TelegramService::BIRTHDAY_DISCOUNT_GROUP_CHAT_ID;
+    protected $chatId = TelegramChat::BIRTHDAY_DISCOUNT_GROUP_CHAT_ID;
 
     public function __construct(TelegramService $telegramService, SeleniumService $seleniumService)
     {

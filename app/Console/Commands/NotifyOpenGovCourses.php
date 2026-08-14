@@ -6,6 +6,7 @@ use App\Models\GovOjt;
 use App\Services\LineNotifyService;
 use App\Services\ReurlService;
 use App\Services\SeleniumService;
+use App\Services\Telegram\TelegramChat;
 use App\Services\TelegramService;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -25,7 +26,7 @@ class NotifyOpenGovCourses extends Command
 
     protected $reurlService;
 
-    protected $chatId = TelegramService::OJT_GROUP_CHAT_ID;
+    protected $chatId = TelegramChat::OJT_GROUP_CHAT_ID;
 
     public function __construct(LineNotifyService $lineNotifyService, TelegramService $telegramService, SeleniumService $seleniumService, ReurlService $reurlService)
     {
@@ -40,15 +41,6 @@ class NotifyOpenGovCourses extends Command
     {
         $now = Carbon::now('Asia/Taipei');
 
-        // 通知：三天後的一整天（00:00 ~ 23:59）
-        // $this->notifyCourses(
-        //     $now->copy()->addDays(3)->startOfDay(),
-        //     $now->copy()->addDays(3)->endOfDay(),
-        //     'notified_3days_before',
-        //     '📢 課程將在三天後開放報名！'
-        // );
-
-        // 通知：明天的一整天
         $this->notifyCourses(
             $now->copy()->addDay()->startOfDay(),
             $now->copy()->addDay()->endOfDay(),
@@ -139,12 +131,6 @@ class NotifyOpenGovCourses extends Command
         }
     }
 
-    /**
-     * 產生 Google 日曆事件新增連結
-     */
-    /**
-     * 產生 Google 日曆事件新增連結
-     */
     protected function generateGoogleCalendarLink(GovOjt $course): string
     {
         $title = urlencode($course->course_name);

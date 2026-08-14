@@ -6,6 +6,7 @@ use App\Models\JudicialAuction;
 use App\Services\GeminiService;
 use App\Services\Scraper\JudicialAuction\JudicialAuctionScraper;
 use App\Services\SeleniumService;
+use App\Services\Telegram\TelegramChat;
 use App\Services\TelegramService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
@@ -18,7 +19,7 @@ class ScraperJudicialAuction extends Command
     protected $telegramService;
     protected $seleniumService;
     protected $geminiService;
-    protected $chatId = TelegramService::AUCTION_GROUP_CHAT_ID;
+    protected $chatId = TelegramChat::AUCTION_GROUP_CHAT_ID;
 
     public function __construct(
         TelegramService $telegramService,

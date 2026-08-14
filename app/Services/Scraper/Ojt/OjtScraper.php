@@ -7,6 +7,7 @@ use App\Services\GeminiService;
 use App\Services\ReurlService;
 use App\Services\Scraper\BaseScraper;
 use App\Services\SeleniumService;
+use App\Services\Telegram\TelegramChat;
 use App\Services\TelegramService;
 use Facebook\WebDriver\Interactions\WebDriverActions;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
@@ -185,7 +186,7 @@ class OjtScraper extends BaseScraper
             'training_unit_url' => $course->training_unit_url,
         ]);
 
-        $this->telegramService->sendMessage(TelegramService::OJT_GROUP_CHAT_ID, $message);
+        $this->telegramService->sendMessage(TelegramChat::OJT_GROUP_CHAT_ID, $message);
     }
 
     protected function clickElement(RemoteWebDriver $driver, string $cssSelector): void

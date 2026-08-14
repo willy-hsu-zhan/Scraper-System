@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Services\Scraper\Rent591\Rent591Scraper;
 use App\Services\SeleniumService;
+use App\Services\Telegram\TelegramChat;
 use App\Services\TelegramService;
 use Illuminate\Console\Command;
 
@@ -14,7 +15,7 @@ class ScraperRent591 extends Command
 
     protected $telegramService;
     protected $seleniumService;
-    protected $chatId = TelegramService::RENT591_GROUP_CHAT_ID;
+    protected $chatId = TelegramChat::RENT591_GROUP_CHAT_ID;
 
     public function __construct(TelegramService $telegramService, SeleniumService $seleniumService)
     {
@@ -36,6 +37,6 @@ class ScraperRent591 extends Command
             }
         }
 
-        $this->info('完成，共抓取 '.count($newRents).' 筆');
+        $this->info('完成，共抓取 '.count($newRents).' 筆資料');
     }
 }
