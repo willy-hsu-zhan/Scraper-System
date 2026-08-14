@@ -6,6 +6,7 @@ use App\Models\BirthdayDiscount;
 use App\Services\Scraper\BaseScraper;
 use App\Services\SeleniumService;
 use Facebook\WebDriver\WebDriverBy;
+use Illuminate\Support\Facades\Log;
 
 class BirthdayDiscountScraper extends BaseScraper
 {
@@ -39,17 +40,17 @@ class BirthdayDiscountScraper extends BaseScraper
 
                 $webDriver->get($pageUrl);
 
-logger()->info('BirthdayDiscount Debug', [
-    'page' => $page + 1,
-    'url' => $webDriver->getCurrentURL(),
-    'title' => $webDriver->getTitle(),
-    'offer_count' => count(
-        $webDriver->findElements(
-            WebDriverBy::cssSelector('.offer')
-        )
-    ),
-    'html_length' => strlen($webDriver->getPageSource()),
-]);
+                logger()->info('BirthdayDiscount Debug', [
+                    'page' => $page + 1,
+                    'url' => $webDriver->getCurrentURL(),
+                    'title' => $webDriver->getTitle(),
+                    'offer_count' => count(
+                        $webDriver->findElements(
+                            WebDriverBy::cssSelector('.offer')
+                        )
+                    ),
+                    'html_length' => strlen($webDriver->getPageSource()),
+                ]);
                 // 等待優惠列表出現
                 try {
                     $webDriver->wait(10)->until(
@@ -83,32 +84,16 @@ logger()->info('BirthdayDiscount Debug', [
                             ? $href
                             : 'https://happybirthday.com.tw'.$href;
 
-                        $expireDate = null;
-
-                        try {
-                            $finalText = $element
-                                ->findElement(WebDriverBy::cssSelector('.final'))
-                                ->getText();
-
-                            if (preg_match('/(\d{4}-\d{2}-\d{2})/', $finalText, $matches)) {
-                                $expireDate = $matches[1];
-                            }
-                        } catch (\Exception $e) {
-                            // 沒有期限資料就維持 null
-                        }
-
-                        $description = $this->safeGetText(
-                            $element,
-                            WebDriverBy::cssSelector('p')
-                        );
-
-                        $items[] = [
+                        Log::info('BirthdayDiscount Item Debug', [
                             'title' => $title,
-                            'link' => $link,
-                            'expire_date' => $expireDate,
-                            'description' => $description,
-                        ];
+                            'href' => $href,
+                        ]);
                     } catch (\Exception $e) {
+                        Log::error('BirthdayDiscount Parse Error', [
+                            'message' => $e->getMessage(),
+                            'html' => $element->getAttribute('outerHTML'),
+                        ]);
+
                         continue;
                     }
                 }
