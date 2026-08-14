@@ -121,7 +121,15 @@ class BirthdayDiscountScraper extends BaseScraper
 
     public function save(array $items): void
     {
+        Log::info('BirthdayDiscount Save', [
+            'count' => count($items),
+        ]);
+
         foreach ($items as $item) {
+            Log::info('BirthdayDiscount Saving', [
+                'title' => $item['title'] ?? null,
+            ]);
+
             $this->saveItem($item);
         }
     }
