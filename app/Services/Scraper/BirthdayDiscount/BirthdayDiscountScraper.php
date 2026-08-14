@@ -32,34 +32,31 @@ class BirthdayDiscountScraper extends BaseScraper
         $items = [];
 
         try {
-            $webDriver->get($url);
-
-            // 只抓最新 3 頁，避免每次都掃描全部歷史資料
             $maxPages = 3;
 
             for ($page = 0; $page < $maxPages; $page++) {
                 $pageUrl = $url.'?page='.$page;
 
-                try {
-                    $webDriver->get($pageUrl);
+                $webDriver->get($pageUrl);
 
-                    // 等待列表載入
+                // 等待優惠列表出現
+                try {
                     $webDriver->wait(10)->until(
                         function ($driver) {
                             return count(
                                 $driver->findElements(
-                                    WebDriverBy::cssSelector('.col-xs-12.col-sm-8.col-md-8')
+                                    WebDriverBy::cssSelector('.offer')
                                 )
                             ) > 0;
                         }
                     );
                 } catch (\Exception $e) {
-                    // 該頁載入失敗就停止後續頁面
+                    // 該頁沒有資料，停止後續頁面
                     break;
                 }
 
                 $elements = $webDriver->findElements(
-                    WebDriverBy::cssSelector('.col-xs-12.col-sm-8.col-md-8')
+                    WebDriverBy::cssSelector('.offer')
                 );
 
                 foreach ($elements as $element) {
@@ -74,35 +71,35 @@ class BirthdayDiscountScraper extends BaseScraper
                         $link = str_starts_with($href, 'http')
                             ? $href
                             : 'https://happybirthday.com.tw'.$href;
+
+                        $expireDate = null;
+
+                        try {
+                            $finalText = $element
+                                ->findElement(WebDriverBy::cssSelector('.final'))
+                                ->getText();
+
+                            if (preg_match('/(\d{4}-\d{2}-\d{2})/', $finalText, $matches)) {
+                                $expireDate = $matches[1];
+                            }
+                        } catch (\Exception $e) {
+                            // 沒有期限資料就維持 null
+                        }
+
+                        $description = $this->safeGetText(
+                            $element,
+                            WebDriverBy::cssSelector('p')
+                        );
+
+                        $items[] = [
+                            'title' => $title,
+                            'link' => $link,
+                            'expire_date' => $expireDate,
+                            'description' => $description,
+                        ];
                     } catch (\Exception $e) {
                         continue;
                     }
-
-                    $expireDate = null;
-
-                    try {
-                        $finalText = $element
-                            ->findElement(WebDriverBy::cssSelector('span.final'))
-                            ->getText();
-
-                        if (preg_match('/(\d{4}-\d{2}-\d{2})/', $finalText, $matches)) {
-                            $expireDate = $matches[1];
-                        }
-                    } catch (\Exception $e) {
-                        // 沒有期限資料就維持 null
-                    }
-
-                    $description = $this->safeGetText(
-                        $element,
-                        WebDriverBy::tagName('p')
-                    );
-
-                    $items[] = [
-                        'title' => $title,
-                        'link' => $link,
-                        'expire_date' => $expireDate,
-                        'description' => $description,
-                    ];
                 }
             }
         } finally {
