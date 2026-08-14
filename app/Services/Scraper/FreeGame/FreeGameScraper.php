@@ -34,32 +34,14 @@ class FreeGameScraper extends BaseScraper
                 ])
                 ->get($url);
 
-            logger()->info('FreeGame Request', [
-                'status' => $response->status(),
-                'url' => $url,
-                'html_length' => strlen($response->body()),
-            ]);
-
             if (! $response->successful()) {
-                logger()->error('FreeGame Request Failed', [
-                    'status' => $response->status(),
-                    'body' => $response->body(),
-                ]);
-
                 return [];
             }
 
             $items = $this->parser->parse($response->body());
 
-            logger()->info('FreeGame Result', [
-                'count' => count($items),
-            ]);
-
             return $items;
         } catch (\Throwable $e) {
-            logger()->error('FreeGame Scrape Error', [
-                'message' => $e->getMessage(),
-            ]);
 
             return [];
         }
@@ -77,9 +59,6 @@ class FreeGameScraper extends BaseScraper
 
     protected function saveItem(array $item): ?array
     {
-        logger()->info('FreeGame SaveItem', [
-            'title' => $item['title'] ?? null,
-        ]);
 
         if (empty($item['title'])) {
             return null;

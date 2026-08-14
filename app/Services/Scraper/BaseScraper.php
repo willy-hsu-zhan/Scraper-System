@@ -11,7 +11,7 @@ abstract class BaseScraper implements ScraperInterface
     public function run(): array
     {
         $scrapedItems = $this->scrape();
-        
+
         $newItems = [];
 
         foreach ($scrapedItems as $item) {
