@@ -19,10 +19,14 @@ class FreeGameParser
                     return;
                 }
 
+                $link = $node->filter('a')->count()
+                    ? $node->filter('a')->attr('href')
+                    : null;
+
                 $items[] = [
                     'title' => $title,
-                    'link' => '',
-                    'description' => '',
+                    'link' => $link,
+                    'description' => null,
                     'date' => null,
                 ];
             }

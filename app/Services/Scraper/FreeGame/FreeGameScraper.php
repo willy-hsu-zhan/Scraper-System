@@ -40,10 +40,9 @@ class FreeGameScraper extends BaseScraper
                 'html_length' => strlen($response->body()),
             ]);
 
-            if (! $response->successful()) {
+            if ($response->failed()) {
                 logger()->error('FreeGame Request Failed', [
                     'status' => $response->status(),
-                    'body' => $response->body(),
                 ]);
 
                 return [];
