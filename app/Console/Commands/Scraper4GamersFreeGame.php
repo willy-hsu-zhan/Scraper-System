@@ -14,7 +14,7 @@ class Scraper4GamersFreeGame extends Command
 
     protected $telegramService;
     protected $seleniumService;
-    protected $chatId = '-5107922211';
+    protected $chatId = TelegramService::FREE_GAME_GROUP_CHAT_ID;
 
     public function __construct(TelegramService $telegramService, SeleniumService $seleniumService)
     {

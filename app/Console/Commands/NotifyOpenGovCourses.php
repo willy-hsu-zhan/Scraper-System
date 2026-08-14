@@ -25,7 +25,7 @@ class NotifyOpenGovCourses extends Command
 
     protected $reurlService;
 
-    protected $chatId = '-5185362500';
+    protected $chatId = TelegramService::OJT_GROUP_CHAT_ID;
 
     public function __construct(LineNotifyService $lineNotifyService, TelegramService $telegramService, SeleniumService $seleniumService, ReurlService $reurlService)
     {

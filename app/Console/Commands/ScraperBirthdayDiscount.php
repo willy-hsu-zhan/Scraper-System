@@ -33,7 +33,7 @@ class ScraperBirthdayDiscount extends Command
 
     protected $jobTexts;
 
-    protected $chatId = '-5445385394'; // 暫時先用全域變數 // 日後聊天室擴充再更改
+    protected $chatId = TelegramService::BIRTHDAY_DISCOUNT_GROUP_CHAT_ID;
 
     public function __construct(TelegramService $telegramService, SeleniumService $seleniumService)
     {

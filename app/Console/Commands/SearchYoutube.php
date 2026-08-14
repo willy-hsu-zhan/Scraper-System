@@ -19,7 +19,7 @@ class SearchYoutube extends Command
 
     protected TelegramService $telegramService;
 
-    protected string $chatId = '-5401712481';
+    protected string $chatId = TelegramService::MUSIC_GROUP_CHAT_ID;
 
     public function __construct(TelegramService $telegramService)
     {
@@ -34,19 +34,19 @@ class SearchYoutube extends Command
         $categories = [
             '19' => [
                 'label' => '✈️ 旅遊',
-                'chat_id' => '-5100480609',
+                'chat_id' => TelegramService::YOUTUBE_TRAVEL_GROUP_CHAT_ID,
             ],
             '10' => [
                 'label' => '🎵 音樂',
-                'chat_id' => '-4661576369',
+                'chat_id' => TelegramService::YOUTUBE_MUSIC_CATEGORY_GROUP_CHAT_ID,
             ],
             '20' => [
                 'label' => '🎮 遊戲',
-                'chat_id' => '-5023352255',
+                'chat_id' => TelegramService::YOUTUBE_GAME_GROUP_CHAT_ID,
             ],
             '24' => [
                 'label' => '🎬 電影',
-                'chat_id' => '-4997962376',
+                'chat_id' => TelegramService::YOUTUBE_MOVIE_GROUP_CHAT_ID,
             ],
         ];
 

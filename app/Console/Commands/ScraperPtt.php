@@ -37,7 +37,7 @@ class ScraperPtt extends Command
 
     protected $lineNotifyService;
 
-    protected $chatId = '-5234655807'; // 暫時先用全域變數 // 日後聊天室擴充再更改
+    protected $chatId = TelegramService::PTT_GROUP_CHAT_ID;
 
     protected $telegramService;
 

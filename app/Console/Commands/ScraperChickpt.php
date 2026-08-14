@@ -42,7 +42,7 @@ class ScraperChickpt extends Command
 
     protected $jobTexts;
 
-    protected $chatId = '-1004460159382'; // 暫時先用全域變數 // 日後聊天室擴充再更改
+    protected $chatId = TelegramService::CHICKPT_GROUP_CHAT_ID;
 
     public function __construct(LineNotifyService $lineNotifyService, TelegramService $telegramService, SeleniumService $seleniumService)
     {

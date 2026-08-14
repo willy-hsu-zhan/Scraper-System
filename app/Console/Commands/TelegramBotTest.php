@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Services\TelegramService;
 use Illuminate\Console\Command;
 use Longman\TelegramBot\Request;
 use Longman\TelegramBot\Telegram;
@@ -38,7 +39,7 @@ class TelegramBotTest extends Command
 
             // 準備數據
             $data = [
-                'chat_id' => '-4664862172',
+                'chat_id' => TelegramService::DCARD_GROUP_CHAT_ID,
                 'text' => 'YAAAAA',
             ];
 

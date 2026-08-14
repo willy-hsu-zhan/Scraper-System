@@ -14,7 +14,7 @@ class ScraperDeliveryCoupon extends Command
 
     protected $telegramService;
     protected $seleniumService;
-    protected $chatId = '-5419894094';
+    protected $chatId = TelegramService::DELIVERY_COUPON_GROUP_CHAT_ID;
 
     public function __construct(TelegramService $telegramService, SeleniumService $seleniumService)
     {

@@ -15,6 +15,25 @@ use Longman\TelegramBot\Entities\InlineKeyboard;
 
 class TelegramService
 {
+    public const REPORT_GROUP_CHAT_ID = -5276842274;
+    public const MUSIC_GROUP_CHAT_ID = -5401712481;
+    public const YOUTUBE_MUSIC_SHARE_GROUP_CHAT_ID = self::MUSIC_GROUP_CHAT_ID;
+    public const AUCTION_GROUP_CHAT_ID = -5434110194;
+    public const OJT_GROUP_CHAT_ID = -5185362500;
+    public const YOUTUBE_VIDEO_OUTPUT_LOG_GROUP_CHAT_ID = -5229387465;
+    public const YOUTUBE_VIDEO_OUTPUT_GROUP_CHAT_ID = -5437101799;
+    public const FREE_GAME_GROUP_CHAT_ID = -5107922211;
+    public const BIRTHDAY_DISCOUNT_GROUP_CHAT_ID = -5445385394;
+    public const CHICKPT_GROUP_CHAT_ID = -1004460159382;
+    public const DCARD_GROUP_CHAT_ID = -4664862172;
+    public const DELIVERY_COUPON_GROUP_CHAT_ID = -5419894094;
+    public const RENT591_GROUP_CHAT_ID = -4675025353;
+    public const PTT_GROUP_CHAT_ID = -5234655807;
+    public const YOUTUBE_TRAVEL_GROUP_CHAT_ID = -5100480609;
+    public const YOUTUBE_MUSIC_CATEGORY_GROUP_CHAT_ID = -4661576369;
+    public const YOUTUBE_GAME_GROUP_CHAT_ID = -5023352255;
+    public const YOUTUBE_MOVIE_GROUP_CHAT_ID = -4997962376;
+
     protected TelegramApiClientInterface $apiClient;
     protected TelegramMessageFormatterInterface $formatter;
     protected TelegramUpdateParserInterface $parser;
@@ -120,16 +139,16 @@ class TelegramService
         $chatId = $parsedUpdate['chat_id'];
 
         switch ($chatId) {
-            case -5276842274:
+            case self::REPORT_GROUP_CHAT_ID:
                 $this->handleReportGroup($chatId, $text);
                 return;
-            case -5401712481:
+            case self::MUSIC_GROUP_CHAT_ID:
                 $this->handleMusicGroup($chatId, $text);
                 return;
-            case -5434110194:
+            case self::AUCTION_GROUP_CHAT_ID:
                 $this->handleAuctionGroup($chatId, $text);
                 return;
-            case -5185362500:
+            case self::OJT_GROUP_CHAT_ID:
                 $this->handleOjtGroup($chatId, $text);
                 return;
             default:
@@ -395,7 +414,7 @@ class TelegramService
         }
 
         $videos = $response->json()['items'] ?? [];
-        $chatId = '-5401712481';
+        $chatId = self::MUSIC_GROUP_CHAT_ID;
 
         if (empty($videos)) {
             $this->sendMessage($chatId, "🔍 找不到相關音樂\n\n關鍵字：{$keyword}\n請嘗試其他歌名或歌手 🙏");

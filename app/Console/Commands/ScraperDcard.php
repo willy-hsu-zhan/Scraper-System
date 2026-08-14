@@ -22,7 +22,7 @@ class ScraperDcard extends Command
 
     protected $jobTexts;
 
-    protected $chatId = '-4664862172'; // 暫時先用全域變數 // 日後聊天室擴充再更改
+    protected $chatId = TelegramService::DCARD_GROUP_CHAT_ID;
 
     /**
      * The name and signature of the console command.

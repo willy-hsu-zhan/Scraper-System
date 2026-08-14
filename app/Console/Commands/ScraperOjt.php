@@ -20,7 +20,7 @@ class ScraperOjt extends Command
     protected $seleniumService;
     protected $geminiService;
     protected $reurlService;
-    protected $chatId = '-5185362500';
+    protected $chatId = TelegramService::OJT_GROUP_CHAT_ID;
 
     public function __construct(
         TelegramService $telegramService,
@@ -37,7 +37,7 @@ class ScraperOjt extends Command
 
     public function handle()
     {
-        $scraper = new OjtScraper($this->seleniumService, $this->geminiService, $this->reurlService);
+        $scraper = new OjtScraper($this->seleniumService, $this->geminiService, $this->reurlService, $this->telegramService);
         $newCourses = $scraper->run();
 
         foreach ($newCourses as $course) {
