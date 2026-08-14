@@ -4,7 +4,6 @@ namespace App\Services\Telegram;
 
 use App\Services\Telegram\Contracts\TelegramApiClientInterface;
 use Illuminate\Support\Facades\Http;
-use Longman\TelegramBot\Request;
 
 class TelegramApiClient implements TelegramApiClientInterface
 {
@@ -35,7 +34,7 @@ class TelegramApiClient implements TelegramApiClientInterface
             $payload['reply_markup'] = json_encode($keyboard);
         }
 
-        return $this->sendRequest($payload);
+        return $this->sendRequest('sendMessage', $payload);
     }
 
     public function sendDocument(string $chatId, string $filePath, string $fileName)
@@ -59,25 +58,33 @@ class TelegramApiClient implements TelegramApiClientInterface
         }
     }
 
-    public function answerCallbackQuery(string $callbackQueryId, string $text, bool $showAlert = false): void
-    {
+    public function answerCallbackQuery(
+        string $callbackQueryId,
+        string $text,
+        bool $showAlert = false
+    ): void {
         if ($this->apiKey === '') {
             return;
         }
 
-        Request::answerCallbackQuery([
+        $this->sendRequest('answerCallbackQuery', [
             'callback_query_id' => $callbackQueryId,
             'text' => $text,
             'show_alert' => $showAlert,
         ]);
     }
 
-    protected function sendRequest(array $payload)
+    protected function sendRequest(string $path, array $payload)
     {
         try {
-            $result = Request::sendMessage($payload);
+            $response = Http::post($this->getApiUrl($path), $payload);
 
-            return $result->isOk() ? $result->getDescription() : $result->printError();
+            if ($response->successful() && $response->json('ok')) {
+                return $response->json('description', '成功');
+            }
+
+            return $response->json('description')
+                ?? $response->body();
         } catch (\Exception $e) {
             return $e->getMessage();
         }
