@@ -82,7 +82,11 @@ class BirthdayDiscountScraper extends BaseScraper
                 }
             }
         } finally {
-            $webDriver->quit();
+            try {
+                $webDriver->quit();
+            } catch (\Exception $e) {
+                // Selenium session 已中斷時，不需要再次拋出錯誤
+            }
         }
 
         return $items;
