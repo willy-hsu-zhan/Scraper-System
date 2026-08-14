@@ -30,8 +30,8 @@ class FeedController extends Controller
             return [
                 'type' => 'rent',
                 'title' => $item->title,
-                'subtitle' => $item->region.' ・ $'.number_format($item->price_info).' / 月',
-                'price' => $item->price_info,
+                'subtitle' => $item->region.' ・ $'.number_format($item->price).' / 月',
+                'price' => $item->price,
                 'link' => $item->link,
                 'time' => (string) $item->created_at,
             ];

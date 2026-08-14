@@ -12,6 +12,6 @@ class Rent591 extends Model
     protected $table = 'rent_591';
 
     protected $fillable = [
-        'id', 'title', 'region', 'price_info', 'link',
+        'id', 'title', 'region', 'price', 'link',
     ];
 }
