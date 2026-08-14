@@ -77,6 +77,10 @@ class FreeGameScraper extends BaseScraper
 
     protected function saveItem(array $item): ?array
     {
+        logger()->info('FreeGame SaveItem', [
+            'title' => $item['title'] ?? null,
+        ]);
+
         if (empty($item['title'])) {
             return null;
         }
