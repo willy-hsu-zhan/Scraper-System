@@ -75,12 +75,12 @@ class Rent591Scraper extends BaseScraper
 
                         $link = $titleElement->getAttribute('href');
                         $title = $titleElement->getAttribute('title');
-                        $price = (int) str_replace(',', '', $priceText);
+                        $priceInfo = (int) str_replace(',', '', $priceText);
 
                         $items[] = [
                             'title' => $title,
                             'region' => $regionName,
-                            'price' => $price,
+                            'price_info' => $priceInfo,
                             'link' => $link,
                         ];
                     } catch (\Exception $e) {
