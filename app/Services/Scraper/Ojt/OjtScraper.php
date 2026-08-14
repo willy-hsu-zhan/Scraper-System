@@ -153,6 +153,10 @@ class OjtScraper extends BaseScraper
             $driver->quit();
         }
 
+        logger()->info('Ojt Scrape Result', [
+            'count' => count($items),
+            'items' => $items,
+        ]);
         return $items;
     }
 
@@ -175,11 +179,33 @@ class OjtScraper extends BaseScraper
 
     protected function saveItem(array $item): ?array
     {
-        if (empty($item['training_unit_url']) || GovOjt::where('training_unit_url', $item['training_unit_url'])->exists()) {
+        logger()->info('Ojt SaveItem', [
+            'course_name' => $item['course_name'] ?? null,
+            'course_code' => $item['course_code'] ?? null,
+            'training_unit_url' => $item['training_unit_url'] ?? null,
+        ]);
+
+        if (empty($item['training_unit_url'])) {
+            logger()->warning('Ojt SaveItem skipped: missing training_unit_url');
+
+            return null;
+        }
+
+        if (GovOjt::where('training_unit_url', $item['training_unit_url'])->exists()) {
+            logger()->info('Ojt SaveItem skipped: already exists', [
+                'training_unit_url' => $item['training_unit_url'],
+            ]);
+
             return null;
         }
 
         $course = GovOjt::create($item);
+
+        logger()->info('Ojt SaveItem created', [
+            'id' => $course->id,
+            'course_name' => $course->course_name,
+        ]);
+
         $this->notifyNewCourse($course);
 
         return $course->toArray();
