@@ -6,7 +6,6 @@ use App\Models\BirthdayDiscount;
 use App\Services\Scraper\BaseScraper;
 use App\Services\SeleniumService;
 use Facebook\WebDriver\WebDriverBy;
-use Illuminate\Support\Facades\Log;
 
 class BirthdayDiscountScraper extends BaseScraper
 {
@@ -52,26 +51,12 @@ class BirthdayDiscountScraper extends BaseScraper
                         }
                     );
                 } catch (\Exception $e) {
-                    Log::warning('BirthdayDiscount Page Load Failed', [
-                        'page' => $page + 1,
-                        'url' => $pageUrl,
-                        'message' => $e->getMessage(),
-                    ]);
-
-                    // 該頁沒有資料，停止後續頁面
                     break;
                 }
 
                 $elements = $webDriver->findElements(
                     WebDriverBy::cssSelector('.offer')
                 );
-
-                Log::info('BirthdayDiscount Debug', [
-                    'page' => $page + 1,
-                    'url' => $webDriver->getCurrentURL(),
-                    'title' => $webDriver->getTitle(),
-                    'offer_count' => count($elements),
-                ]);
 
                 foreach ($elements as $element) {
                     try {
@@ -117,18 +102,7 @@ class BirthdayDiscountScraper extends BaseScraper
                             'expire_date' => $expireDate,
                             'description' => $description,
                         ];
-
-                        Log::info('BirthdayDiscount Item Debug', [
-                            'title' => $title,
-                            'href' => $href,
-                            'expire_date' => $expireDate,
-                        ]);
                     } catch (\Exception $e) {
-                        Log::error('BirthdayDiscount Parse Error', [
-                            'message' => $e->getMessage(),
-                            'html' => $element->getAttribute('outerHTML'),
-                        ]);
-
                         continue;
                     }
                 }
@@ -140,10 +114,6 @@ class BirthdayDiscountScraper extends BaseScraper
                 // Selenium session 已中斷時，不需要再次拋出錯誤
             }
         }
-
-        Log::info('BirthdayDiscount Scrape Finished', [
-            'count' => count($items),
-        ]);
 
         return $items;
     }
@@ -160,15 +130,7 @@ class BirthdayDiscountScraper extends BaseScraper
 
     public function save(array $items): void
     {
-        Log::info('BirthdayDiscount Save', [
-            'count' => count($items),
-        ]);
-
         foreach ($items as $item) {
-            Log::info('BirthdayDiscount Saving', [
-                'title' => $item['title'] ?? null,
-            ]);
-
             $this->saveItem($item);
         }
     }
