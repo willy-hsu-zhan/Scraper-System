@@ -40,9 +40,10 @@ class FreeGameScraper extends BaseScraper
                 'html_length' => strlen($response->body()),
             ]);
 
-            if ($response->failed()) {
+            if (! $response->successful()) {
                 logger()->error('FreeGame Request Failed', [
                     'status' => $response->status(),
+                    'body' => $response->body(),
                 ]);
 
                 return [];
@@ -74,13 +75,6 @@ class FreeGameScraper extends BaseScraper
         return $this->formatter->format($item);
     }
 
-    public function save(array $items): void
-    {
-        foreach ($items as $item) {
-            $this->saveItem($item);
-        }
-    }
-
     protected function saveItem(array $item): ?array
     {
         if (empty($item['title'])) {
@@ -89,17 +83,9 @@ class FreeGameScraper extends BaseScraper
 
         $titleHash = FreeGame4Gamers::makeTitleHash($item['title']);
 
-        $record = FreeGame4Gamers::where(
-            'title_hash',
-            $titleHash
-        )->first();
+        $record = FreeGame4Gamers::where('title_hash', $titleHash)->first();
 
         if ($record) {
-            logger()->info('FreeGame Existing', [
-                'title' => $item['title'],
-                'id' => $record->id,
-            ]);
-
             $record->update([
                 'description' => $item['description'] ?? null,
                 'link' => $item['link'] ?? null,
@@ -116,10 +102,6 @@ class FreeGameScraper extends BaseScraper
             'link' => $item['link'] ?? null,
             'publish_date' => $item['date'] ?? null,
             'is_push' => false,
-        ]);
-
-        logger()->info('FreeGame Created', [
-            'title' => $item['title'],
         ]);
 
         return $item;
