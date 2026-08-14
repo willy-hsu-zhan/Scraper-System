@@ -33,45 +33,69 @@ class BirthdayDiscountScraper extends BaseScraper
 
         try {
             $webDriver->get($url);
-            $totalCount = 0;
 
-            try {
-                $footerText = $webDriver->findElement(WebDriverBy::cssSelector('.view-footer .text-center'))->getText();
-                if (preg_match('/共計\s*(\d+)\s*筆/', $footerText, $matches)) {
-                    $totalCount = (int) $matches[1] - 1;
+            // 只抓最新 3 頁，避免每次都掃描全部歷史資料
+            $maxPages = 3;
+
+            for ($page = 0; $page < $maxPages; $page++) {
+                $pageUrl = $url.'?page='.$page;
+
+                try {
+                    $webDriver->get($pageUrl);
+
+                    // 等待列表載入
+                    $webDriver->wait(10)->until(
+                        function ($driver) {
+                            return count(
+                                $driver->findElements(
+                                    WebDriverBy::cssSelector('.col-xs-12.col-sm-8.col-md-8')
+                                )
+                            ) > 0;
+                        }
+                    );
+                } catch (\Exception $e) {
+                    // 該頁載入失敗就停止後續頁面
+                    break;
                 }
-            } catch (\Exception $e) {
-            }
 
-            $perPage = 20;
-            $totalPages = $totalCount > 0 ? (int) ceil($totalCount / $perPage) : 1;
-
-            for ($page = 0; $page < $totalPages; $page++) {
-                $pageUrl = 'https://happybirthday.com.tw/list?page='.$page;
-                $webDriver->get($pageUrl);
-                sleep(2);
-
-                $elements = $webDriver->findElements(WebDriverBy::cssSelector('.col-xs-12.col-sm-8.col-md-8'));
+                $elements = $webDriver->findElements(
+                    WebDriverBy::cssSelector('.col-xs-12.col-sm-8.col-md-8')
+                );
 
                 foreach ($elements as $element) {
                     try {
-                        $linkElement = $element->findElement(WebDriverBy::cssSelector('h2 a'));
+                        $linkElement = $element->findElement(
+                            WebDriverBy::cssSelector('h2 a')
+                        );
+
                         $title = trim($linkElement->getText());
-                        $link = 'https://happybirthday.com.tw'.$linkElement->getAttribute('href');
+                        $href = $linkElement->getAttribute('href');
+
+                        $link = str_starts_with($href, 'http')
+                            ? $href
+                            : 'https://happybirthday.com.tw'.$href;
                     } catch (\Exception $e) {
                         continue;
                     }
 
                     $expireDate = null;
+
                     try {
-                        $finalText = $element->findElement(WebDriverBy::cssSelector('span.final'))->getText();
+                        $finalText = $element
+                            ->findElement(WebDriverBy::cssSelector('span.final'))
+                            ->getText();
+
                         if (preg_match('/(\d{4}-\d{2}-\d{2})/', $finalText, $matches)) {
                             $expireDate = $matches[1];
                         }
                     } catch (\Exception $e) {
+                        // 沒有期限資料就維持 null
                     }
 
-                    $description = $this->safeGetText($element, WebDriverBy::tagName('p'));
+                    $description = $this->safeGetText(
+                        $element,
+                        WebDriverBy::tagName('p')
+                    );
 
                     $items[] = [
                         'title' => $title,
