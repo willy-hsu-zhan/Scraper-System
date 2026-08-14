@@ -49,13 +49,9 @@ class PttScraper extends BaseScraper
                 WebDriverBy::cssSelector('a.e7-article-default')
             );
 
-            dump('抓到文章：'.count($articleElements));
-
             foreach ($articleElements as $element) {
                 try {
                     $title = $this->parser->extractTitle($element);
-
-                    dump('標題：'.$title);
 
                     $jobs[] = [
                         'title' => $title,
@@ -66,7 +62,6 @@ class PttScraper extends BaseScraper
                         'salary' => $this->parser->extractSalary($title),
                     ];
                 } catch (\Exception $e) {
-                    dump('解析失敗：'.$e->getMessage());
                     continue;
                 }
             }
@@ -74,14 +69,12 @@ class PttScraper extends BaseScraper
             $webDriver->quit();
         }
 
-        dump('scrape 最後取得：'.count($jobs));
-
         return $jobs;
     }
 
     public function filter(array $item): bool
     {
-        return $this->filter->shouldSkip($item['title']);
+        return ! $this->filter->shouldSkip($item['title']);
     }
 
     public function format(array $item): string
@@ -103,13 +96,6 @@ class PttScraper extends BaseScraper
         }
 
         JobPtt::create($item);
-
-        return $item;
-    }
-
-    protected function cleanItem(array $item): array
-    {
-        $item['title'] = trim($item['title'] ?? '');
 
         return $item;
     }
