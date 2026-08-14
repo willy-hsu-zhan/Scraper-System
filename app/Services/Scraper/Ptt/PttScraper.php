@@ -84,7 +84,7 @@ class PttScraper extends BaseScraper
 
     public function filter(array $item): bool
     {
-        return ! $this->filter->shouldSkip($item['title']);
+        return $this->filter->shouldSkip($item['title']);
     }
 
     public function format(array $item): string
