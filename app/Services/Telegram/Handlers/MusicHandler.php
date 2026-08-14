@@ -7,6 +7,7 @@ use App\Services\Telegram\TelegramChat;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Longman\TelegramBot\Entities\InlineKeyboard;
 
 class MusicHandler
 {
@@ -93,7 +94,7 @@ class MusicHandler
             $channel = $video['snippet']['channelTitle'];
             $encodedTitle = base64_encode(mb_substr($title, 0, 10, 'UTF-8'));
 
-            $keyboard = new \Longman\TelegramBot\Entities\InlineKeyboard([
+            $keyboard = new InlineKeyboard([
                 [
                     [
                         'text' => '🎵 下載音樂',
@@ -114,8 +115,11 @@ class MusicHandler
         }
     }
 
-    protected function sendMessage(int|string $chatId, string $message, ?array $keyboard = null): void
-    {
+    protected function sendMessage(
+        int|string $chatId,
+        string $message,
+        ?InlineKeyboard $keyboard = null
+    ): void {
         $this->apiClient->sendMessage((string) $chatId, $message, $keyboard);
     }
 

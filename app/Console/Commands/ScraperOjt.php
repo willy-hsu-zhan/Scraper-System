@@ -11,6 +11,7 @@ use App\Services\Telegram\TelegramChat;
 use App\Services\TelegramService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
+use Longman\TelegramBot\Entities\InlineKeyboard;
 
 class ScraperOjt extends Command
 {
@@ -88,14 +89,12 @@ class ScraperOjt extends Command
             $keyboard = null;
 
             if ($govOjt) {
-                $keyboard = [
-                    'inline_keyboard' => [[
-                        [
-                            'text' => 'AI 摘要',
-                            'callback_data' => "ojt_summary:{$govOjt->id}",
-                        ],
-                    ]],
-                ];
+                $keyboard = new InlineKeyboard([
+                    [
+                        'text' => 'AI 摘要',
+                        'callback_data' => "ojt_summary:{$govOjt->id}",
+                    ],
+                ]);
             }
 
             $this->telegramService->sendMessage($this->chatId, $message, $keyboard);
