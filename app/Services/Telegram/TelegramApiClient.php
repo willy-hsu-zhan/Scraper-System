@@ -4,6 +4,7 @@ namespace App\Services\Telegram;
 
 use App\Services\Telegram\Contracts\TelegramApiClientInterface;
 use Illuminate\Support\Facades\Http;
+use Longman\TelegramBot\Entities\InlineKeyboard;
 
 class TelegramApiClient implements TelegramApiClientInterface
 {
@@ -19,8 +20,11 @@ class TelegramApiClient implements TelegramApiClientInterface
             : '';
     }
 
-    public function sendMessage(string $chatId, string $message, ?array $keyboard = null)
-    {
+    public function sendMessage(
+        string $chatId,
+        string $message,
+        ?InlineKeyboard $keyboard = null
+    ) {
         if ($this->apiKey === '') {
             return 'Telegram bot API key is not configured.';
         }
