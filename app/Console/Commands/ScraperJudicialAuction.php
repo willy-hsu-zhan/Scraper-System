@@ -10,6 +10,7 @@ use App\Services\Telegram\TelegramChat;
 use App\Services\TelegramService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
+use Longman\TelegramBot\Entities\InlineKeyboard;
 
 class ScraperJudicialAuction extends Command
 {
@@ -72,17 +73,14 @@ class ScraperJudicialAuction extends Command
             }
 
             $keyboard = null;
+
             if ($auction) {
-                $keyboard = [
-                    'inline_keyboard' => [
-                        [
-                            [
-                                'text' => '產生 AI 摘要',
-                                'callback_data' => "auction_summary:{$auction->id}",
-                            ],
-                        ],
+                $keyboard = new InlineKeyboard([
+                    [
+                        'text' => '產生 AI 摘要',
+                        'callback_data' => "auction_summary:{$auction->id}",
                     ],
-                ];
+                ]);
             }
 
             $this->telegramService->sendMessage($this->chatId, $message, $keyboard);
