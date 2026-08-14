@@ -9,6 +9,7 @@ use App\Services\Scraper\Ojt\OjtScraper;
 use App\Services\SeleniumService;
 use App\Services\Telegram\TelegramChat;
 use App\Services\TelegramService;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 use Longman\TelegramBot\Entities\InlineKeyboard;
@@ -81,9 +82,9 @@ class ScraperOjt extends Command
             $message .= "學員費用：{$course['student_cost']}\n";
             $message .= "政府補助：{$course['government_cost']}\n";
             $message .= "訓練地點：{$course['training_location']}\n";
-            $message .= "報名期間：{$course['registration_start_at']} ~ {$course['registration_end_at']}\n";
+            $message .= "報名期間：{$this->formatDatetime($course['registration_start_at'])} ~ {$this->formatDatetime($course['registration_end_at'])}\n";
             $message .= "招生狀態：{$course['enrollment_status']}\n";
-            $message .= "開課期間：{$course['scheduled_start_date']} ~ {$course['scheduled_end_date']}\n";
+            $message .= "開課期間：{$this->formatDate($course['scheduled_start_date'])} ~ {$this->formatDate($course['scheduled_end_date'])}\n";
             $message .= "繳費方式：{$course['payment_method']}";
 
             $keyboard = null;
@@ -104,5 +105,16 @@ class ScraperOjt extends Command
         $this->info('已檢查 '.count($newCourses).' 個新的 OJT 課程。');
 
         return 0;
+    }
+
+    private function formatDatetime($datetime): string
+    {
+        if (empty($datetime)) {
+            return '未提供';
+        }
+
+        return Carbon::parse($datetime)
+            ->timezone('Asia/Taipei')
+            ->format('Y-m-d H:i');
     }
 }

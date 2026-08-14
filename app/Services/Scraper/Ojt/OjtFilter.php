@@ -6,15 +6,10 @@ class OjtFilter
 {
     public function shouldKeep(array $item): bool
     {
-        $result = ! empty($item['course_name'])
-            && ! empty($item['training_unit_url']);
+        if (empty($item['course_name']) || empty($item['training_unit_url'])) {
+            return false;
+        }
 
-        logger()->info('Ojt Filter', [
-            'course_name' => $item['course_name'] ?? null,
-            'training_unit_url' => $item['training_unit_url'] ?? null,
-            'result' => $result,
-        ]);
-
-        return $result;
+        return ! str_contains($item['enrollment_status'] ?? '', '備取');
     }
 }
