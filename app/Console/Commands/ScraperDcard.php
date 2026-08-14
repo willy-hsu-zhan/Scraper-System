@@ -21,7 +21,7 @@ class ScraperDcard extends Command
 
     protected $jobTexts;
 
-    protected $chatId = TelegramChat::DCARD_GROUP_CHAT_ID;
+    protected $chatId = TelegramChat::DCARD;
 
     /**
      * The name and signature of the console command.

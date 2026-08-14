@@ -41,7 +41,7 @@ class ScraperChickpt extends Command
 
     protected $jobTexts;
 
-    protected $chatId = TelegramChat::CHICKPT_GROUP_CHAT_ID;
+    protected $chatId = TelegramChat::CHICKPT;
 
     public function __construct(LineNotifyService $lineNotifyService, TelegramService $telegramService, SeleniumService $seleniumService)
     {

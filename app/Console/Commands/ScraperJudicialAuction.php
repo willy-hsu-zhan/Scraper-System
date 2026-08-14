@@ -19,7 +19,7 @@ class ScraperJudicialAuction extends Command
     protected $telegramService;
     protected $seleniumService;
     protected $geminiService;
-    protected $chatId = TelegramChat::AUCTION_GROUP_CHAT_ID;
+    protected $chatId = TelegramChat::AUCTION;
 
     public function __construct(
         TelegramService $telegramService,

@@ -13,17 +13,22 @@ class GeminiClient implements GeminiClientInterface
 
     public function __construct()
     {
-        $this->apiKey = config('gemini.api_key');
-        $this->baseUrl = config('gemini.base_url');
-        $this->timeout = config('gemini.timeout', 60);
+        $this->apiKey = (string) config('gemini.api_key', '');
+        $this->baseUrl = (string) config('gemini.base_url', '');
+        $this->timeout = (int) config('gemini.timeout', 60);
 
-        if (! $this->apiKey || ! $this->baseUrl) {
-            throw new \RuntimeException('Gemini API configuration is missing.');
+        if ($this->apiKey === '' || $this->baseUrl === '') {
+            $this->apiKey = '';
+            $this->baseUrl = '';
         }
     }
 
     public function request(array $payload): ?array
     {
+        if ($this->apiKey === '' || $this->baseUrl === '') {
+            return null;
+        }
+
         $endpoint = $this->buildEndpoint();
 
         $response = Http::timeout($this->timeout)
