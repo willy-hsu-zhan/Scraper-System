@@ -12,77 +12,86 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
+        // 統一使用 Laravel application timezone，避免排程時間與應用程式時區不一致。
+        $timezone = config('app.timezone', 'Asia/Taipei');
+
+        // YouTube 搜尋結果的執行紀錄獨立寫入檔案，方便查看排程執行狀況。
+        $logPath = storage_path('logs/search-youtube.log');
+
+        // 就業通課程：每小時更新一次課程資料。
         $schedule->command('app:scraper-ojt')
             ->hourly()
-            ->timezone('Asia/Taipei'); // 每天 00:00、12:00
+            ->timezone($timezone);
 
-        //$logPath = storage_path('logs/search-youtube.log');
+        // YouTube 每日搜尋排程。
+        // 將相同設定集中管理，避免重複撰寫排程設定。
+        $youtubeSchedules = [
+            ['command' => 'TW 19', 'time' => '12:10'], // 旅遊
+            ['command' => 'all 10', 'time' => '12:20'], // 音樂
+            ['command' => 'TW 20', 'time' => '12:25'], // 遊戲
+            ['command' => 'TW 24', 'time' => '12:35'], // 電影
+        ];
 
-        // ✈️ 旅遊
-        // $schedule->command('app:search-youtube TW 19')
-        //     ->dailyAt('12:10')
-        //     ->withoutOverlapping()
-        //     ->onOneServer()
-        //     ->runInBackground()
-        //     ->appendOutputTo($logPath)
-        //     ->timezone('Asia/Taipei');
+        foreach ($youtubeSchedules as $config) {
+            $schedule->command("app:search-youtube {$config['command']}")
+                ->dailyAt($config['time'])
+                ->withoutOverlapping()
+                ->onOneServer()
+                ->runInBackground()
+                ->appendOutputTo($logPath)
+                ->timezone($timezone);
+        }
 
-        // 🎵 音樂
-        // $schedule->command('app:search-youtube all 10')
-        //     ->dailyAt('12:20')
-        //     ->withoutOverlapping()
-        //     ->onOneServer()
-        //     ->runInBackground()
-        //     ->appendOutputTo($logPath)
-        //     ->timezone('Asia/Taipei');
-
-        // 🎮 遊戲
-        // $schedule->command('app:search-youtube TW 20')
-        //     ->dailyAt('12:25')
-        //     ->withoutOverlapping()
-        //     ->onOneServer()
-        //     ->runInBackground()
-        //     ->appendOutputTo($logPath)
-        //     ->timezone('Asia/Taipei');
-
-        // 🎬 電影
-        // $schedule->command('app:search-youtube TW 24')
-        //     ->dailyAt('12:35')
-        //     ->withoutOverlapping()
-        //     ->onOneServer()
-        //     ->runInBackground()
-        //     ->appendOutputTo($logPath)
-        //     ->timezone('Asia/Taipei');
-
+        // 4Gamers 免費遊戲：每天上午 9 點與晚上 9 點執行。
         $schedule->command('app:scraper-4gamers-free')
             ->twiceDaily(9, 21)
-            ->timezone('Asia/Taipei');
+            ->timezone($timezone);
 
+        // 外送優惠：每天執行一次。
         $schedule->command('app:scraper-delivery-coupon')
             ->daily()
-            ->timezone('Asia/Taipei');
+            ->timezone($timezone);
 
+        // 生日優惠：每天上午 10 點與晚上 10 點執行。
         $schedule->command('app:scraper-birthday-discount')
             ->twiceDaily(10, 22)
-            ->timezone('Asia/Taipei');
+            ->timezone($timezone);
 
+        // Chickpt：每小時的 15 分與 45 分執行。
+        // 凌晨 01:00～07:00 暫停執行，避免不必要的請求。
         $schedule->command('app:scraper-chickpt')
             ->cron('15,45 * * * *')
-            ->timezone('Asia/Taipei')
-            ->when(function () {
-                $hour = now('Asia/Taipei')->hour;
+            ->timezone($timezone)
+            ->when(function () use ($timezone) {
+                $hour = now($timezone)->hour;
 
                 return ! ($hour >= 1 && $hour < 7);
             });
 
+        // 法拍資訊：每天凌晨 00:30 執行。
         $schedule->command('app:scraper-judicial-auction')
             ->dailyAt('00:30')
-            ->timezone('Asia/Taipei');
-        $schedule->command('app:scraper-ptt')->cron('10,30 * * * *');
-        // 每天凌晨 2 點清理 1 天前的檔案
-        $schedule->command('youtube:clean')->dailyAt('02:00');
-        $schedule->command('app:scraper-rent591')->everyThirtyMinutes()->timezone('Asia/Taipei');
-        $schedule->command('app:notify-open-govojt')->hourly()->timezone('Asia/Taipei');
+            ->timezone($timezone);
+
+        // PTT：每小時的 10 分與 30 分執行。
+        $schedule->command('app:scraper-ptt')
+            ->cron('10,30 * * * *')
+            ->timezone($timezone);
+
+        // YouTube 暫存檔案：每天凌晨 02:00 清理 1 天前的檔案。
+        $schedule->command('youtube:clean')
+            ->dailyAt('02:00')
+            ->timezone($timezone);
+
+        // 591 租屋資訊：每 30 分鐘更新一次。
+        $schedule->command('app:scraper-rent591')
+            ->everyThirtyMinutes()
+            ->timezone($timezone);
+
+        // 就業通公開課程通知：每小時檢查一次是否有需要通知的新課程。
+        $schedule->command('app:notify-open-govojt')
+            ->hourly()
+            ->timezone($timezone);
     }
 
     /**
