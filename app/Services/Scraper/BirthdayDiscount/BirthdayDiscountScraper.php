@@ -33,6 +33,7 @@ class BirthdayDiscountScraper extends BaseScraper
         $items = [];
 
         try {
+            // 只抓最新 3 頁，避免掃描全部歷史資料
             $maxPages = 3;
 
             for ($page = 0; $page < $maxPages; $page++) {
@@ -40,18 +41,6 @@ class BirthdayDiscountScraper extends BaseScraper
 
                 $webDriver->get($pageUrl);
 
-                logger()->info('BirthdayDiscount Debug', [
-                    'page' => $page + 1,
-                    'url' => $webDriver->getCurrentURL(),
-                    'title' => $webDriver->getTitle(),
-                    'offer_count' => count(
-                        $webDriver->findElements(
-                            WebDriverBy::cssSelector('.offer')
-                        )
-                    ),
-                    'html_length' => strlen($webDriver->getPageSource()),
-                ]);
-                // 等待優惠列表出現
                 try {
                     $webDriver->wait(10)->until(
                         function ($driver) {
@@ -63,6 +52,12 @@ class BirthdayDiscountScraper extends BaseScraper
                         }
                     );
                 } catch (\Exception $e) {
+                    Log::warning('BirthdayDiscount Page Load Failed', [
+                        'page' => $page + 1,
+                        'url' => $pageUrl,
+                        'message' => $e->getMessage(),
+                    ]);
+
                     // 該頁沒有資料，停止後續頁面
                     break;
                 }
@@ -70,6 +65,13 @@ class BirthdayDiscountScraper extends BaseScraper
                 $elements = $webDriver->findElements(
                     WebDriverBy::cssSelector('.offer')
                 );
+
+                Log::info('BirthdayDiscount Debug', [
+                    'page' => $page + 1,
+                    'url' => $webDriver->getCurrentURL(),
+                    'title' => $webDriver->getTitle(),
+                    'offer_count' => count($elements),
+                ]);
 
                 foreach ($elements as $element) {
                     try {
@@ -84,9 +86,42 @@ class BirthdayDiscountScraper extends BaseScraper
                             ? $href
                             : 'https://happybirthday.com.tw'.$href;
 
+                        $expireDate = null;
+
+                        try {
+                            $finalText = $element
+                                ->findElement(
+                                    WebDriverBy::cssSelector('span.final')
+                                )
+                                ->getText();
+
+                            if (preg_match(
+                                '/(\d{4}-\d{2}-\d{2})/',
+                                $finalText,
+                                $matches
+                            )) {
+                                $expireDate = $matches[1];
+                            }
+                        } catch (\Exception $e) {
+                            // 沒有優惠截止日就維持 null
+                        }
+
+                        $description = $this->safeGetText(
+                            $element,
+                            WebDriverBy::tagName('p')
+                        );
+
+                        $items[] = [
+                            'title' => $title,
+                            'link' => $link,
+                            'expire_date' => $expireDate,
+                            'description' => $description,
+                        ];
+
                         Log::info('BirthdayDiscount Item Debug', [
                             'title' => $title,
                             'href' => $href,
+                            'expire_date' => $expireDate,
                         ]);
                     } catch (\Exception $e) {
                         Log::error('BirthdayDiscount Parse Error', [
@@ -105,6 +140,10 @@ class BirthdayDiscountScraper extends BaseScraper
                 // Selenium session 已中斷時，不需要再次拋出錯誤
             }
         }
+
+        Log::info('BirthdayDiscount Scrape Finished', [
+            'count' => count($items),
+        ]);
 
         return $items;
     }
@@ -141,7 +180,11 @@ class BirthdayDiscountScraper extends BaseScraper
         }
 
         $titleHash = BirthdayDiscount::makeTitleHash($item['title']);
-        $record = BirthdayDiscount::where('title_hash', $titleHash)->first();
+
+        $record = BirthdayDiscount::where(
+            'title_hash',
+            $titleHash
+        )->first();
 
         if ($record) {
             $record->update([
@@ -155,7 +198,7 @@ class BirthdayDiscountScraper extends BaseScraper
         }
 
         BirthdayDiscount::create([
-            'title' => $item['title'] ?? null,
+            'title' => $item['title'],
             'title_hash' => $titleHash,
             'link' => $item['link'] ?? null,
             'expire_date' => $item['expire_date'] ?? null,
