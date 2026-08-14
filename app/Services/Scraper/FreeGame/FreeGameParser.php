@@ -11,25 +11,16 @@ class FreeGameParser
         $crawler = new Crawler($html);
         $items = [];
 
-        $crawler->filter('#ssr-news-tag-title')->each(
+        $crawler->filter('a[href*="/news/detail/"]')->each(
             function (Crawler $node) use (&$items) {
-                $title = trim($node->text());
+                $title = trim($node->filter('h3')->text(''));
+                $link = $node->attr('href');
 
-                if (empty($title)) {
+                if (empty($title) || empty($link)) {
                     return;
                 }
 
-                $link = null;
-
-                try {
-                    $link = $node
-                        ->closest('a')
-                        ->attr('href');
-                } catch (\Throwable $e) {
-                    // 找不到連結時略過
-                }
-
-                if ($link && ! str_starts_with($link, 'http')) {
+                if (! str_starts_with($link, 'http')) {
                     $link = 'https://www.4gamers.com.tw'.$link;
                 }
 
