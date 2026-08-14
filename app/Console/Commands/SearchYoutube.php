@@ -135,7 +135,7 @@ class SearchYoutube extends Command
                         "📺 {$video['snippet']['channelTitle']}\n".
                         "🔗 https://www.youtube.com/watch?v={$videoId}";
 
-                    $keyboard = new InlineKeyboard(
+                    $keyboard = new InlineKeyboard([
                         [
                             [
                                 'text' => '🎵 下載音樂',
@@ -145,8 +145,8 @@ class SearchYoutube extends Command
                                 'text' => '🎬 下載影片',
                                 'callback_data' => "yt|video|{$videoId}",
                             ],
-                        ]
-                    );
+                        ],
+                    ]);
 
                     Request::sendMessage([
                         'chat_id' => $categoryConfig['chat_id'],
