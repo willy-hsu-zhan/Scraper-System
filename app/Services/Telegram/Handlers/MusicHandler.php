@@ -94,16 +94,20 @@ class MusicHandler
             $channel = $video['snippet']['channelTitle'];
             $encodedTitle = base64_encode(mb_substr($title, 0, 10, 'UTF-8'));
 
-            $keyboard = new InlineKeyboard([
-                [
-                    'text' => '🎵 下載音樂',
-                    'callback_data' => "yt|audio|{$videoId}|{$encodedTitle}",
+            $keyboard = [
+                'inline_keyboard' => [
+                    [
+                        [
+                            'text' => '🎵 下載音樂',
+                            'callback_data' => "yt|audio|{$videoId}|{$encodedTitle}",
+                        ],
+                        [
+                            'text' => '🎬 下載影片',
+                            'callback_data' => "yt|video|{$videoId}|{$encodedTitle}",
+                        ],
+                    ],
                 ],
-                [
-                    'text' => '🎬 下載影片',
-                    'callback_data' => "yt|video|{$videoId}|{$encodedTitle}",
-                ],
-            ]);
+            ];
 
             $message = "🎵 {$title}\n".
                 "📺 {$channel}\n".
@@ -113,11 +117,8 @@ class MusicHandler
         }
     }
 
-    protected function sendMessage(
-        int|string $chatId,
-        string $message,
-        ?InlineKeyboard $keyboard = null
-    ): void {
+    protected function sendMessage(int|string $chatId, string $message, ?array $keyboard = null): void
+    {
         $this->apiClient->sendMessage((string) $chatId, $message, $keyboard);
     }
 

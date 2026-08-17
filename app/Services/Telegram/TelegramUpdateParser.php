@@ -10,9 +10,20 @@ class TelegramUpdateParser implements TelegramUpdateParserInterface
     {
         $callbackMessage = $payload['callback_query']['message'] ?? null;
 
+        $isCallback = isset($payload['callback_query']);
+        $isMessage = isset($payload['message']);
+        $isLocation = $isMessage && isset($payload['message']['location']);
+
+        $type = 'message';
+        if ($isCallback) {
+            $type = 'callback_query';
+        } elseif ($isLocation) {
+            $type = 'location';
+        }
+
         return [
             'update_id' => $payload['update_id'] ?? null,
-            'type' => isset($payload['callback_query']) ? 'callback_query' : 'message',
+            'type' => $type,
             'chat_id' => $payload['message']['chat']['id'] ?? $callbackMessage['chat']['id'] ?? null,
             'user_id' => $payload['message']['from']['id'] ?? $payload['callback_query']['from']['id'] ?? null,
             'username' => $payload['message']['from']['username'] ?? $payload['callback_query']['from']['username'] ?? null,
@@ -22,6 +33,8 @@ class TelegramUpdateParser implements TelegramUpdateParserInterface
             'callback_data' => $payload['callback_query']['data'] ?? null,
             'inline_message_id' => $payload['callback_query']['inline_message_id'] ?? null,
             'has_attachment' => $this->payloadHasAttachment($payload),
+            'latitude' => $payload['message']['location']['latitude'] ?? null,
+            'longitude' => $payload['message']['location']['longitude'] ?? null,
             'raw' => $payload,
         ];
     }

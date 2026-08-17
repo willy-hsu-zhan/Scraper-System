@@ -32,11 +32,8 @@ class TelegramService
         $this->callbackRouter = $callbackRouter;
     }
 
-    public function sendMessage(
-        string $chatId,
-        string $message,
-        ?InlineKeyboard $keyboard = null
-    ) {
+    public function sendMessage(string $chatId, string $message, ?array $keyboard = null)
+    {
         return $this->apiClient->sendMessage($chatId, $message, $keyboard);
     }
 
@@ -58,7 +55,7 @@ class TelegramService
             return;
         }
 
-        if ($parsedUpdate['type'] === 'message') {
+        if ($parsedUpdate['type'] === 'message' || $parsedUpdate['type'] === 'location') {
             $this->messageRouter->route($parsedUpdate);
 
             return;

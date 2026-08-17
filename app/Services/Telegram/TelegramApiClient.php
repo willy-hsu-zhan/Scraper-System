@@ -35,7 +35,7 @@ class TelegramApiClient implements TelegramApiClientInterface
         ];
 
         if ($keyboard !== null) {
-            $payload['reply_markup'] = json_encode($keyboard);
+            $payload['reply_markup'] = json_encode($keyboard, JSON_UNESCAPED_UNICODE);
         }
 
         return $this->sendRequest('sendMessage', $payload);
