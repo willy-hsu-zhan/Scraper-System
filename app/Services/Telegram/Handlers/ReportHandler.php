@@ -46,6 +46,13 @@ class ReportHandler
 
     public function handleMessage(int|string $chatId, string $text): void
     {
+        // respond with intro keyboard for common triggers
+        $lower = mb_strtolower(trim($text));
+        if (in_array($lower, ['/start', '檢舉', '報案', 'help', '說明'])) {
+            $this->sendReportIntro($chatId);
+            return;
+        }
+
         if (! $this->looksLikeLocation($text)) {
             return;
         }
@@ -60,16 +67,120 @@ class ReportHandler
 
         $template = $this->buildReportTemplate($cityData['city'], $cleanText);
 
-        $this->sendMessage($chatId, $template);
+        $this->sendMessage($chatId, $template, $this->getReportKeyboard());
         usleep(300000);
         $this->sendMessage(
             $chatId,
             "📍 判斷地點：{$cityData['city']}\n\n"
             ."🔗 線上檢舉：\n{$cityData['url']}\n\n"
-            .'📞 簡訊報案電話：'
+            .'📞 簡訊報案電話：',
+            $this->getReportKeyboard()
         );
         usleep(300000);
-        $this->sendMessage($chatId, $cityData['phone']);
+        $this->sendMessage($chatId, $cityData['phone'], $this->getReportKeyboard());
+    }
+
+    /**
+     * Handle incoming location (latitude/longitude)
+     */
+    public function handleLocation(int|string $chatId, float $latitude, float $longitude): void
+    {
+        // Log receipt
+        \Illuminate\Support\Facades\Log::info('Telegram location received', [
+            'chat_id' => $chatId,
+            'latitude' => $latitude,
+            'longitude' => $longitude,
+        ]);
+
+        // Acknowledge to user
+        $message = "📍 已取得目前位置\n\n緯度：{$latitude}\n經度：{$longitude}\n\n正在判斷所在地區...";
+        $this->sendMessage($chatId, $message, $this->getReportKeyboard());
+
+        // Use geocoding service to reverse geocode
+        try {
+            $geoService = new \App\Services\GeocodingService();
+            $result = $geoService->reverse($latitude, $longitude);
+
+            if (! $result || empty($result['address'])) {
+                \Illuminate\Support\Facades\Log::warning('Unable to detect address from reverse geocoding', [
+                    'latitude' => $latitude,
+                    'longitude' => $longitude,
+                ]);
+
+                $this->sendMessage($chatId, '⚠️ 無法判斷地址，請輸入地址文字或稍後再試。', $this->getReportKeyboard());
+                return;
+            }
+
+            $address = $result['address'];
+            \Illuminate\Support\Facades\Log::info('Reverse geocoding success', [
+                'latitude' => $latitude,
+                'longitude' => $longitude,
+                'address' => $address,
+            ]);
+
+            // Normalize and detect city using existing logic
+            $cleanText = $this->normalizeAddressText($address);
+            $cityData = $this->detectCity($cleanText);
+
+            if (! $cityData) {
+                \Illuminate\Support\Facades\Log::warning('Unable to detect report city', [
+                    'address' => $address,
+                    'latitude' => $latitude,
+                    'longitude' => $longitude,
+                ]);
+
+                $this->sendMessage($chatId, "⚠️ 找不到符合的縣市：\n{$address}\n請手動輸入地址或確認位置。", $this->getReportKeyboard());
+                return;
+            }
+
+            $template = $this->buildReportTemplate($cityData['city'], $address);
+            $this->sendMessage($chatId, $template, $this->getReportKeyboard());
+            usleep(300000);
+            $this->sendMessage(
+                $chatId,
+                "📍 判斷地點：{$cityData['city']}\n\n"
+                ."🔗 線上檢舉：\n{$cityData['url']}\n\n"
+                .'📞 簡訊報案電話：',
+                $this->getReportKeyboard()
+            );
+            usleep(300000);
+            $this->sendMessage($chatId, $cityData['phone'], $this->getReportKeyboard());
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Reverse geocoding failed', [
+                'latitude' => $latitude,
+                'longitude' => $longitude,
+                'error' => $e->getMessage(),
+            ]);
+
+            $this->sendMessage($chatId, '⚠️ 反查地址發生錯誤，請稍後再試。', $this->getReportKeyboard());
+        }
+    }
+
+    protected function getReportKeyboard(): array
+    {
+        return [
+            'keyboard' => [
+                [
+                    [
+                        'text' => '📍 取得目前位置',
+                        'request_location' => true,
+                    ],
+                ],
+            ],
+            'resize_keyboard' => true,
+            'is_persistent' => true,
+        ];
+    }
+
+    protected function sendReportIntro(int|string $chatId): void
+    {
+        $intro = "🚨 交通檢舉助手\n\n請直接輸入違規地址，\n或點擊下方按鈕分享目前位置。";
+        $this->sendMessage($chatId, $intro, $this->getReportKeyboard());
+    }
+
+    protected function sendMessage(int|string $chatId, string $message, ?array $keyboard = null): void
+    {
+        $this->apiClient->sendMessage((string) $chatId, $message, $keyboard);
     }
 
     public function looksLikeLocation(string $text): bool
@@ -120,10 +231,5 @@ class ReportHandler
     public function normalizeAddressText(string $text): string
     {
         return preg_replace('/^\s*\d{3,5}\s*/u', '', $text);
-    }
-
-    protected function sendMessage(int|string $chatId, string $message): void
-    {
-        $this->apiClient->sendMessage((string) $chatId, $message);
     }
 }

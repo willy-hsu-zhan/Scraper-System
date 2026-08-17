@@ -9,8 +9,6 @@ use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Longman\TelegramBot\Entities\InlineKeyboard;
-use Longman\TelegramBot\Request;
 
 class SearchYoutube extends Command
 {
@@ -135,24 +133,23 @@ class SearchYoutube extends Command
                         "📺 {$video['snippet']['channelTitle']}\n".
                         "🔗 https://www.youtube.com/watch?v={$videoId}";
 
-                    $keyboard = new InlineKeyboard(
-                        [
+                    $keyboard = [
+                        'inline_keyboard' => [
                             [
-                                'text' => '🎵 下載音樂',
-                                'callback_data' => "yt|audio|{$videoId}",
+                                [
+                                    'text' => '🎵 下載音樂',
+                                    'callback_data' => "yt|audio|{$videoId}",
+                                ],
+                                [
+                                    'text' => '🎬 下載影片',
+                                    'callback_data' => "yt|video|{$videoId}",
+                                ],
                             ],
-                            [
-                                'text' => '🎬 下載影片',
-                                'callback_data' => "yt|video|{$videoId}",
-                            ],
-                        ]
-                    );
+                        ],
+                    ];
 
-                    Request::sendMessage([
-                        'chat_id' => $categoryConfig['chat_id'],
-                        'text' => $text,
-                        'reply_markup' => $keyboard,
-                    ]);
+                    // Use TelegramService to send so reply_markup is encoded consistently
+                    $this->telegramService->sendMessage($categoryConfig['chat_id'], $text, $keyboard);
 
                     sleep(3);
                 }

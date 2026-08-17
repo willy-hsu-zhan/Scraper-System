@@ -51,7 +51,7 @@ class TelegramService
             return;
         }
 
-        if ($parsedUpdate['type'] === 'message') {
+        if ($parsedUpdate['type'] === 'message' || $parsedUpdate['type'] === 'location') {
             $this->messageRouter->route($parsedUpdate);
             return;
         }

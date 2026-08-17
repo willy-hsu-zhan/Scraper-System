@@ -90,18 +90,20 @@ class MusicHandler
             $channel = $video['snippet']['channelTitle'];
             $encodedTitle = base64_encode(mb_substr($title, 0, 10, 'UTF-8'));
 
-            $keyboard = new \Longman\TelegramBot\Entities\InlineKeyboard([
-                [
+            $keyboard = [
+                'inline_keyboard' => [
                     [
-                        'text' => '🎵 下載音樂',
-                        'callback_data' => "yt|audio|{$videoId}|{$encodedTitle}",
-                    ],
-                    [
-                        'text' => '🎬 下載影片',
-                        'callback_data' => "yt|video|{$videoId}|{$encodedTitle}",
+                        [
+                            'text' => '🎵 下載音樂',
+                            'callback_data' => "yt|audio|{$videoId}|{$encodedTitle}",
+                        ],
+                        [
+                            'text' => '🎬 下載影片',
+                            'callback_data' => "yt|video|{$videoId}|{$encodedTitle}",
+                        ],
                     ],
                 ],
-            ]);
+            ];
 
             $message = "🎵 {$title}\n".
                 "📺 {$channel}\n".

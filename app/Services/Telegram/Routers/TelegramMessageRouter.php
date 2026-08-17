@@ -22,13 +22,30 @@ class TelegramMessageRouter
     public function route(array $parsedUpdate): void
     {
         $chatId = $parsedUpdate['chat_id'] ?? null;
+        $type = $parsedUpdate['type'] ?? 'message';
         $text = trim((string) ($parsedUpdate['message_text'] ?? ''));
 
-        if ($chatId === null || $text === '') {
+        if ($chatId === null) {
             return;
         }
 
         $chatIdInt = (int) $chatId;
+
+        // Location updates are handled separately
+        if ($type === 'location') {
+            $latitude = isset($parsedUpdate['latitude']) ? (float) $parsedUpdate['latitude'] : null;
+            $longitude = isset($parsedUpdate['longitude']) ? (float) $parsedUpdate['longitude'] : null;
+
+            if ($latitude !== null && $longitude !== null && $chatIdInt === TelegramChat::REPORT) {
+                $this->reportHandler->handleLocation($chatId, $latitude, $longitude);
+            }
+
+            return;
+        }
+
+        if ($text === '') {
+            return;
+        }
 
         switch (true) {
             case $chatIdInt === TelegramChat::REPORT:
