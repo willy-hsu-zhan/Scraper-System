@@ -4,7 +4,6 @@ namespace App\Services\Telegram;
 
 use App\Services\Telegram\Contracts\TelegramApiClientInterface;
 use Illuminate\Support\Facades\Http;
-use Longman\TelegramBot\Request;
 
 class TelegramApiClient implements TelegramApiClientInterface
 {
@@ -19,8 +18,11 @@ class TelegramApiClient implements TelegramApiClientInterface
             : '';
     }
 
-    public function sendMessage(string $chatId, string $message, ?array $keyboard = null)
-    {
+    public function sendMessage(
+        string $chatId,
+        string $message,
+        ?array $keyboard = null
+    ) {
         if ($this->apiKey === '') {
             return 'Telegram bot API key is not configured.';
         }
@@ -31,21 +33,31 @@ class TelegramApiClient implements TelegramApiClientInterface
         ];
 
         if ($keyboard !== null) {
-            $payload['reply_markup'] = json_encode($keyboard, JSON_UNESCAPED_UNICODE);
+            $payload['reply_markup'] = json_encode(
+                $keyboard,
+                JSON_UNESCAPED_UNICODE
+            );
         }
 
-        return $this->sendRequest($payload);
+        return $this->sendRequest('sendMessage', $payload);
     }
 
-    public function sendDocument(string $chatId, string $filePath, string $fileName)
-    {
+    public function sendDocument(
+        string $chatId,
+        string $filePath,
+        string $fileName
+    ) {
         if ($this->apiKey === '') {
             return 'Telegram bot API key is not configured.';
         }
 
         try {
             $response = Http::timeout(600)
-                ->attach('document', file_get_contents($filePath), $fileName)
+                ->attach(
+                    'document',
+                    file_get_contents($filePath),
+                    $fileName
+                )
                 ->post($this->getApiUrl('sendDocument'), [
                     'chat_id' => $chatId,
                 ]);
@@ -58,25 +70,36 @@ class TelegramApiClient implements TelegramApiClientInterface
         }
     }
 
-    public function answerCallbackQuery(string $callbackQueryId, string $text, bool $showAlert = false): void
-    {
+    public function answerCallbackQuery(
+        string $callbackQueryId,
+        string $text,
+        bool $showAlert = false
+    ): void {
         if ($this->apiKey === '') {
             return;
         }
 
-        Request::answerCallbackQuery([
+        $this->sendRequest('answerCallbackQuery', [
             'callback_query_id' => $callbackQueryId,
             'text' => $text,
             'show_alert' => $showAlert,
         ]);
     }
 
-    protected function sendRequest(array $payload)
+    protected function sendRequest(string $path, array $payload)
     {
         try {
-            $result = Request::sendMessage($payload);
+            $response = Http::post(
+                $this->getApiUrl($path),
+                $payload
+            );
 
-            return $result->isOk() ? $result->getDescription() : $result->printError();
+            if ($response->successful() && $response->json('ok')) {
+                return $response->json('description', '成功');
+            }
+
+            return $response->json('description')
+                ?? $response->body();
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -84,6 +107,8 @@ class TelegramApiClient implements TelegramApiClientInterface
 
     protected function getApiUrl(string $path): string
     {
-        return rtrim($this->apiBaseUrl, '/') . '/' . ltrim($path, '/');
+        return rtrim($this->apiBaseUrl, '/')
+            .'/'
+            .ltrim($path, '/');
     }
 }
