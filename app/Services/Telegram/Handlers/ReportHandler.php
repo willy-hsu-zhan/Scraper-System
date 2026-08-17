@@ -61,6 +61,16 @@ class ReportHandler
             return;
         }
 
+        if ($lower === '📍 如何分享目前位置') {
+            $this->sendMessage(
+                $chatId,
+                "📍 分享目前位置\n\n"
+                ."請點擊 Telegram 左下角「📎」→「位置」→「傳送目前位置」。"
+            );
+
+            return;
+        }
+
         $cleanText = $this->normalizeAddressText($text);
         $cityData = $this->detectCity($cleanText);
 
@@ -167,8 +177,7 @@ class ReportHandler
             'keyboard' => [
                 [
                     [
-                        'text' => '📍 取得目前位置',
-                        'request_location' => true,
+                        'text' => '📍 如何分享目前位置',
                     ],
                 ],
             ],
