@@ -50,16 +50,9 @@ class ReportHandler
             'chat_id' => $chatId,
             'text' => $text,
         ]);
+
         // respond with intro keyboard for common triggers
         $lower = mb_strtolower(trim($text));
-        if (in_array($lower, ['/start', '檢舉', '報案', 'help', '說明'])) {
-            $this->sendReportIntro($chatId);
-            return;
-        }
-
-        if (! $this->looksLikeLocation($text)) {
-            return;
-        }
 
         if ($lower === '📍 如何分享目前位置') {
             $this->sendMessage(
@@ -70,6 +63,16 @@ class ReportHandler
 
             return;
         }
+        if (in_array($lower, ['/start', '檢舉', '報案', 'help', '說明'])) {
+            $this->sendReportIntro($chatId);
+            return;
+        }
+
+        if (! $this->looksLikeLocation($text)) {
+            return;
+        }
+
+
 
         $cleanText = $this->normalizeAddressText($text);
         $cityData = $this->detectCity($cleanText);
