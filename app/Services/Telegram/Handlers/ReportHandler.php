@@ -10,32 +10,32 @@ class ReportHandler
         '臺北市' => [
             'keywords' => ['臺北市'],
             'url' => 'https://prsweb.tcpd.gov.tw/#/New',
-            'phone' => '0911-510914',
+            'phone' => '0911510914',
         ],
         '新北市' => [
             'keywords' => ['新北市'],
             'url' => 'https://tvrs.ntpd.gov.tw/Home/Report_Add',
-            'phone' => '0911-510105',
+            'phone' => '0911510105',
         ],
         '台中市' => [
             'keywords' => ['台中市'],
             'url' => 'https://www.tchpd.npa.gov.tw/ch/mailbox/mailtraffic/mailtraffic?module=mailtraffic&id=7480#',
-            'phone' => '0911-510915',
+            'phone' => '0911510915',
         ],
         '台南市' => [
             'keywords' => ['台南市'],
             'url' => 'https://tr.tnpd.gov.tw/TrafficMailbox/Index/92929b01-cf5e-99d6-2539-bee668350a6d',
-            'phone' => '0911-510916',
+            'phone' => '0911510916',
         ],
         '高雄市' => [
             'keywords' => ['高雄市'],
             'url' => 'https://policemail.kcg.gov.tw/Statement.aspx',
-            'phone' => '0911-510917',
+            'phone' => '0911510917',
         ],
         '基隆市' => [
             'keywords' => ['基隆市'],
             'url' => 'https://tptv.klg.gov.tw/reportcase/index.aspx',
-            'phone' => '0911-510918',
+            'phone' => '0911510918',
         ],
     ];
 
@@ -95,7 +95,7 @@ class ReportHandler
             $this->getReportKeyboard()
         );
         usleep(300000);
-        $this->sendMessage($chatId, $cityData['phone'], $this->getReportKeyboard());
+        $this->sendMessage($chatId, "<a href=\"tel:{$cityData['phone']}\">{$cityData['phone']}</a>", $this->getReportKeyboard());
     }
 
     /**
@@ -162,7 +162,7 @@ class ReportHandler
                 $this->getReportKeyboard()
             );
             usleep(300000);
-            $this->sendMessage($chatId, $cityData['phone'], $this->getReportKeyboard());
+            $this->sendMessage($chatId, "<a href=\"tel:{$cityData['phone']}\">{$cityData['phone']}</a>", $this->getReportKeyboard());
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error('Reverse geocoding failed', [
                 'latitude' => $latitude,
