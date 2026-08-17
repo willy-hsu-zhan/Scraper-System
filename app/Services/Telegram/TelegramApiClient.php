@@ -30,6 +30,7 @@ class TelegramApiClient implements TelegramApiClientInterface
         $payload = [
             'chat_id' => $chatId,
             'text' => $message,
+            'parse_mode' => 'HTML',
         ];
 
         if ($keyboard !== null) {
