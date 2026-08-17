@@ -3,7 +3,7 @@
 namespace App\Services\Telegram\Handlers;
 
 use App\Services\Telegram\Contracts\TelegramApiClientInterface;
-
+use Illuminate\Support\Facades\Log;
 class ReportHandler
 {
     private const REPORT_CITIES = [
@@ -46,6 +46,10 @@ class ReportHandler
 
     public function handleMessage(int|string $chatId, string $text): void
     {
+        Log::info('ReportHandler::handleMessage called', [
+            'chat_id' => $chatId,
+            'text' => $text,
+        ]);
         // respond with intro keyboard for common triggers
         $lower = mb_strtolower(trim($text));
         if (in_array($lower, ['/start', '檢舉', '報案', 'help', '說明'])) {
