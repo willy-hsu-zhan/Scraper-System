@@ -38,4 +38,8 @@ return [
     'reurl' => [
         'api_key' => env('REURL_API_KEY'),
     ],
+
+    'phone_location' => [
+        'secret' => env('PHONE_LOCATION_SECRET'),
+    ],
 ];

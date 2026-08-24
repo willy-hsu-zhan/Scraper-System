@@ -25,4 +25,5 @@ Route::post('/telegram/webhook', [TelegramController::class, 'handleWebhook']);
 
 Route::get('/feed', [FeedController::class, 'index']);
 
-Route::post('/location', [LocationController::class, 'store']);
+Route::post('/location', [LocationController::class, 'store'])
+    ->middleware('phone.location');
