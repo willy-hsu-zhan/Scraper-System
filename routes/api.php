@@ -4,6 +4,7 @@ use App\Http\Controllers\FeedController;
 use App\Http\Controllers\TelegramController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LocationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,3 +24,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/telegram/webhook', [TelegramController::class, 'handleWebhook']);
 
 Route::get('/feed', [FeedController::class, 'index']);
+
+Route::post('/location', [LocationController::class, 'store']);
