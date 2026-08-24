@@ -12,6 +12,7 @@ class LocationController extends Controller
     {
         $validated = $request->validate([
             'device_id' => ['required', 'string', 'max:100'],
+            'device_name' => ['required', 'string', 'max:100'],
             'latitude' => ['required', 'numeric', 'between:-90,90'],
             'longitude' => ['required', 'numeric', 'between:-180,180'],
             'accuracy' => ['nullable', 'numeric', 'min:0'],
