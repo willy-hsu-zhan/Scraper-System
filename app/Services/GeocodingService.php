@@ -131,60 +131,58 @@ class GeocodingService
      */
     protected function formatTaiwanAddress(array $addr): ?string
     {
-        $country = (string) ($addr['country'] ?? '');
-        $countryCode = (string) ($addr['country_code'] ?? '');
-        $isTaiwan = false;
+        $countryCode = mb_strtolower((string) ($addr['country_code'] ?? ''));
 
-        if ($country !== '') {
-            $lower = mb_strtolower($country);
-            if (str_contains($lower, 'taiwan') || str_contains($lower, '臺灣') || str_contains($lower, '台灣')) {
-                $isTaiwan = true;
-            }
-        }
-
-        if ($countryCode !== '' && mb_strtolower($countryCode) === 'tw') {
-            $isTaiwan = true;
-        }
-
-        if (! $isTaiwan) {
+        if ($countryCode !== 'tw') {
             return null;
         }
 
-        $city = trim((string) ($addr['city'] ?? $addr['municipality'] ?? $addr['county'] ?? $addr['state'] ?? ''));
-        $district = trim((string) ($addr['city_district'] ?? $addr['district'] ?? $addr['suburb'] ?? $addr['town'] ?? ''));
-        $road = trim((string) ($addr['road'] ?? $addr['pedestrian'] ?? $addr['residential'] ?? ''));
-        $house = trim((string) ($addr['house_number'] ?? ''));
+        $city = trim((string) (
+            $addr['city']
+            ?? $addr['municipality']
+            ?? $addr['county']
+            ?? $addr['state']
+            ?? ''
+        ));
 
-        $parts = [];
+        $district = trim((string) (
+            $addr['city_district']
+            ?? $addr['district']
+            ?? $addr['suburb']
+            ?? ''
+        ));
+
+        $road = trim((string) (
+            $addr['road']
+            ?? $addr['pedestrian']
+            ?? $addr['residential']
+            ?? ''
+        ));
+
+        $houseNumber = trim((string) ($addr['house_number'] ?? ''));
+
+        if ($city === '' && $district === '' && $road === '') {
+            return null;
+        }
+
+        $address = '';
 
         if ($city !== '') {
-            $parts[] = $city;
+            $address .= $city;
         }
 
         if ($district !== '' && $district !== $city) {
-            $parts[] = $district;
+            $address .= $district;
         }
 
-        $roadSegment = $road;
-        if ($roadSegment !== '' && $house !== '' && ! str_contains($roadSegment, $house)) {
-            $roadSegment .= $house;
-        } elseif ($roadSegment === '' && $house !== '') {
-            $roadSegment = $house;
+        if ($road !== '') {
+            $address .= $road;
         }
 
-        if ($roadSegment !== '') {
-            $parts[] = $roadSegment;
+        if ($houseNumber !== '') {
+            $address .= $houseNumber . '號';
         }
 
-        if (empty($parts)) {
-            return null;
-        }
-
-        $composed = implode('', $parts);
-        $composed = preg_replace('/[\s\x{00a0}]+/', '', $composed);
-        $composed = preg_replace('/,+/', '', $composed);
-        $composed = trim($composed, " ,\t\n\r");
-
-        return $composed !== '' ? $composed : null;
+        return $address !== '' ? $address : null;
     }
 }
