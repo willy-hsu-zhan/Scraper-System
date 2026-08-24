@@ -5,11 +5,16 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class LocationController extends Controller
 {
     public function store(Request $request): JsonResponse
     {
+        Log::info('Location API received', [
+            'request' => $request->all(),
+        ]);
+
         $validated = $request->validate([
             'device_id' => ['required', 'string', 'max:100'],
             'device_name' => ['required', 'string', 'max:100'],
