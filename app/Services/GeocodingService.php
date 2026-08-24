@@ -131,9 +131,8 @@ class GeocodingService
      */
     protected function formatTaiwanAddress(array $addr): ?string
     {
-        // detect Taiwan by country or country_code
-        $country = $addr['country'] ?? '';
-        $countryCode = $addr['country_code'] ?? '';
+        $country = (string) ($addr['country'] ?? '');
+        $countryCode = (string) ($addr['country_code'] ?? '');
         $isTaiwan = false;
 
         if ($country !== '') {
@@ -143,21 +142,18 @@ class GeocodingService
             }
         }
 
-        if ($countryCode !== '') {
-            if (mb_strtolower($countryCode) === 'tw') {
-                $isTaiwan = true;
-            }
+        if ($countryCode !== '' && mb_strtolower($countryCode) === 'tw') {
+            $isTaiwan = true;
         }
 
         if (! $isTaiwan) {
             return null;
         }
 
-        // Collect components
-        $city = $addr['city'] ?? $addr['municipality'] ?? $addr['county'] ?? $addr['state'] ?? '';
-        $district = $addr['city_district'] ?? $addr['district'] ?? $addr['suburb'] ?? $addr['town'] ?? $addr['village'] ?? '';
-        $road = $addr['road'] ?? $addr['pedestrian'] ?? $addr['residential'] ?? '';
-        $house = $addr['house_number'] ?? '';
+        $city = trim((string) ($addr['city'] ?? $addr['municipality'] ?? $addr['county'] ?? $addr['state'] ?? ''));
+        $district = trim((string) ($addr['city_district'] ?? $addr['district'] ?? $addr['suburb'] ?? $addr['town'] ?? ''));
+        $road = trim((string) ($addr['road'] ?? $addr['pedestrian'] ?? $addr['residential'] ?? ''));
+        $house = trim((string) ($addr['house_number'] ?? ''));
 
         $parts = [];
 
@@ -169,41 +165,26 @@ class GeocodingService
             $parts[] = $district;
         }
 
-        // For roads, try to clean up common noise
-        if ($road !== '') {
-            // Nominatim sometimes includes road components with commas; keep as-is but trim
-            $road = trim($road);
+        $roadSegment = $road;
+        if ($roadSegment !== '' && $house !== '' && ! str_contains($roadSegment, $house)) {
+            $roadSegment .= $house;
+        } elseif ($roadSegment === '' && $house !== '') {
+            $roadSegment = $house;
         }
 
-        // Combine road + house number into one segment
-        if ($road !== '') {
-            $roadSegment = $road;
-            if ($house !== '') {
-                // Some house numbers already contain the road suffix; simply append
-                $roadSegment .= $house;
-            }
+        if ($roadSegment !== '') {
             $parts[] = $roadSegment;
-        } elseif ($house !== '') {
-            // No road, but have house number — try use village or suburb as preceding context
-            if (!empty($addr['village'])) {
-                $parts[] = $addr['village'] . $house;
-            } elseif (!empty($addr['suburb'])) {
-                $parts[] = $addr['suburb'] . $house;
-            } else {
-                $parts[] = $house;
-            }
         }
 
-        // If we have at least city and district or road, return composed string
-        if (!empty($parts)) {
-            $composed = implode('', $parts);
-            // sanitize: remove repeated commas/spaces
-            $composed = preg_replace('/\s+,\s+/', '', $composed);
-            $composed = trim($composed, " ,\t\n\r");
-
-            return $composed !== '' ? $composed : null;
+        if (empty($parts)) {
+            return null;
         }
 
-        return null;
+        $composed = implode('', $parts);
+        $composed = preg_replace('/[\s\x{00a0}]+/', '', $composed);
+        $composed = preg_replace('/,+/', '', $composed);
+        $composed = trim($composed, " ,\t\n\r");
+
+        return $composed !== '' ? $composed : null;
     }
 }

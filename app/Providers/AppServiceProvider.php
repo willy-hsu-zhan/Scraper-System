@@ -27,6 +27,11 @@ class AppServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(
+            \App\Services\WeatherService::class,
+            \App\Services\WeatherService::class
+        );
+
+        $this->app->bind(
             \App\Services\Telegram\Contracts\TelegramMessageFormatterInterface::class,
             \App\Services\Telegram\TelegramMessageFormatter::class
         );
