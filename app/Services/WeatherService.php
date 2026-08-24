@@ -93,23 +93,59 @@ class WeatherService
     protected function resolvePrecipitationProbability(array $data): float
     {
         $hourly = $data['hourly'] ?? [];
+
         $times = $hourly['time'] ?? [];
         $probabilities = $hourly['precipitation_probability'] ?? [];
 
-        if (empty($probabilities)) {
+        if (empty($times) || empty($probabilities)) {
             return 0.0;
         }
 
         $currentTime = $data['current']['time'] ?? null;
 
-        if (is_string($currentTime) && is_array($times)) {
-            $index = array_search($currentTime, $times, true);
-            if ($index !== false && isset($probabilities[$index])) {
-                return (float) $probabilities[$index];
-            }
+        if (! is_string($currentTime)) {
+            return (float) ($probabilities[0] ?? 0);
         }
 
-        return (float) ($probabilities[0] ?? 0);
+        try {
+            $currentTimestamp = strtotime($currentTime);
+
+            if ($currentTimestamp === false) {
+                return (float) ($probabilities[0] ?? 0);
+            }
+
+            $closestIndex = 0;
+            $closestDiff = PHP_INT_MAX;
+
+            foreach ($times as $index => $time) {
+                if (! isset($probabilities[$index])) {
+                    continue;
+                }
+
+                $timestamp = strtotime($time);
+
+                if ($timestamp === false) {
+                    continue;
+                }
+
+                $diff = abs($timestamp - $currentTimestamp);
+
+                if ($diff < $closestDiff) {
+                    $closestDiff = $diff;
+                    $closestIndex = $index;
+                }
+            }
+
+            return (float) ($probabilities[$closestIndex] ?? 0);
+
+        } catch (\Throwable $e) {
+            Log::warning('Failed to resolve precipitation probability', [
+                'current_time' => $currentTime,
+                'error' => $e->getMessage(),
+            ]);
+
+            return (float) ($probabilities[0] ?? 0);
+        }
     }
 
     protected function mapWeatherCodeToChinese(int $weatherCode): string

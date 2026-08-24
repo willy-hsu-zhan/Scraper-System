@@ -43,9 +43,4 @@ return [
         'secret' => env('PHONE_LOCATION_SECRET'),
     ],
 
-    'telegram' => [
-        'apikey' => env('TELEGRAM_BOT_API_KEY', ''),
-        'username' => env('TELEGRAM_BOT_USERNAME', ''),
-        'phone_location_chat_id' => env('TELEGRAM_PHONE_LOCATION_CHAT_ID', '-5308571034'),
-    ],
 ];

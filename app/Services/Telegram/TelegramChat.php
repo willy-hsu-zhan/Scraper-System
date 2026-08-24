@@ -37,4 +37,6 @@ class TelegramChat
     public const YOUTUBE_GAME = -5023352255;
 
     public const YOUTUBE_MOVIE = -4997962376;
+
+    public const PHONE_LOCATION = -5308571034;
 }

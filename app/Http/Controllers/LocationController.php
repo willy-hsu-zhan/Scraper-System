@@ -9,6 +9,7 @@ use App\Services\WeatherService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Services\Telegram\TelegramChat;
 
 class LocationController extends Controller
 {
@@ -79,7 +80,7 @@ class LocationController extends Controller
         }
 
         if (is_array($weather)) {
-            $chatId = (string) config('services.telegram.phone_location_chat_id', '-5308571034');
+            $chatId = (string) TelegramChat::PHONE_LOCATION;
             $message = $this->buildTelegramMessage($address, $latitude, $longitude, $deviceName, $weather);
 
             try {
@@ -101,7 +102,8 @@ class LocationController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Location received',
+            'message' => 'Location received successfully.',
+            'data' => $validated,
         ]);
     }
 
