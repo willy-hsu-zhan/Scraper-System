@@ -62,7 +62,21 @@ class ScraperOjt extends Command
                     $summary = $this->geminiService->summarizeCourseByUrl($govOjt->training_unit_url);
 
                     if (! empty($summary)) {
-                        $govOjt->update(['ai_summary' => $summary]);
+                        // 儲存 AI 摘要
+                        $govOjt->update([
+                            'ai_summary' => $summary,
+                        ]);
+
+                        // 發送 AI 摘要 Telegram 通知
+                        $summaryMessage = "🧠 AI 課程分析\n\n";
+                        $summaryMessage .= $summary;
+
+                        $this->telegramService->sendMessage(
+                            $this->chatId,
+                            $summaryMessage
+                        );
+
+                        sleep(3);
                     }
                 }
             } catch (\Throwable $e) {
@@ -110,7 +124,7 @@ class ScraperOjt extends Command
             sleep(3);
         }
 
-        $this->info('已檢查 '.count($newCourses).' 個新的 OJT 課程。');
+        $this->info('已檢查 ' . count($newCourses) . ' 個新的 OJT 課程。');
 
         return 0;
     }
