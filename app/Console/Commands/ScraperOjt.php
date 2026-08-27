@@ -12,6 +12,7 @@ use App\Services\TelegramService;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
+use App\Services\Telegram\Contracts\TelegramMessageFormatterInterface;
 
 class ScraperOjt extends Command
 {
@@ -27,13 +28,16 @@ class ScraperOjt extends Command
 
     protected $reurlService;
 
+    protected $telegramMessageFormatter;
+
     protected $chatId = TelegramChat::OJT;
 
     public function __construct(
         TelegramService $telegramService,
         SeleniumService $seleniumService,
         GeminiService $geminiService,
-        ReurlService $reurlService
+        ReurlService $reurlService,
+        TelegramMessageFormatterInterface $telegramMessageFormatter
     ) {
         parent::__construct();
 
@@ -41,6 +45,7 @@ class ScraperOjt extends Command
         $this->seleniumService = $seleniumService;
         $this->geminiService = $geminiService;
         $this->reurlService = $reurlService;
+        $this->telegramMessageFormatter = $telegramMessageFormatter;
     }
 
     public function handle()
@@ -66,6 +71,9 @@ class ScraperOjt extends Command
                         $govOjt->update([
                             'ai_summary' => $summary,
                         ]);
+
+                        $summaryMessage = "🧠 AI 課程分析\n\n"
+                                . $this->telegramMessageFormatter->formatTelegramText($summary);
 
                         // 發送 AI 摘要 Telegram 通知
                         $summaryMessage = "🧠 AI 課程分析\n\n";
