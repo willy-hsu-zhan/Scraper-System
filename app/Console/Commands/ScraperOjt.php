@@ -73,11 +73,7 @@ class ScraperOjt extends Command
                         ]);
 
                         $summaryMessage = "🧠 AI 課程分析\n\n"
-                                . $this->telegramMessageFormatter->formatTelegramText($summary);
-
-                        // 發送 AI 摘要 Telegram 通知
-                        $summaryMessage = "🧠 AI 課程分析\n\n";
-                        $summaryMessage .= $summary;
+                            . $this->telegramMessageFormatter->formatTelegramText($summary);
 
                         $this->telegramService->sendMessage(
                             $this->chatId,
