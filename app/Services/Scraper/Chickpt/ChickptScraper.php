@@ -29,52 +29,93 @@ class ChickptScraper extends BaseScraper
     public function scrape(): array
     {
         $baseUrl = 'https://www.chickpt.com.tw';
-        $url = 'https://www.chickpt.com.tw/cases?is_address_no_limit=1';
+
+        $urls = [
+            'https://www.chickpt.com.tw/cases?is_address_no_limit=1',
+            'https://www.chickpt.com.tw/cases?area=Taipei',
+            'https://www.chickpt.com.tw/cases?area=NewTaipei',
+            'https://www.chickpt.com.tw/cases?area=Keelung',
+        ];
+
         $webDriver = $this->seleniumService->openWebDriver();
         $jobs = [];
 
         try {
-            $webDriver->get($url);
-            $currentPage = 1;
+            foreach ($urls as $url) {
+                $webDriver->get($url);
+                $currentPage = 1;
 
-            while ($currentPage <= 3) {
-                try {
-                    $pageLink = $webDriver->findElement(WebDriverBy::linkText((string) $currentPage));
-                    $pageLink->click();
-
-                    $webDriver->wait(10)->until(
-                        WebDriverExpectedCondition::visibilityOfElementLocated(
+                while ($currentPage <= 3) {
+                    try {
+                        $pageLink = $webDriver->findElement(
                             WebDriverBy::linkText((string) $currentPage)
+                        );
+
+                        $pageLink->click();
+
+                        $webDriver->wait(10)->until(
+                            WebDriverExpectedCondition::visibilityOfElementLocated(
+                                WebDriverBy::linkText((string) $currentPage)
+                            )
+                        );
+                    } catch (\Exception $e) {
+                        break;
+                    }
+
+                    $jobElements = $webDriver->findElements(
+                        WebDriverBy::cssSelector(
+                            '.jobs-wrap ul#job-list.job-list.show li'
                         )
                     );
-                } catch (\Exception $e) {
-                    break;
-                }
 
-                $jobElements = $webDriver->findElements(WebDriverBy::cssSelector('.jobs-wrap ul#job-list.job-list.show li'));
+                    foreach ($jobElements as $jobNode) {
+                        try {
+                            $title = trim(
+                                $jobNode->findElement(
+                                    WebDriverBy::cssSelector('h2')
+                                )->getText()
+                            );
 
-                foreach ($jobElements as $jobNode) {
-                    try {
-                        $title = trim($jobNode->findElement(WebDriverBy::cssSelector('h2'))->getText());
-                        $relativeLink = $jobNode->findElement(WebDriverBy::cssSelector('a'))->getAttribute('href');
-                        $link = str_starts_with($relativeLink, 'http') ? $relativeLink : $baseUrl.$relativeLink;
-                        $company = trim($jobNode->findElement(WebDriverBy::cssSelector('.ellipsis-job-company'))->getText());
-                        $salary = trim($jobNode->findElement(WebDriverBy::cssSelector('.salary'))->getText());
-                        $place = trim($jobNode->findElement(WebDriverBy::cssSelector('.place'))->getText());
+                            $relativeLink = $jobNode->findElement(
+                                WebDriverBy::cssSelector('a')
+                            )->getAttribute('href');
 
-                        $jobs[] = [
-                            'title' => $title,
-                            'link' => $link,
-                            'company' => $company,
-                            'salary' => $salary,
-                            'place' => $place,
-                        ];
-                    } catch (\Exception $e) {
-                        continue;
+                            $link = str_starts_with($relativeLink, 'http')
+                                ? $relativeLink
+                                : $baseUrl . $relativeLink;
+
+                            $company = trim(
+                                $jobNode->findElement(
+                                    WebDriverBy::cssSelector('.ellipsis-job-company')
+                                )->getText()
+                            );
+
+                            $salary = trim(
+                                $jobNode->findElement(
+                                    WebDriverBy::cssSelector('.salary')
+                                )->getText()
+                            );
+
+                            $place = trim(
+                                $jobNode->findElement(
+                                    WebDriverBy::cssSelector('.place')
+                                )->getText()
+                            );
+
+                            $jobs[] = [
+                                'title' => $title,
+                                'link' => $link,
+                                'company' => $company,
+                                'salary' => $salary,
+                                'place' => $place,
+                            ];
+                        } catch (\Exception $e) {
+                            continue;
+                        }
                     }
-                }
 
-                $currentPage++;
+                    $currentPage++;
+                }
             }
         } finally {
             $webDriver->quit();
